@@ -42,6 +42,15 @@ class _TestViewState extends State<TestView> {
               ],
             ),
             ),
+            /*
+             CircularProgressIndicator
+             (
+                value: 0.7, // sets the progress value to 70%
+              backgroundColor: Colors.grey,
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+            strokeWidth: 5.0
+             ),
+             */
         CardQuestion(Question:widget.questionModel.question),
         SizedBox(height: 40,),
         Expanded(

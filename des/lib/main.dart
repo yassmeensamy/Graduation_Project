@@ -47,5 +47,6 @@ class SplashScreen extends StatelessWidget {
         home: Scaffold(
             backgroundColor: constants.pageColor,
             body: CircularProgressIndicator()));
+
   }
 }
