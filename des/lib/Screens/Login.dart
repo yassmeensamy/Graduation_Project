@@ -1,4 +1,6 @@
+import 'package:des/Tokens.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import '../Components/upperBgCircle.dart';
 import 'ForgotPassword/Forgot.dart';
@@ -23,7 +25,7 @@ class Login extends StatelessWidget {
               color: constants.pageColor,
               child: Stack(
                 children: <Widget>[
-                  UpperBgCircle(constants.babyBlue70, 'Sign In',390.0),
+                  UpperBgCircle(constants.babyBlue70, 'Sign In', 390.0),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     child: Column(
@@ -67,7 +69,8 @@ class Login extends StatelessWidget {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => const Register()));
+                                          builder: (context) =>
+                                              const Register()));
                                 },
                                 child: const Text(
                                   'Register Now',
@@ -187,6 +190,9 @@ class LoginFrom extends StatefulWidget {
   State<LoginFrom> createState() => _LoginFromState();
 }
 
+TextEditingController emailController = TextEditingController();
+TextEditingController passwordController = TextEditingController();
+
 class _LoginFromState extends State<LoginFrom> {
   @override
   Widget build(BuildContext context) {
@@ -195,6 +201,7 @@ class _LoginFromState extends State<LoginFrom> {
         SizedBox(
           height: 60,
           child: TextFormField(
+            controller: emailController,
             decoration: const InputDecoration(
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
@@ -220,6 +227,7 @@ class _LoginFromState extends State<LoginFrom> {
         SizedBox(
           height: 60,
           child: TextFormField(
+            controller: passwordController,
             obscureText: true,
             decoration: const InputDecoration(
               border: OutlineInputBorder(
@@ -261,9 +269,7 @@ class _LoginFromState extends State<LoginFrom> {
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=>const Home())
-              );
+              login(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: constants.babyBlue,
@@ -280,5 +286,31 @@ class _LoginFromState extends State<LoginFrom> {
         )
       ],
     );
+  }
+}
+
+void login(BuildContext context) async {
+  String email = emailController.text.toString();
+  String password = passwordController.text.toString();
+  try {
+    Response response = await post(
+        Uri.parse('https://mentally.duckdns.org/api/auth/login/'),
+        body: {
+          "username": email,
+          "password": password,
+        });
+    if (response.statusCode == 200) {
+      print('Logged In Successfully');
+      Tokens tokens = parseTokens(response.body);
+      saveTokensToSharedPreferences(tokens);
+      Navigator.of(context)
+                  .push(MaterialPageRoute(builder: (context) => const Home()));
+    } else if (response.statusCode == 401) {
+      print(response.body);
+    } else {
+      print('Something went wrong. Please try again later');
+    }
+  } catch (e) {
+    print(e);
   }
 }

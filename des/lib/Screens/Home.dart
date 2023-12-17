@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart' as constants;
 
 class Home extends StatelessWidget {
@@ -55,13 +56,22 @@ class Home extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Container(
-                              margin: EdgeInsets.only(top: 16),
-                              width: 50,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                  color: Colors.white, shape: BoxShape.circle),
-                              child: Image.asset('assets/images/female.png'),
+                            GestureDetector(
+                              onTap: () async {
+                                final SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                await prefs.remove('accessToken');
+                                await prefs.remove('refreshToken');
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 16),
+                                width: 50,
+                                height: 50,
+                                decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle),
+                                child: Image.asset('assets/images/female.png'),
+                              ),
                             ),
                             Spacer(),
                             Column(
