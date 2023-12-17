@@ -1,11 +1,21 @@
 import 'package:des/Cubits/TestCubits/TestCubit.dart';
 import 'package:des/Cubits/TestCubits/TestCubitStates.dart';
-import 'package:des/Screens/ResultScreen.dart';
+import 'package:des/Screens/Home.dart';
+import 'package:des/Screens/Result.dart';
 import 'package:des/Screens/TextView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class TestScreen extends StatelessWidget 
+class TestScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+        create: (context) => Testcubit(),
+        child: Testcreen(),
+    );
+  }
+}
+class Testcreen extends StatelessWidget 
 {
   int currentQuestionindex=1;
   bool isAnswerSelected = false;
@@ -31,7 +41,9 @@ List<Map<String, int>> scores = [];
               if (state is TestInitial) 
               {
                 // Handle the initial state, you can return a loading indicator or any other widget.
-                return Scaffold(
+                
+                return  
+                Scaffold(
                   backgroundColor: Colors.green,
                   body: ElevatedButton(
                     onPressed: () {
@@ -40,6 +52,7 @@ List<Map<String, int>> scores = [];
                     child: Text('Start test'),
                   ),
                 );
+                
               } 
              else if (state is TestQuestion) 
              {

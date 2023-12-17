@@ -1,6 +1,12 @@
+
+import 'package:des/Cubits/TestCubits/TestCubit.dart';
+import 'package:des/Screens/TestScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:intl/intl.dart';
 import '../constants.dart' as constants;
+
 
 class Home extends StatelessWidget {
   static const List<List<String>> emotions = [
@@ -128,18 +134,31 @@ class Home extends StatelessWidget {
                                 ),
                                 Row(
                                   children: [
-                                    Text(
-                                      'Start Now',
-                                      style: TextStyle(
-                                          color: constants.green,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
-                                    ),
-                                    Icon(
-                                      Icons.play_arrow,
-                                      color: constants.green,
-                                      size: 20,
-                                    )
+                                 InkWell(
+                                 onTap: () {
+                                   Navigator.push(context,MaterialPageRoute(builder: (context) => TestScreen()));
+                                    //context.read<Testcubit>().fetchQuestions();
+                                 },
+                                 child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                   children: [
+                                   Text(
+                                       'Start Now',
+                                        style: TextStyle(
+                                        color: constants.green,
+                                       fontWeight: FontWeight.bold,
+                                       fontSize: 17,
+                                       ),
+                                       ),
+                                       Icon(
+                                        Icons.play_arrow,
+                                         color: constants.green,
+                                         size: 20,
+                                         ),
+                                         ],
+                                         ),
+                                         )
+
                                   ],
                                 )
                               ]),

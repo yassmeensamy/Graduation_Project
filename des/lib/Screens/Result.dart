@@ -1,9 +1,10 @@
+import 'package:des/Screens/Home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Result extends StatelessWidget {
+class ResultScreen extends StatelessWidget {
    final int total_score;
-  Result({required this.total_score});
+  ResultScreen({required this.total_score});
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +18,21 @@ class Result extends StatelessWidget {
           Padding(padding: EdgeInsets.only(top:42),
           child:
           Row(
-            children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: 
+            [
+              Center(child:
+              Text("Result",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold)),
+              ),
+              SizedBox(width: 50),
               IconButton(
                 onPressed: () 
                 {
-                  // Add your onPressed logic here
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>Home()));
                 },
-                icon: Icon(Icons.arrow_back),
                 
-              ),
-              SizedBox(width: 100,),
-              Text("Result",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold)),
-              // Add other widgets for the Row here
+                icon: Icon(Icons.close),
+              ), 
             ],
           ),
           ),
