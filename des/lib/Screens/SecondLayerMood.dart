@@ -5,8 +5,6 @@ import 'package:des/Widgets/Horizontal.dart';
 import 'package:des/Widgets/MoodCard.dart';
 import 'package:des/Widgets/NextButton.dart';
 import 'package:flutter/material.dart';
-import '../constants.dart' as constants;
-
 
 class SecondViewMood extends StatefulWidget {
   @override
@@ -55,7 +53,7 @@ class _SecondViewMoodState extends State<SecondViewMood> {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.all(30),
+        padding: const EdgeInsets.all(30),
         child: Column(
           children: [
             Row(
@@ -64,39 +62,39 @@ class _SecondViewMoodState extends State<SecondViewMood> {
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.arrow_back_ios, size: 13),
+                  icon: const Icon(Icons.arrow_back_ios, size: 13),
                 ),
-                SizedBox(width: 35),
-                Text(
+                const SizedBox(width: 35),
+                const Text(
                   "How are you Feeling?",
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            SizedBox(height: 12),
+            const SizedBox(height: 12),
             DateCard(Date: "Today 11:47"),
-            SizedBox(height: 25),
-            Image(
+            const SizedBox(height: 25),
+            const Image(
               image: AssetImage("assets/images/Emotions/Proud.png"),
               width: 130.0,
               height: 130.0,
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             HorizontalLineDrawingWidget(),
-            SizedBox(height: 25),
-            Text(
+            const SizedBox(height: 25),
+            const Text(
               "Happy",
               style: TextStyle(fontSize: 40, color: Colors.black, fontFamily: 'Roboto'),
             ),
-            SizedBox(height: 20),
-            Text(
+            const SizedBox(height: 20),
+            const Text(
               "Which words describe your feeling best?",
               style: TextStyle(fontSize: 16, color: Colors.black54),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Expanded(
               child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 16.0,
                   mainAxisSpacing: 16.0,
@@ -123,7 +121,7 @@ class _SecondViewMoodState extends State<SecondViewMood> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(bottom: 20),
+              padding: const EdgeInsets.only(bottom: 20),
               child: NextButton(ontap: ()
               {
                  Navigator.push(context,MaterialPageRoute(builder: (context) => Journalingcreen()));

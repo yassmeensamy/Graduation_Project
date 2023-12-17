@@ -30,8 +30,8 @@ class _ImageFormState extends State<ImageForm> {
           return AlertDialog(
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: Text('Please choose media to select'),
-            content: Container(
+            title: const Text('Please choose media to select'),
+            content: SizedBox(
               height: MediaQuery.of(context).size.height / 6,
               child: Column(
                 children: [
@@ -41,7 +41,7 @@ class _ImageFormState extends State<ImageForm> {
                       Navigator.pop(context);
                       getImage(ImageSource.gallery);
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
                         Icon(Icons.image),
                         Text('From Gallery'),
@@ -54,7 +54,7 @@ class _ImageFormState extends State<ImageForm> {
                       Navigator.pop(context);
                       getImage(ImageSource.camera);
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
                         Icon(Icons.camera),
                         Text('From Camera'),

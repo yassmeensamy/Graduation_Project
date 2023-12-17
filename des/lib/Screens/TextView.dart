@@ -10,7 +10,7 @@ class TestView extends StatefulWidget
   final VoidCallback? Next;
   final VoidCallback? Back;
 
-  TestView({
+  const TestView({super.key, 
     required this.questionModel,
     required this.currentQuestion,
     required this.Next,
@@ -33,11 +33,11 @@ class _TestViewState extends State<TestView> {
             child:
             Row(
               children:[
-                Icon(Icons.arrow_back_ios ,size: 13,),
+                const Icon(Icons.arrow_back_ios ,size: 13,),
                InkWell(onTap: (){
                 widget.Back!();
                },
-               child: Text("Previous", style: TextStyle(color: Colors.black)),
+               child: const Text("Previous", style: TextStyle(color: Colors.black)),
           ),
               ],
             ),
@@ -52,7 +52,7 @@ class _TestViewState extends State<TestView> {
              ),
              */
         CardQuestion(Question:widget.questionModel.question),
-        SizedBox(height: 40,),
+        const SizedBox(height: 40,),
         Expanded(
           child: ListView.builder(
             itemCount: widget.questionModel.answerOptions.length,
@@ -83,7 +83,7 @@ class _TestViewState extends State<TestView> {
           height: 50, // Set the desired height
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(19),
-            color: Color(0xFF004743),
+            color: const Color(0xFF004743),
           ),
           child: InkWell(
             onTap: () 
@@ -96,7 +96,7 @@ class _TestViewState extends State<TestView> {
               else 
               {
                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                           content: Text("You should answer this question"),
                           duration: Duration(milliseconds: 500),
                 ),
@@ -104,7 +104,7 @@ class _TestViewState extends State<TestView> {
               }
              
             },
-            child: Center
+            child: const Center
             (
               child: Text('Next', style: TextStyle(color: Colors.white)),
             ),

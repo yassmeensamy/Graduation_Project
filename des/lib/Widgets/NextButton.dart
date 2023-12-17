@@ -1,11 +1,11 @@
-import 'package:des/Screens/JournalingScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class NextButton extends StatelessWidget
 {
   final void  Function() ontap;
-  NextButton({required this.ontap});
+  const NextButton({super.key, required this.ontap});
+  @override
   Widget build (BuildContext context)
   {
   return  Container(
@@ -13,8 +13,8 @@ class NextButton extends StatelessWidget
                 height: 45, // Set the desired height
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
-                  border: Border.all(color: Color(0xff9CABC2).withOpacity(.6)),
-                  color: Color(0xFFD5E8E4),
+                  border: Border.all(color: const Color(0xff9CABC2).withOpacity(.6)),
+                  color: const Color(0xFFD5E8E4),
                 ),
                 child: InkWell(
                   onTap: ontap,

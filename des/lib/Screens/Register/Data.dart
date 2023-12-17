@@ -11,8 +11,8 @@ List<Widget> arr = getScreens();
 
 List<Widget> getScreens() {
   List<Widget> arr = [const DataForm()];
-  for (int i = 0; i < PreferencesWidgets.length; i++) {
-    arr.add(PreferencesWidgets[i]);
+  for (int i = 0; i < preferencesWidgets.length; i++) {
+    arr.add(preferencesWidgets[i]);
   }
   arr.add(const ImageForm());
   return arr;

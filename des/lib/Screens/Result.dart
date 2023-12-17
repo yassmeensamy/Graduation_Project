@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class ResultScreen extends StatelessWidget {
    final int total_score;
-  ResultScreen({required this.total_score});
+  const ResultScreen({super.key, required this.total_score});
 
   @override
   Widget build(BuildContext context) {
@@ -24,26 +24,26 @@ class ResultScreen extends StatelessWidget {
               Center(child:
               Text("Result",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold)),
               ),
-              SizedBox(width: 50),
+              const SizedBox(width: 50),
               IconButton(
                 onPressed: () 
                 {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) =>Home()));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) =>const Home()));
                 },
                 
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
               ), 
             ],
           ),
           ),
-          SizedBox(height: 80),
+          const SizedBox(height: 80),
           Center(
           child :
           Container(
             decoration: BoxDecoration(
                 border: Border.all(width:17,color: Colors.transparent ),
                 shape: BoxShape.circle,
-                 gradient: LinearGradient(
+                 gradient: const LinearGradient(
                   begin: Alignment.topLeft,      // Starting point
                  end: Alignment.bottomRight,
                 colors:  [Color(0xFF6495ED), Color(0xFFB57EDC)], 
@@ -66,7 +66,7 @@ class ResultScreen extends StatelessWidget {
                     fontFamily: GoogleFonts.comfortaa().fontFamily,
                     fontSize: 55,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF6495ED),
+                    color: const Color(0xFF6495ED),
                   ),
                 ),
               ),
@@ -74,10 +74,10 @@ class ResultScreen extends StatelessWidget {
           ),
           ),
           
-          SizedBox(height: 30,),
+          const SizedBox(height: 30,),
            Text("Normal",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 50,fontWeight: FontWeight.bold)),
-          SizedBox(height: 30,),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 28),
+          const SizedBox(height: 30,),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 28),
             child:
             Center(child:
             Text("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia aut ipsa.",

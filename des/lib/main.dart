@@ -41,12 +41,12 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    checkTokens(context);
+    // checkTokens(context);
     return const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: CircularProgressIndicator()));
+            body: OnBoarding()));
 
   }
 }

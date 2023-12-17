@@ -9,29 +9,33 @@ import 'package:google_fonts/google_fonts.dart';
 
 
 class Journalingcreen extends StatelessWidget {
+  const Journalingcreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => JournalingCubit(),
-      child: JournalingScreen(),
+      child: const JournalingScreen(),
     );
   }
 }
 
 class JournalingScreen extends StatelessWidget {
+  const JournalingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            JournalingTitle(),
-            SizedBox(height: 8),
-            JournalingImage(),
-            SizedBox(height: 4),
-            JournalingContainer(),
+            const JournalingTitle(),
+            const SizedBox(height: 8),
+            const JournalingImage(),
+            const SizedBox(height: 4),
+            const JournalingContainer(),
             // Remove the unnecessary comment
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             NextButton(
               ontap: ()
               {
@@ -47,23 +51,25 @@ class JournalingScreen extends StatelessWidget {
 
 
 class JournalingContainer extends StatelessWidget {
+  const JournalingContainer({super.key});
+
   @override
   Widget build(BuildContext context) {
     // Use BlocBuilder to get the state from the JournalingCubit
     return BlocBuilder<JournalingCubit, JournalingState>(
       builder: (context, state) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: 28),
+          padding: const EdgeInsets.symmetric(horizontal: 28),
           child: Stack(
             children: [
-              Container(
+              SizedBox(
                 width: 330,
                 child: TextField(
                   maxLines: 17,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide: BorderSide(color: Color.fromARGB(255, 18, 26, 170)),
+                      borderSide: const BorderSide(color: Color.fromARGB(255, 18, 26, 170)),
                     ),
                     hintText: '  What\'s on your mind? ',
                     hintStyle: TextStyle(
@@ -84,7 +90,7 @@ class JournalingContainer extends StatelessWidget {
                   state is WritingJouenalingState
                       ? '${state.wordsNumbers}/3000'
                       : '', // Display count only when writing is true
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.grey,
                   ),
                 ),
@@ -100,9 +106,11 @@ class JournalingContainer extends StatelessWidget {
 
 
 class JournalingImage extends StatelessWidget {
+  const JournalingImage({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Image(
         image: AssetImage('assets/images/Journaling.png'),
         width: 350,
@@ -113,14 +121,16 @@ class JournalingImage extends StatelessWidget {
 }
 
 class JournalingTitle extends StatelessWidget {
+  const JournalingTitle({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top:30),
+      padding: const EdgeInsets.only(top:30),
       child: Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 5),
+            padding: const EdgeInsets.only(top: 5),
             child: Center(
               child: Column(
                 children: [
@@ -131,27 +141,27 @@ class JournalingTitle extends StatelessWidget {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        icon: Icon(Icons.arrow_back_ios, size: 13),
+                        icon: const Icon(Icons.arrow_back_ios, size: 13),
                       ),
-                      SizedBox(width: 35),
+                      const SizedBox(width: 35),
                       Text(
                         "Add any thoughts that",
                         style: TextStyle(
                       fontSize: 20,
                       fontFamily: GoogleFonts.openSans().fontFamily,
-                      color: Color(0xFF000000),
+                      color: const Color(0xFF000000),
                     ),
                       ),
                     ],
                   ),
                  
-                  SizedBox(height:1), // Adding some space between the icon and text
+                  const SizedBox(height:1), // Adding some space between the icon and text
                   Text(
                     'are reflecting your Mood',
                     style: TextStyle(
                       fontSize: 20,
                       fontFamily: GoogleFonts.openSans().fontFamily,
-                      color: Color(0xFF000000),
+                      color: const Color(0xFF000000),
                     ),
                   ),
                 ],

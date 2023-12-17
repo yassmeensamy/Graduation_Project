@@ -6,13 +6,13 @@ class PreferencesForm extends StatelessWidget {
   String? question;
   PreferencesForm(String q,{super.key, this.question})
   {
-    this.question =q;
+    question =q;
   }
   @override
   Widget build(BuildContext context) {
     return  Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
         Row(
@@ -21,7 +21,7 @@ class PreferencesForm extends StatelessWidget {
           Text(question!),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 16,
         ),
       ],
@@ -29,4 +29,4 @@ class PreferencesForm extends StatelessWidget {
   }
 }
 
-List PreferencesWidgets = [PreferencesForm('Do you like sports?'),PreferencesForm('Are you in a good health state?')];
+List preferencesWidgets = [PreferencesForm('Do you like sports?'),PreferencesForm('Are you in a good health state?')];

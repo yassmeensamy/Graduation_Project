@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/percent_indicator.dart'; // Import CircularPercentIndicator
 
 class CardQuestion extends StatelessWidget {
   final String Question;
@@ -25,7 +24,7 @@ class CardQuestion extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
                 color: Colors.white,
                 
-                boxShadow: [
+                boxShadow: const [
                   BoxShadow(
                     color: Colors.grey, // Shadow color
                     offset: Offset(0, 3), // Offset (x, y) controls the shadow's position
@@ -40,7 +39,7 @@ class CardQuestion extends StatelessWidget {
               child: Center(
                 child: Text(
                   Question,
-                  style: TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
             ),

@@ -1,6 +1,5 @@
 import 'package:des/Cubits/TestCubits/TestCubit.dart';
 import 'package:des/Cubits/TestCubits/TestCubitStates.dart';
-import 'package:des/Screens/Home.dart';
 import 'package:des/Screens/Result.dart';
 import 'package:des/Screens/TextView.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +30,7 @@ List<Map<String, int>> scores = [];
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFFEFF0F3),
+        backgroundColor: const Color(0xFFEFF0F3),
         body: Padding(
           padding: const EdgeInsets.only(top: 0, left: 20, right: 20),
           child: BlocBuilder<Testcubit, TestState>(
@@ -58,7 +57,7 @@ List<Map<String, int>> scores = [];
              {
                     
                       return TestView(
-                     questionModel: state.questions![currentQuestionindex-1],
+                     questionModel: state.questions[currentQuestionindex-1],
                      currentQuestion: currentQuestionindex,
                                Next: ()
                                 {
@@ -79,7 +78,7 @@ List<Map<String, int>> scores = [];
   }
               else if (state is TestError) {
                 // Handle the error state, you can return an error message or any other widget.
-                return Scaffold(backgroundColor: Colors.black);
+                return const Scaffold(backgroundColor: Colors.black);
               } 
               else if (state is TestFinished) 
               {

@@ -1,9 +1,5 @@
-
-import 'package:des/Cubits/TestCubits/TestCubit.dart';
 import 'package:des/Screens/TestScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart' as constants;
@@ -70,7 +66,7 @@ class Home extends StatelessWidget {
                                 await prefs.remove('refreshToken');
                               },
                               child: Container(
-                                margin: EdgeInsets.only(top: 16),
+                                margin: const EdgeInsets.only(top: 16),
                                 width: 50,
                                 height: 50,
                                 decoration: const BoxDecoration(
@@ -79,26 +75,26 @@ class Home extends StatelessWidget {
                                 child: Image.asset('assets/images/female.png'),
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
                                   DateFormat('EEEE').format(DateTime.now()),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: constants.txtGrey, fontSize: 16),
                                 ),
                                 Text(
                                   DateFormat.MMMMd().format(DateTime.now()),
-                                  style: TextStyle(fontSize: 20),
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                               ],
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 16,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 16.0),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 16.0),
                               child: Icon(
                                 Icons.calendar_month_outlined,
                                 color: constants.darkGrey,
@@ -131,13 +127,13 @@ class Home extends StatelessWidget {
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
+                                const Text(
                                   'Depression Test',
                                   style: TextStyle(fontSize: 22),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Text(
+                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: const Text(
                                     'Take a test to determine your depression level',
                                     style: TextStyle(color: constants.darkGrey),
                                   ),
@@ -149,7 +145,7 @@ class Home extends StatelessWidget {
                                    Navigator.push(context,MaterialPageRoute(builder: (context) => TestScreen()));
                                     //context.read<Testcubit>().fetchQuestions();
                                  },
-                                 child: Row(
+                                 child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                    children: [
                                    Text(
@@ -181,20 +177,20 @@ class Home extends StatelessWidget {
                               Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
+                                    const Text(
                                       'Depression Test',
                                       style: TextStyle(fontSize: 22),
                                     ),
                                     Container(
                                       padding:
-                                          EdgeInsets.symmetric(vertical: 8.0),
-                                      child: Text(
+                                          const EdgeInsets.symmetric(vertical: 8.0),
+                                      child: const Text(
                                         'Take a test to determine your \n depression level',
                                         style: TextStyle(
                                             color: constants.darkGrey),
                                       ),
                                     ),
-                                    Row(
+                                    const Row(
                                       children: [
                                         Text(
                                           'Join Now',
@@ -225,31 +221,31 @@ class Home extends StatelessWidget {
                                 children: [
                                   Container(
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 16),
-                                    child: Text(
+                                        const EdgeInsets.symmetric(horizontal: 16),
+                                    child:const Text(
                                       'Daily Tasks',
                                       style: TextStyle(fontSize: 22),
                                     ),
                                   ),
                                   ListTile(
-                                    leading: Icon(
+                                    leading: const Icon(
                                       Icons.sports_gymnastics,
                                       color: Colors.white,
                                       size: 36,
                                     ),
-                                    title: Text('Meditate for 5 minutes'),
-                                    subtitle: Text('Meditaion Plan'),
+                                    title:const Text('Meditate for 5 minutes'),
+                                    subtitle: const Text('Meditaion Plan'),
                                     trailing: Checkbox(
                                         value: false, onChanged: (b) {}),
                                   ),
                                   ListTile(
-                                    leading: Icon(
+                                    leading: const Icon(
                                       Icons.work,
                                       color: Colors.white,
                                       size: 36,
                                     ),
-                                    title: Text('Meditate for 5 minutes'),
-                                    subtitle: Text('Meditaion Plan'),
+                                    title: const Text('Meditate for 5 minutes'),
+                                    subtitle: const Text('Meditaion Plan'),
                                     trailing: Checkbox(
                                         value: false, onChanged: (b) {}),
                                   ),
@@ -260,14 +256,14 @@ class Home extends StatelessWidget {
                 ),
               ),
               Container(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                     color: constants.mint,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(25),
                       topRight: Radius.circular(25),
                     )),
-                padding: EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-                child: Row(
+                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Icon(
@@ -303,8 +299,8 @@ class Home extends StatelessWidget {
     for (int i = 0; i < emotions.length; i++) {
       result.add(
         Container(
-          padding: EdgeInsets.symmetric(vertical: 8.0),
-          margin: EdgeInsets.only(left: 8.0),
+          padding:const EdgeInsets.symmetric(vertical: 8.0),
+          margin: const EdgeInsets.only(left: 8.0),
           child: Column(
             children: [
               Image.asset(

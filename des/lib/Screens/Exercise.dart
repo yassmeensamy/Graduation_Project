@@ -5,12 +5,14 @@ import 'package:google_fonts/google_fonts.dart';
 import '../constants.dart' as constants;
 
 class ExerciseScreen extends StatelessWidget {
+  const ExerciseScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: constants.pageColor,
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           "Exercise",
           style: TextStyle(color: Colors.black),
         ),
@@ -21,7 +23,7 @@ class ExerciseScreen extends StatelessWidget {
       body: Scaffold(
   backgroundColor: constants.pageColor,
   appBar: AppBar(
-    title: Text(
+    title: const Text(
       "Exercise",
       style: TextStyle(color: Colors.black),
     ),
@@ -45,13 +47,13 @@ class ExerciseScreen extends StatelessWidget {
                       fontFamily: GoogleFonts.nunitoSans().fontFamily,
                     ),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     "Meditation lolllllllllllllllllllllllllllllllllllllllllllllllllllllll ",
                     textAlign: TextAlign.left,
                     softWrap: true,
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     children: [
                       InkWell(
@@ -63,7 +65,7 @@ class ExerciseScreen extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Row(
+                        child: const Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(

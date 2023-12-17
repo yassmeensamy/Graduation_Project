@@ -7,7 +7,7 @@ class MoodCard extends StatefulWidget {
   final Function(bool) onPressed;
   final SecondMoodModel mood;
 
-  MoodCard({
+  const MoodCard({super.key, 
     required this.isSelected,
     required this.onPressed,
     required this.mood,
@@ -33,20 +33,20 @@ class _MoodCardState extends State<MoodCard> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
-          padding: EdgeInsets.only(top: 5),
+          padding: const EdgeInsets.only(top: 5),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              SizedBox(height: 3,),
+              const SizedBox(height: 3,),
               Image.asset(
                 widget.mood.ImagePath, 
                 height: 65,
                 width: 65,
               ),
-              SizedBox(height: 4),
+              const SizedBox(height: 4),
               Text(
                 widget.mood.moodText, 
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ],
           ),
