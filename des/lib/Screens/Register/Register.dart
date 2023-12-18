@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -305,9 +304,7 @@ class _RegisterFromState extends State<RegisterFrom> {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const VerifyEmail()));
-              // register(context);
+              register(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: constants.lilac,
@@ -365,6 +362,7 @@ class _RegisterFromState extends State<RegisterFrom> {
       }
     } catch (e) {
       print(e);
+      errorToast('Something went wrong. Please try again later');
     }
   }
 }
