@@ -233,6 +233,7 @@ class _LoginFromState extends State<LoginFrom> {
       }
     } catch (e) {
       print(e);
+      errorToast('Something went wrong. Please try again later');
     }
   }
 
