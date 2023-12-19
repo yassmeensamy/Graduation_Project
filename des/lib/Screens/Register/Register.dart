@@ -4,11 +4,9 @@ import 'package:des/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:oktoast/oktoast.dart';
 import '../../Components/Toasts.dart';
 import '../../constants.dart' as constants;
 import '../../tokens.dart';
-import 'VerifyEmail.dart';
 
 class Register extends StatelessWidget {
   const Register({super.key});

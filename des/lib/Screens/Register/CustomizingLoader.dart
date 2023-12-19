@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../../constants.dart' as constants;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
-import '../Home.dart';
 
 class CustomizingLoader extends StatefulWidget {
   const CustomizingLoader({super.key});

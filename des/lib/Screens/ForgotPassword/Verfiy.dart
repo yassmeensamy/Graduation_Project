@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../Components/VerificationCodeFields.dart';
 import '../../Components/upperBgCircle.dart';
 import '../../constants.dart' as constants;
 import 'Reset.dart';
@@ -9,51 +10,59 @@ class Verfiy extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          color: constants.pageColor,
-          child: Stack(
-            children: <Widget>[
-              UpperBgCircle(constants.babyBlue70, 'Forgot Password?', 390.0),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 340,
-                    ),
-                    Text(
-                      'Verify its you.',
-                      style: TextStyle(fontSize: 24),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Enter the code sent to ',
-                            style: TextStyle(
-                                color: constants.txtGrey, fontSize: 18),
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height,
+          ),
+          child: SafeArea(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              color: constants.pageColor,
+              child: Stack(
+                children: <Widget>[
+                  UpperBgCircle(
+                      constants.babyBlue70, 'Forgot Password?', 390.0),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 340,
+                        ),
+                        Text(
+                          'Verify its you.',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Enter the code sent to ',
+                                style: TextStyle(
+                                    color: constants.txtGrey, fontSize: 18),
+                              ),
+                              Text(
+                                'abc@example.com',
+                                style: TextStyle(
+                                    color: constants.txtGrey,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 18),
+                              ),
+                            ],
                           ),
-                          Text(
-                            'abc@example.com',
-                            style: TextStyle(
-                                color: constants.txtGrey,
-                                decoration: TextDecoration.underline,
-                                fontSize: 18),
-                          ),
-                        ],
-                      ),
+                        ),
+                        EmailFrom(),
+                      ],
                     ),
-                    EmailFrom(),
-                  ],
-                ),
-              )
-            ],
+                  )
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -78,104 +87,7 @@ class _EmailFromState extends State<EmailFrom> {
         const SizedBox(
           height: 32,
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              height: 60,
-              width: MediaQuery.of(context).size.width / 8,
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.txtGrey),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.babyBlue70),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  hintText: '-',
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            SizedBox(
-              height: 60,
-              width: MediaQuery.of(context).size.width / 8,
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.txtGrey),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.babyBlue70),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  hintText: '-',
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            SizedBox(
-              height: 60,
-              width: MediaQuery.of(context).size.width / 8,
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.txtGrey),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.babyBlue70),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  hintText: '-',
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 16,
-            ),
-            SizedBox(
-              height: 60,
-              width: MediaQuery.of(context).size.width / 8,
-              child: TextFormField(
-                textAlign: TextAlign.center,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.txtGrey),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.babyBlue70),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  hintText: '-',
-                ),
-              ),
-            ),
-          ],
-        ),
+        const VerificationCodeFields(),
         const SizedBox(
           height: 32,
         ),
@@ -215,3 +127,4 @@ class _EmailFromState extends State<EmailFrom> {
     );
   }
 }
+
