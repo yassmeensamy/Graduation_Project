@@ -8,42 +8,40 @@ class Forgot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            color: constants.pageColor,
-            child: Stack(
-              children: <Widget>[
-                UpperBgCircle(constants.babyBlue70, 'Forgot Password?', 390.0),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 340,
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: constants.pageColor,
+          child: Stack(
+            children: <Widget>[
+              UpperBgCircle(constants.babyBlue70, 'Forgot Password?', 390.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 340,
+                    ),
+                    Text(
+                      'Forgot Your Password?',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        'Don’t worry it happens! Enter your Email to get the verification code.',
+                        style: TextStyle(color: constants.txtGrey),
                       ),
-                      Text(
-                        'Forgot Your Password?',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          'Don’t worry it happens! Enter your Email to get the verification code.',
-                          style: TextStyle(color: constants.txtGrey),
-                        ),
-                      ),
-                      EmailFrom(),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                    EmailFrom(),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),

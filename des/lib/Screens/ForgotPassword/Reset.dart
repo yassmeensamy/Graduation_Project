@@ -1,49 +1,47 @@
+import 'package:des/main.dart';
 import 'package:flutter/material.dart';
 import '../../Components/upperBgCircle.dart';
 import '../../constants.dart' as constants;
-import '../Home.dart';
 
 class Reset extends StatelessWidget {
   const Reset({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: SafeArea(
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            color: constants.pageColor,
-            child: Stack(
-              children: <Widget>[
-                UpperBgCircle(constants.babyBlue70, 'Forgot Password?', 390.0),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 340,
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          color: constants.pageColor,
+          child: Stack(
+            children: <Widget>[
+              UpperBgCircle(constants.babyBlue70, 'Forgot Password?', 390.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 340,
+                    ),
+                    Text(
+                      'Reset Your Password',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16.0),
+                      child: Text(
+                        'Enter a new pasword',
+                        style: TextStyle(color: constants.txtGrey),
                       ),
-                      Text(
-                        'Reset Your Password',
-                        style: TextStyle(fontSize: 24),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 16.0),
-                        child: Text(
-                          'Enter a new pasword',
-                          style: TextStyle(color: constants.txtGrey),
-                        ),
-                      ),
-                      LoginFrom(),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    ),
+                    LoginFrom(),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -63,7 +61,6 @@ class _LoginFromState extends State<LoginFrom> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        
         SizedBox(
           height: 60,
           child: TextFormField(
@@ -116,14 +113,12 @@ class _LoginFromState extends State<LoginFrom> {
         const SizedBox(
           height: 16,
         ),
-      
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: ElevatedButton(
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (context)=>const Home())
-              );
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const MainNavigator()));
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: constants.babyBlue,

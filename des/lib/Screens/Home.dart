@@ -1,9 +1,11 @@
 import 'package:des/Screens/TestScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Models/user.dart';
+import '../Providers/UserProvider.dart';
 import '../constants.dart' as constants;
-
 
 class Home extends StatelessWidget {
   static const List<List<String>> emotions = [
@@ -41,89 +43,143 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-          backgroundColor: constants.pageColor,
-          body: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 32.0, horizontal: 16),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    User? currentUser = userProvider.user;
+    return Scaffold(
+      backgroundColor: constants.pageColor,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 32.0, horizontal: 16),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
+                        GestureDetector(
+                          onTap: () async {
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            await prefs.remove('accessToken');
+                            await prefs.remove('refreshToken');
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(top: 16),
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                                color: Colors.white, shape: BoxShape.circle),
+                            child: Image.asset('assets/images/female.png'),
+                          ),
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            GestureDetector(
-                              onTap: () async {
-                                final SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.remove('accessToken');
-                                await prefs.remove('refreshToken');
-                              },
-                              child: Container(
-                                margin: const EdgeInsets.only(top: 16),
-                                width: 50,
-                                height: 50,
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    shape: BoxShape.circle),
-                                child: Image.asset('assets/images/female.png'),
-                              ),
+                            Text(
+                              DateFormat('EEEE').format(DateTime.now()),
+                              style: const TextStyle(
+                                  color: constants.txtGrey, fontSize: 16),
                             ),
-                            const Spacer(),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  DateFormat('EEEE').format(DateTime.now()),
-                                  style: const TextStyle(
-                                      color: constants.txtGrey, fontSize: 16),
-                                ),
-                                Text(
-                                  DateFormat.MMMMd().format(DateTime.now()),
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                              ],
+                            Text(
+                              DateFormat.MMMMd().format(DateTime.now()),
+                              style: const TextStyle(fontSize: 20),
                             ),
-                            const SizedBox(
-                              width: 16,
-                            ),
-                            const Padding(
-                              padding: EdgeInsets.only(top: 16.0),
-                              child: Icon(
-                                Icons.calendar_month_outlined,
-                                color: constants.darkGrey,
-                              ),
-                            )
                           ],
                         ),
                         const SizedBox(
-                          height: 16,
-                        ),
-                        const Text(
-                          'Welcome Back, Yara',
-                          style: TextStyle(fontSize: 22),
+                          width: 16,
                         ),
                         const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 10.0),
-                          child: Text(
-                            'How\'s your mental status at the moment?',
-                            style: TextStyle(color: constants.txtGrey),
+                          padding: EdgeInsets.only(top: 16.0),
+                          child: Icon(
+                            Icons.calendar_month_outlined,
+                            color: constants.darkGrey,
                           ),
-                        ),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: getEmotions(),
-                          ),
-                        ),
-                        RectangleContainer(
-                          constants.mint,
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text(
+                      'Welcome Back, ${currentUser!.firstName}',
+                      style: const TextStyle(fontSize: 22),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        'How\'s your mental status at the moment?',
+                        style: TextStyle(color: constants.txtGrey),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: getEmotions(),
+                      ),
+                    ),
+                    RectangleContainer(
+                      constants.mint,
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Depression Test',
+                              style: TextStyle(fontSize: 22),
+                            ),
+                            Container(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: const Text(
+                                'Take a test to determine your depression level',
+                                style: TextStyle(color: constants.darkGrey),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TestScreen()));
+                                    //context.read<Testcubit>().fetchQuestions();
+                                  },
+                                  child: const Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Start Now',
+                                        style: TextStyle(
+                                          color: constants.green,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.play_arrow,
+                                        color: constants.green,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            )
+                          ]),
+                    ),
+                    RectangleContainer(
+                      constants.lilac30,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
                           Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -132,165 +188,114 @@ class Home extends StatelessWidget {
                                   style: TextStyle(fontSize: 22),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
                                   child: const Text(
-                                    'Take a test to determine your depression level',
+                                    'Take a test to determine your \n depression level',
                                     style: TextStyle(color: constants.darkGrey),
                                   ),
                                 ),
-                                Row(
+                                const Row(
                                   children: [
-                                 InkWell(
-                                 onTap: () {
-                                   Navigator.push(context,MaterialPageRoute(builder: (context) => TestScreen()));
-                                    //context.read<Testcubit>().fetchQuestions();
-                                 },
-                                 child: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                   children: [
-                                   Text(
-                                       'Start Now',
-                                        style: TextStyle(
-                                        color: constants.green,
-                                       fontWeight: FontWeight.bold,
-                                       fontSize: 17,
-                                       ),
-                                       ),
-                                       Icon(
-                                        Icons.play_arrow,
-                                         color: constants.green,
-                                         size: 20,
-                                         ),
-                                         ],
-                                         ),
-                                         )
-
+                                    Text(
+                                      'Join Now',
+                                      style: TextStyle(
+                                          color: constants.lilac,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17),
+                                    ),
+                                    Icon(
+                                      Icons.play_arrow,
+                                      color: constants.lilac,
+                                      size: 20,
+                                    )
                                   ],
                                 )
                               ]),
-                        ),
-                        RectangleContainer(
-                          constants.lilac30,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      'Depression Test',
-                                      style: TextStyle(fontSize: 22),
-                                    ),
-                                    Container(
-                                      padding:
-                                          const EdgeInsets.symmetric(vertical: 8.0),
-                                      child: const Text(
-                                        'Take a test to determine your \n depression level',
-                                        style: TextStyle(
-                                            color: constants.darkGrey),
-                                      ),
-                                    ),
-                                    const Row(
-                                      children: [
-                                        Text(
-                                          'Join Now',
-                                          style: TextStyle(
-                                              color: constants.lilac,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 17),
-                                        ),
-                                        Icon(
-                                          Icons.play_arrow,
-                                          color: constants.lilac,
-                                          size: 20,
-                                        )
-                                      ],
-                                    )
-                                  ]),
-                              Image.asset(
-                                'assets/images/Emotions/meetup.png',
-                                width: 92,
-                              ),
-                            ],
+                          Image.asset(
+                            'assets/images/Emotions/meetup.png',
+                            width: 92,
                           ),
-                        ),
-                        RectangleContainer(
-                            constants.babyBlue30,
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    padding:
-                                        const EdgeInsets.symmetric(horizontal: 16),
-                                    child:const Text(
-                                      'Daily Tasks',
-                                      style: TextStyle(fontSize: 22),
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.sports_gymnastics,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                    title:const Text('Meditate for 5 minutes'),
-                                    subtitle: const Text('Meditaion Plan'),
-                                    trailing: Checkbox(
-                                        value: false, onChanged: (b) {}),
-                                  ),
-                                  ListTile(
-                                    leading: const Icon(
-                                      Icons.work,
-                                      color: Colors.white,
-                                      size: 36,
-                                    ),
-                                    title: const Text('Meditate for 5 minutes'),
-                                    subtitle: const Text('Meditaion Plan'),
-                                    trailing: Checkbox(
-                                        value: false, onChanged: (b) {}),
-                                  ),
-                                ])),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                    color: constants.mint,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25),
-                      topRight: Radius.circular(25),
-                    )),
-                padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-                child: const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Icon(
-                      Icons.home,
-                      color: constants.babyBlue,
-                    ),
-                    Icon(
-                      Icons.calendar_month,
-                      color: constants.txtGrey,
-                    ),
-                    Icon(
-                      Icons.group,
-                      color: constants.txtGrey,
-                    ),
-                    Icon(
-                      Icons.timer,
-                      color: constants.txtGrey,
-                    ),
-                    Icon(
-                      Icons.person,
-                      color: constants.txtGrey,
-                    ),
+                    RectangleContainer(
+                        constants.babyBlue30,
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: const Text(
+                                  'Daily Tasks',
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.sports_gymnastics,
+                                  color: Colors.white,
+                                  size: 36,
+                                ),
+                                title: const Text('Meditate for 5 minutes'),
+                                subtitle: const Text('Meditaion Plan'),
+                                trailing:
+                                    Checkbox(value: false, onChanged: (b) {}),
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.work,
+                                  color: Colors.white,
+                                  size: 36,
+                                ),
+                                title: const Text('Meditate for 5 minutes'),
+                                subtitle: const Text('Meditaion Plan'),
+                                trailing:
+                                    Checkbox(value: false, onChanged: (b) {}),
+                              ),
+                            ])),
                   ],
                 ),
               ),
-            ],
-          )),
+            ),
+          ),
+          Container(
+            decoration: const BoxDecoration(
+                color: constants.mint,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(25),
+                  topRight: Radius.circular(25),
+                )),
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Icon(
+                  Icons.home,
+                  color: constants.babyBlue,
+                ),
+                Icon(
+                  Icons.calendar_month,
+                  color: constants.txtGrey,
+                ),
+                Icon(
+                  Icons.group,
+                  color: constants.txtGrey,
+                ),
+                Icon(
+                  Icons.timer,
+                  color: constants.txtGrey,
+                ),
+                Icon(
+                  Icons.person,
+                  color: constants.txtGrey,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -299,7 +304,7 @@ class Home extends StatelessWidget {
     for (int i = 0; i < emotions.length; i++) {
       result.add(
         Container(
-          padding:const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
           margin: const EdgeInsets.only(left: 8.0),
           child: Column(
             children: [

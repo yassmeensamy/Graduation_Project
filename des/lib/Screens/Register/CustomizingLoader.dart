@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:des/main.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart' as constants;
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -36,34 +37,31 @@ class _CustomizingLoaderState extends State<CustomizingLoader> {
       t.cancel();
       timer.cancel();
       Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const Home()));
+          .push(MaterialPageRoute(builder: (context) => const MainNavigator()));
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          backgroundColor: constants.pageColor,
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Center(
-                child: LoadingAnimationWidget.fourRotatingDots(
-                  color: constants.lilac,
-                  size: 100,
-                ),
+    return Scaffold(
+        backgroundColor: constants.pageColor,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Center(
+              child: LoadingAnimationWidget.fourRotatingDots(
+                color: constants.lilac,
+                size: 100,
               ),
-              Container(
-                  padding: const EdgeInsets.only(top: 64.0),
-                  child: Text(
-                    txt,
-                    style: const TextStyle(fontSize: 24),
-                  ))
-            ],
-          ),
+            ),
+            Container(
+                padding: const EdgeInsets.only(top: 64.0),
+                child: Text(
+                  txt,
+                  style: const TextStyle(fontSize: 24),
+                ))
+          ],
         ));
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../Models/user.dart';
+import '../../Providers/UserProvider.dart';
 import '../../constants.dart' as constants;
 import 'Data.dart';
 
@@ -7,87 +10,85 @@ class VerifyEmail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: SingleChildScrollView(
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-                maxHeight: MediaQuery.of(context).size.height,
-              ),
-            child: SafeArea(
-              child: Container(
-                width: MediaQuery.of(context).size.width,
-                color: constants.pageColor,
-                child: Stack(
-                  children: <Widget>[
-                    Positioned(
-                      top: -80,
-                      left: -50,
-                      child: Container(
-                        width: 390.0,
-                        height: 390.0,
-                        decoration: const BoxDecoration(
-                          color: constants.lilac70,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(85.0),
-                              child: Text(
-                                'Verify Your Email',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 44,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                          ],
-                        ),
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height,
+          ),
+          child: SafeArea(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              color: constants.pageColor,
+              child: Stack(
+                children: <Widget>[
+                  Positioned(
+                    top: -80,
+                    left: -50,
+                    child: Container(
+                      width: 390.0,
+                      height: 390.0,
+                      decoration: const BoxDecoration(
+                        color: constants.lilac70,
+                        shape: BoxShape.circle,
                       ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          SizedBox(
-                            height: 340,
-                          ),
-                          Text(
-                            'Verify its you.',
-                            style: TextStyle(fontSize: 24),
-                          ),
                           Padding(
-                            padding: EdgeInsets.symmetric(vertical: 8.0),
-                            child: Row(
-                              children: [
-                                Text(
-                                  'Enter the code sent to ',
-                                  style: TextStyle(
-                                      color: constants.txtGrey, fontSize: 18),
-                                ),
-                                Text(
-                                  'abc@example.com',
-                                  style: TextStyle(
-                                      color: constants.txtGrey,
-                                      decoration: TextDecoration.underline,
-                                      fontSize: 18),
-                                ),
-                              ],
+                            padding: EdgeInsets.all(85.0),
+                            child: Text(
+                              'Verify Your Email',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 44,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
-                          EmailFrom(),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: 340,
+                        ),
+                        Text(
+                          'Verify its you.',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8.0),
+                          child: Row(
+                            children: [
+                              Text(
+                                'Enter the code sent to ',
+                                style: TextStyle(
+                                    color: constants.txtGrey, fontSize: 18),
+                              ),
+                              Text(
+                                'abc@example.com',
+                                style: TextStyle(
+                                    color: constants.txtGrey,
+                                    decoration: TextDecoration.underline,
+                                    fontSize: 18),
+                              ),
+                            ],
+                          ),
+                        ),
+                        EmailFrom(),
+                      ],
+                    ),
+                  )
+                ],
               ),
             ),
           ),
