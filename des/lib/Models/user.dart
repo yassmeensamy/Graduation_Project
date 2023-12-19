@@ -5,5 +5,5 @@ class User {
   String? gender;
   String? dob;
   bool? isEmailVerified;
-  String? image;
+  List<int>? image;
 }

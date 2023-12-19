@@ -1,6 +1,8 @@
 import 'package:des/Providers/UserProvider.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Components/upperBgCircle.dart';
 import '../../Models/user.dart';
 import 'CustomizingLoader.dart';
@@ -11,13 +13,27 @@ import 'Forms/imageForm.dart';
 
 int i = 0;
 List<Widget> arr = getScreens();
+Map body = {};
 
 List<Widget> getScreens() {
-  List<Widget> arr = [const DataForm()];
+  List<Widget> arr = [
+    DataForm(
+      onBirthdaySelected: (selectedBirthday) {
+        body = {'birth_date': selectedBirthday};
+      },
+      onGenderSelected2: (selectedGender) {
+        body.addAll({'gender': selectedGender});
+      },
+    )
+  ];
+
   for (int i = 0; i < preferencesWidgets.length; i++) {
     arr.add(preferencesWidgets[i]);
   }
-  arr.add(const ImageForm());
+  arr.add(ImageForm(onImageSelected: (imageData) {
+    print(imageData);
+    body.addAll({'image': imageData});
+  }));
   return arr;
 }
 
@@ -72,6 +88,7 @@ class _DataState extends State<Data> {
                                     i = i + 1;
                                   });
                                 } else {
+                                  updateProfile();
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
                                           const CustomizingLoader()));
@@ -126,4 +143,17 @@ class _DataState extends State<Data> {
       ),
     );
   }
+}
+
+void updateProfile() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+
+  print(body);
+  // try {
+  //   await patch(Uri.parse('https://mentally.duckdns.org/api/profile/'),
+  //       body: body, headers: {'Authorization': 'Bearer $accessToken'});
+  // } catch (e) {
+  //   print(e);
+  // }
 }

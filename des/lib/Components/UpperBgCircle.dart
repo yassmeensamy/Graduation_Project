@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
 class UpperBgCircle extends StatelessWidget {
-  Color? color;
-  String? txt;
-  double? size;
-  UpperBgCircle(Color c, String t, double s,{super.key}) {
-    color = c;
-    txt = t;
-    size = s;
-  }
+  final Color? color;
+  final String? txt;
+  final double? size;
+  const UpperBgCircle(this.color, this.txt, this.size,{super.key});
 
   @override
   Widget build(BuildContext context) {

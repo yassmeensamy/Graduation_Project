@@ -15,7 +15,7 @@ class ResultScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
 
         children: [
-          Padding(padding: EdgeInsets.only(top:42),
+          Padding(padding: const EdgeInsets.only(top:42),
           child:
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

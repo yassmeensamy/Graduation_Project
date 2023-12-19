@@ -14,14 +14,15 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainNavigator());
 }
+
 class MainNavigator extends StatefulWidget {
   const MainNavigator({Key? key}) : super(key: key);
 
   @override
-  _MainNavigatorState createState() => _MainNavigatorState();
+  MainNavigatorState createState() => MainNavigatorState();
 }
 
-class _MainNavigatorState extends State<MainNavigator> {
+class MainNavigatorState extends State<MainNavigator> {
   String? accessToken;
   String? refreshToken;
   User user = User();
@@ -31,44 +32,62 @@ class _MainNavigatorState extends State<MainNavigator> {
   @override
   void initState() {
     super.initState();
-    getTokens();
+    _getTokens();
   }
 
-  void getTokens() async {
+  _getTokens() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
       refreshToken = prefs.getString('refreshToken');
     });
     if (accessToken != null && refreshToken != null) {
-      fetchUserProfile();
+      _fetchUserProfile();
     }
   }
 
-  fetchUserProfile() {
+  _fetchUserProfile() {
     userProvider = UserProvider();
     user.firstName = 'Yara';
     user.lastName = 'Muhammad';
-    user.gender = 'Female';
-    user.dob = '2001-18-10';
+    user.gender = null;
+    user.dob = null;
     user.email = 'yara@gmail.com';
     user.isEmailVerified = true;
-    user.image = '';
+    user.image = null;
     userProvider!.setUser(user);
     setState(() {});
+  }
+  
+  bool _isLoggedInVerifiedAndProfileComplete() {
+    return accessToken != null &&
+        refreshToken != null &&
+        user.isEmailVerified! &&
+        user.gender != null &&
+        user.dob != null;
+  }
+
+  bool _isLoggedInVerifiedAndProfileIncomplete() {
+    return accessToken != null &&
+        refreshToken != null &&
+        user.isEmailVerified! &&
+        (user.gender == null || user.dob == null);
+  }
+
+  bool _isLoggedInAndNotVerified() {
+    return accessToken != null &&
+        refreshToken != null &&
+        !user.isEmailVerified!;
   }
 
   @override
   Widget build(BuildContext context) {
-    if (accessToken != null && refreshToken != null) {
-      if (user.isEmailVerified! && user.gender != null && user.dob != null) {
-        return _buildMaterialApp(const Home());
-      } else if (user.isEmailVerified! &&
-          (user.gender == null || user.dob == null)) {
-        return _buildMaterialApp(const Data());
-      } else {
-        return _buildMaterialApp(const VerifyEmail());
-      }
+    if (_isLoggedInVerifiedAndProfileComplete()) {
+      return _buildMaterialApp(const Home());
+    } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
+      return _buildMaterialApp(const Data());
+    } else if (_isLoggedInAndNotVerified()) {
+      return _buildMaterialApp(const VerifyEmail());
     } else {
       return _buildMaterialApp(const OnBoarding());
     }

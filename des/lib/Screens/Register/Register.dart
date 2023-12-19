@@ -94,7 +94,7 @@ class Register extends StatelessWidget {
                                 ))
                           ],
                         ),
-                        SocialAuth('or sign up with', constants.lilac)
+                        const SocialAuth('or sign up with', constants.lilac)
                       ],
                     ),
                   )
@@ -264,7 +264,6 @@ class _RegisterFromState extends State<RegisterFrom> {
         errorToast('Something went wrong. Please try again later');
       }
     } catch (e) {
-      print(e);
       errorToast('Something went wrong. Please try again later');
     }
   }

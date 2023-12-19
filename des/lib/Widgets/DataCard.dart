@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DateCard extends StatelessWidget {
-  String Date;
-  DateCard({required this.Date});
+  final String date;
+  const DateCard({super.key, required this.date});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +19,7 @@ class DateCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(Date),
+            Text(date),
             const SizedBox(
               width: 10,
             ),

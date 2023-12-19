@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:des/Cubits/TestCubits/TestCubitStates.dart';
-import 'package:des/GlobalData.dart';
 import 'package:des/Models/QuestionModel.dart';
 import 'package:des/Models/TestResult.dart';
 import 'package:des/Services/GetQuestions.dart';
 import 'package:des/Services/GetTestResulrt.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../constants.dart' as constants;
 
 class Testcubit extends Cubit<TestState> {
   
@@ -59,7 +59,7 @@ void fetchNextQuestions() {
         }
         */
         
-           fetchFinalScore(scores) ;
+           fetchFinalScore(constants.scores) ;
    {
     
    }

@@ -7,6 +7,8 @@ import 'package:des/Widgets/NextButton.dart';
 import 'package:flutter/material.dart';
 
 class SecondViewMood extends StatefulWidget {
+  const SecondViewMood({super.key});
+
   @override
   _SecondViewMoodState createState() => _SecondViewMoodState();
 }
@@ -72,7 +74,7 @@ class _SecondViewMoodState extends State<SecondViewMood> {
               ],
             ),
             const SizedBox(height: 12),
-            DateCard(Date: "Today 11:47"),
+            const DateCard(date: "Today 11:47"),
             const SizedBox(height: 25),
             const Image(
               image: AssetImage("assets/images/Emotions/Proud.png"),
@@ -80,7 +82,7 @@ class _SecondViewMoodState extends State<SecondViewMood> {
               height: 130.0,
             ),
             const SizedBox(height: 25),
-            HorizontalLineDrawingWidget(),
+            const HorizontalLineDrawingWidget(),
             const SizedBox(height: 25),
             const Text(
               "Happy",
@@ -124,7 +126,7 @@ class _SecondViewMoodState extends State<SecondViewMood> {
               padding: const EdgeInsets.only(bottom: 20),
               child: NextButton(ontap: ()
               {
-                 Navigator.push(context,MaterialPageRoute(builder: (context) => Journalingcreen()));
+                 Navigator.push(context,MaterialPageRoute(builder: (context) => const Journalingcreen()));
               },),
             ),
           ],

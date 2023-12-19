@@ -323,12 +323,9 @@ class Home extends StatelessWidget {
 }
 
 class RectangleContainer extends StatelessWidget {
-  Color? color;
-  Widget? child;
-  RectangleContainer(Color c, Widget ch, {super.key}) {
-    color = c;
-    child = ch;
-  }
+  final Color? color;
+  final Widget? child;
+  const RectangleContainer(this.color, this.child, {super.key});
 
   @override
   Widget build(BuildContext context) {

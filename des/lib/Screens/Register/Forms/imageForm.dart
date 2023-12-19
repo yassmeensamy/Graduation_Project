@@ -1,22 +1,44 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../constants.dart' as constants;
+import 'package:provider/provider.dart';
+import '../../../Models/user.dart';
+import '../../../Providers/UserProvider.dart';
+
+typedef ImageCallback = void Function(List<int>? image);
 
 class ImageForm extends StatefulWidget {
-  const ImageForm({super.key});
+  final ImageCallback onImageSelected;
+  const ImageForm({Key? key, required this.onImageSelected}) : super(key: key);
 
   @override
   State<ImageForm> createState() => _ImageFormState();
 }
 
 class _ImageFormState extends State<ImageForm> {
+  List<int>? imageBytes;
   XFile? image;
-
+  ImageProvider? photo;
   final ImagePicker picker = ImagePicker();
+  @override
+  void initState() {
+    super.initState();
+    setImage(context);
+  }
+
+  void setImage(BuildContext context) {
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    User currentUser = userProvider.user!;
+    photo = (currentUser.gender == 'M')
+        ? const AssetImage('assets/images/malePhoto.png')
+        : const AssetImage('assets/images/femalePhoto.png');
+  }
 
   Future getImage(ImageSource media) async {
-    var img = await picker.pickImage(source: media);
+    XFile? img = await picker.pickImage(source: media);
+    imageBytes = await img?.readAsBytes();
+    widget.onImageSelected(imageBytes);
 
     setState(() {
       image = img;
@@ -36,7 +58,6 @@ class _ImageFormState extends State<ImageForm> {
               child: Column(
                 children: [
                   ElevatedButton(
-                    //if user click this button, user can upload image from gallery
                     onPressed: () {
                       Navigator.pop(context);
                       getImage(ImageSource.gallery);
@@ -49,7 +70,6 @@ class _ImageFormState extends State<ImageForm> {
                     ),
                   ),
                   ElevatedButton(
-                    //if user click this button. user can upload image from camera
                     onPressed: () {
                       Navigator.pop(context);
                       getImage(ImageSource.camera);
@@ -76,6 +96,7 @@ class _ImageFormState extends State<ImageForm> {
       ),
       const Row(
         mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text('Would you like to add a photo?'),
         ],
@@ -87,18 +108,9 @@ class _ImageFormState extends State<ImageForm> {
         height: 210,
         width: 210,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              constants.lilac70,
-              constants.babyBlue70,
-            ],
-          ),
           borderRadius: BorderRadius.circular(100),
           image: (image == null)
-              ? const DecorationImage(
-                  image: AssetImage('assets/images/female.png'))
+              ? DecorationImage(image: photo!, fit: BoxFit.cover)
               : DecorationImage(
                   image: FileImage(
                     File(image!.path),
@@ -113,7 +125,7 @@ class _ImageFormState extends State<ImageForm> {
             },
             child: Container(
               padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.only(right: 30, bottom: 20),
+              margin: const EdgeInsets.only(right: 40, bottom: 40),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(100)),

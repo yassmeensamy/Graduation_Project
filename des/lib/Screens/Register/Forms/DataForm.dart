@@ -1,10 +1,21 @@
+import 'package:des/Providers/UserProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../../../Models/user.dart';
 import '../../../constants.dart' as constants;
 
+typedef BirthdayCallback = void Function(String birthday);
+typedef GenderCallback2 = void Function(String gender);
 
 class DataForm extends StatefulWidget {
-  const DataForm({super.key});
+  final BirthdayCallback onBirthdaySelected;
+  final GenderCallback2 onGenderSelected2;
+
+  const DataForm(
+      {super.key,
+      required this.onBirthdaySelected,
+      required this.onGenderSelected2});
 
   @override
   State<DataForm> createState() => _DataFormState();
@@ -16,7 +27,7 @@ class _DataFormState extends State<DataForm> {
   TextEditingController dateinput = TextEditingController();
   @override
   void initState() {
-    dateinput.text = ""; //set the initial value of text field
+    dateinput.text = "";
     super.initState();
   }
 
@@ -62,6 +73,7 @@ class _DataFormState extends State<DataForm> {
               if (pickedDate != null) {
                 String formattedDate =
                     DateFormat('yyyy-MM-dd').format(pickedDate);
+                widget.onBirthdaySelected(formattedDate);
                 setState(() {
                   dateinput.text = formattedDate;
                 });
@@ -100,16 +112,19 @@ class _DataFormState extends State<DataForm> {
         const SizedBox(
           height: 16,
         ),
-        GenderSelection()
+        GenderSelection(onGenderSelected: (selectedGender) {
+          widget.onGenderSelected2(selectedGender);
+        })
       ],
     );
   }
 }
 
-
+typedef GenderCallback = void Function(String gender);
 
 class GenderSelection extends StatefulWidget {
-  GenderSelection({super.key});
+  final GenderCallback onGenderSelected;
+  const GenderSelection({super.key, required this.onGenderSelected});
 
   @override
   State<GenderSelection> createState() => _GenderSelectionState();
@@ -121,11 +136,17 @@ class _GenderSelectionState extends State<GenderSelection> {
   Widget radio(String i, String txt, String img) {
     return GestureDetector(
       onTap: () {
+        widget.onGenderSelected(i);
         if (value == i) {
           setState(() {
             value = '';
           });
         } else {
+          UserProvider userProvider =
+              Provider.of<UserProvider>(context, listen: false);
+          User currentUser = userProvider.user!;
+          currentUser.gender = i;
+          userProvider.setUser(currentUser);
           setState(() {
             value = i;
           });

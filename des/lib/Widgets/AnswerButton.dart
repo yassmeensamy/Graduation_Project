@@ -13,10 +13,10 @@ class AnswerButton extends StatefulWidget {
   });
 
   @override
-  _AnswerButtonState createState() => _AnswerButtonState();
+  AnswerButtonState createState() => AnswerButtonState();
 }
 
-class _AnswerButtonState extends State<AnswerButton> {
+class AnswerButtonState extends State<AnswerButton> {
   @override
   Widget build(BuildContext context) {
     return InkWell(

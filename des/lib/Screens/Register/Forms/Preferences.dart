@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 
-
-
 class PreferencesForm extends StatelessWidget {
-  String? question;
-  PreferencesForm(String q,{super.key, this.question})
-  {
-    question =q;
-  }
+  final String? question;
+  const PreferencesForm(this.question,{super.key});
   @override
   Widget build(BuildContext context) {
     return  Column(
@@ -29,4 +24,4 @@ class PreferencesForm extends StatelessWidget {
   }
 }
 
-List preferencesWidgets = [PreferencesForm('Do you like sports?'),PreferencesForm('Are you in a good health state?')];
+List preferencesWidgets = [const PreferencesForm('Do you like sports?'),const PreferencesForm('Are you in a good health state?')];

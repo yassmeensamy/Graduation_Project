@@ -61,7 +61,7 @@ class ExerciseScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TopicMediation(),
+                              builder: (context) => const TopicMediation(),
                             ),
                           );
                         },

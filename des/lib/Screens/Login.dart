@@ -82,7 +82,7 @@ class Login extends StatelessWidget {
                               ))
                         ],
                       ),
-                      SocialAuth('or sign in with', constants.babyBlue),
+                      const SocialAuth('or sign in with', constants.babyBlue),
                     ],
                   ),
                 )

@@ -14,3 +14,4 @@ const Color lightGrey = Color(0xffECE9EC);
 const Color darkGrey = Color(0xff1E1E1E);
 const Color mint = Color(0xffD5E8E4);
 const Color green = Color(0xff6FDFC7);
+List<Map<String, int>> scores = List.generate(25,(index) => {"value": -1});

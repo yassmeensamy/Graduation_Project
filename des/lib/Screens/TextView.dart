@@ -1,8 +1,9 @@
-import 'package:des/GlobalData.dart';
 import 'package:des/Models/QuestionModel.dart';
 import 'package:des/Widgets/AnswerButton.dart';
 import 'package:des/Widgets/CardQuestion.dart';
 import 'package:flutter/material.dart';
+import '../constants.dart' as constants;
+
 class TestView extends StatefulWidget 
 {
   final Question questionModel;
@@ -67,7 +68,7 @@ class _TestViewState extends State<TestView> {
                   {
                     Selected=true;
                     selectedAnswerIndices[widget.currentQuestion - 1] = isSelected ? index : -1;
-                    scores[widget.currentQuestion-1]["value"] =index;
+                    constants.scores[widget.currentQuestion-1]["value"] =index;
                    
                   });
                 },

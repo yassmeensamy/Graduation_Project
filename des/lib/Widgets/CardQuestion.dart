@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class CardQuestion extends StatelessWidget {
   final String Question;
   //final int QuestionNumber;
-  CardQuestion ( {required this.Question,/*required this.QuestionNumber*/});
+  const CardQuestion ( {super.key, required this.Question,/*required this.QuestionNumber*/});
   @override
   Widget build(BuildContext context) {
     return Padding(

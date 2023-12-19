@@ -14,10 +14,10 @@ class MoodCard extends StatefulWidget {
   });
 
   @override
-  _MoodCardState createState() => _MoodCardState();
+  MoodCardState createState() => MoodCardState();
 }
 
-class _MoodCardState extends State<MoodCard> {
+class MoodCardState extends State<MoodCard> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
