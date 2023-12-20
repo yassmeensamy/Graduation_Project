@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
+import 'package:http/http.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,28 +47,39 @@ class MainNavigatorState extends State<MainNavigator> {
       refreshToken = prefs.getString('refreshToken');
     });
     if (accessToken != null && refreshToken != null) {
-      _fetchUserProfile();
+      await _fetchUserProfile();
     }
   }
 
-  _fetchUserProfile() {
+  getProfile() async {
+    Response response = await get(
+        Uri.parse('https://mentally.duckdns.org/api/profile/'),
+        headers: {'Authorization': 'Bearer $accessToken'});
+    Map userData = jsonDecode(response.body);
+    return userData;
+  }
+
+  _fetchUserProfile() async {
+    Map<String, dynamic>? userData = await getProfile();
+
     userProvider = UserProvider();
-    user.firstName = 'Yara';
-    user.lastName = 'Muhammad';
-    user.gender = null;
-    user.dob = null;
+    user.firstName = userData?['first_name'];
+    user.lastName = userData?['last_name'];
+    user.gender = userData?['gender'];
+    user.dob = userData?['birth_date'];
     user.email = 'yara@gmail.com';
     user.isEmailVerified = true;
     user.image = null;
-    user.googlePhoto='';
+    user.googlePhoto = '';
     userProvider!.setUser(user);
     setState(() {});
   }
-  
+
   bool _isLoggedInVerifiedAndProfileComplete() {
     return accessToken != null &&
         refreshToken != null &&
-        user.isEmailVerified! &&
+        user.isEmailVerified != null && // Perform null check here
+        user.isEmailVerified! && // Access property only if not null
         user.gender != null &&
         user.dob != null;
   }
@@ -71,6 +87,7 @@ class MainNavigatorState extends State<MainNavigator> {
   bool _isLoggedInVerifiedAndProfileIncomplete() {
     return accessToken != null &&
         refreshToken != null &&
+        user.isEmailVerified != null &&
         user.isEmailVerified! &&
         (user.gender == null || user.dob == null);
   }
@@ -78,7 +95,12 @@ class MainNavigatorState extends State<MainNavigator> {
   bool _isLoggedInAndNotVerified() {
     return accessToken != null &&
         refreshToken != null &&
+        user.isEmailVerified != null &&
         !user.isEmailVerified!;
+  }
+  bool _isnotLoggedIn() {
+    return accessToken == null ||
+        refreshToken == null;
   }
 
   @override
@@ -89,8 +111,10 @@ class MainNavigatorState extends State<MainNavigator> {
       return _buildMaterialApp(const Data());
     } else if (_isLoggedInAndNotVerified()) {
       return _buildMaterialApp(const VerifyEmail());
-    } else {
+    } else if (_isnotLoggedIn()) {
       return _buildMaterialApp(const OnBoarding());
+    } else {
+      return _buildMaterialApp(const Loader());
     }
   }
 

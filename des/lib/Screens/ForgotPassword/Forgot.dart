@@ -13,10 +13,10 @@ class Forgot extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width,
           color: constants.pageColor,
-          child: Stack(
+          child: const Stack(
             children: <Widget>[
               UpperBgCircle(constants.babyBlue70, 'Forgot Password?', 390.0),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,

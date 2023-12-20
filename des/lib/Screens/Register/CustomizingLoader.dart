@@ -1,9 +1,8 @@
 import 'dart:async';
+import 'package:des/Components/loader.dart';
 import 'package:des/main.dart';
 import 'package:flutter/material.dart';
 import '../../constants.dart' as constants;
-import 'package:loading_animation_widget/loading_animation_widget.dart';
-
 
 class CustomizingLoader extends StatefulWidget {
   const CustomizingLoader({super.key});
@@ -48,12 +47,7 @@ class _CustomizingLoaderState extends State<CustomizingLoader> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(
-              child: LoadingAnimationWidget.fourRotatingDots(
-                color: constants.lilac,
-                size: 100,
-              ),
-            ),
+            const Loader(),
             Container(
                 padding: const EdgeInsets.only(top: 64.0),
                 child: Text(

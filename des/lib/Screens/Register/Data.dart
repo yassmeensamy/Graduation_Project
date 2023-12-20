@@ -32,7 +32,7 @@ List<Widget> getScreens() {
   }
   arr.add(ImageForm(onImageSelected: (imageData) {
     print(imageData);
-    body.addAll({'image': imageData});
+    // body.addAll({'image': imageData});
   }));
   return arr;
 }
@@ -150,10 +150,10 @@ void updateProfile() async {
   String? accessToken = prefs.getString('accessToken');
 
   print(body);
-  // try {
-  //   await patch(Uri.parse('https://mentally.duckdns.org/api/profile/'),
-  //       body: body, headers: {'Authorization': 'Bearer $accessToken'});
-  // } catch (e) {
-  //   print(e);
-  // }
+  try {
+    await patch(Uri.parse('https://mentally.duckdns.org/api/profile/'),
+        body: body, headers: {'Authorization': 'Bearer $accessToken'});
+  } catch (e) {
+    print(e);
+  }
 }
