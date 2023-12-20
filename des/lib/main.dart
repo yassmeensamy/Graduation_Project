@@ -55,6 +55,7 @@ class MainNavigatorState extends State<MainNavigator> {
     user.email = 'yara@gmail.com';
     user.isEmailVerified = true;
     user.image = null;
+    user.googlePhoto='';
     userProvider!.setUser(user);
     setState(() {});
   }

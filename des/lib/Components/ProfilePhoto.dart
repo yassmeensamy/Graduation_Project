@@ -17,15 +17,12 @@ class ProfilePhoto extends StatelessWidget {
           image: MemoryImage(
         Uint8List.fromList(currentUser.image!),
       ));
-    }
-    else
-    {
-      if(currentUser.gender=='M')
-      {
+    } else if (currentUser.googlePhoto != null) {
+      return Image(image: NetworkImage(currentUser.googlePhoto!));
+    } else {
+      if (currentUser.gender == 'M') {
         return Image.asset('asset/images/malePhoto');
-      }
-      else
-      {
+      } else {
         return Image.asset('asset/images/femalePhoto');
       }
     }

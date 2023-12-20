@@ -6,4 +6,5 @@ class User {
   String? dob;
   bool? isEmailVerified;
   List<int>? image;
+  String? googlePhoto;
 }
