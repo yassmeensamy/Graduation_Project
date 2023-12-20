@@ -1,15 +1,13 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import '../constants.dart' as constants;
 import 'UpperBgCircle.dart';
 
 class LoginTemp extends StatelessWidget {
-  Color? color;
-  String? title;
-  double? size;
-  Widget? content;
-  LoginTemp(this.color, this.title, this.size, this.content, {super.key});
+  final Color? color;
+  final String? title;
+  final double? size;
+  final Widget? content;
+  const LoginTemp(this.color, this.title, this.size, this.content, {super.key});
 
   @override
   Widget build(BuildContext context) {

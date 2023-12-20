@@ -36,16 +36,18 @@ InputDecoration getInputDecoration(String hintText, IconData suffixIcon) {
     suffixIcon: Icon(suffixIcon),
     hintStyle: const TextStyle(color: txtGrey),
     suffixIconColor: txtGrey,
+ 
   );
 }
 
 class VerticalPadding extends StatelessWidget {
-  const VerticalPadding({super.key});
+  final double? padding;
+  const VerticalPadding(this.padding,{super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(
-      height: 16,
+    return SizedBox(
+      height: padding!,
     );
   }
 }

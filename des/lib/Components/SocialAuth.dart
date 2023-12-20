@@ -85,7 +85,8 @@ class SocialAuth extends StatelessWidget {
               ),
               googleAuth),
         ],
-      )
+      ),
+      const constants.VerticalPadding(10)
     ]);
   }
 }

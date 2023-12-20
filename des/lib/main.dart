@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:http/http.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
