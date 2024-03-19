@@ -5,6 +5,5 @@ class User {
   String? gender;
   String? dob;
   bool? isEmailVerified;
-  List<int>? image;
-  String? googlePhoto;
+  String? image;
 }

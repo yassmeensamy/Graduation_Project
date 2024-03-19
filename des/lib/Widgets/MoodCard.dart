@@ -39,7 +39,7 @@ class MoodCardState extends State<MoodCard> {
             children: [
               const SizedBox(height: 3,),
               Image.asset(
-                widget.mood.ImagePath, 
+                widget.mood.imagePath, 
                 height: 65,
                 width: 65,
               ),

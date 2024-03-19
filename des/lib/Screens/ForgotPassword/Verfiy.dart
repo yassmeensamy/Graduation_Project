@@ -78,7 +78,7 @@ class _CodeFromState extends State<CodeFrom> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const constants.VerticalPadding(32),
-        const VerificationCodeFields(),
+        // const VerificationCodeFields(),
         const constants.VerticalPadding(32),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

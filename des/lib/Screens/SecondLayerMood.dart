@@ -10,39 +10,39 @@ class SecondViewMood extends StatefulWidget {
   const SecondViewMood({super.key});
 
   @override
-  _SecondViewMoodState createState() => _SecondViewMoodState();
+  SecondViewMoodState createState() => SecondViewMoodState();
 }
 
-class _SecondViewMoodState extends State<SecondViewMood> {
+class SecondViewMoodState extends State<SecondViewMood> {
   List<SecondMoodModel> moods = [
     SecondMoodModel(
-      Description: 'Happy Description',
-      ImagePath: 'assets/images/Emotions/Proud.png',
+      description: 'Happy Description',
+      imagePath: 'assets/images/Emotions/Proud.png',
       moodText: 'Happy',
     ),
       SecondMoodModel(
-      Description: 'Happy Description',
-      ImagePath: 'assets/images/Emotions/Proud.png',
+      description: 'Happy Description',
+      imagePath: 'assets/images/Emotions/Proud.png',
       moodText: 'Happy',
     ),
        SecondMoodModel(
-      Description: 'Happy Description',
-      ImagePath: 'assets/images/Emotions/Proud.png',
+      description: 'Happy Description',
+      imagePath: 'assets/images/Emotions/Proud.png',
       moodText: 'Happy',
     ),
        SecondMoodModel(
-      Description: 'Happy Description',
-      ImagePath: 'assets/images/Emotions/Proud.png',
+      description: 'Happy Description',
+      imagePath: 'assets/images/Emotions/Proud.png',
       moodText: 'Happy',
     ),
        SecondMoodModel(
-      Description: 'Happy Description',
-      ImagePath: 'assets/images/Emotions/Proud.png',
+      description: 'Happy Description',
+      imagePath: 'assets/images/Emotions/Proud.png',
       moodText: 'Happy',
     ),
        SecondMoodModel(
-      Description: 'Happy Description',
-      ImagePath: 'assets/images/Emotions/Proud.png',
+      description: 'Happy Description',
+      imagePath: 'assets/images/Emotions/Proud.png',
       moodText: 'Happy',
     ),
     // Add other mood models as needed

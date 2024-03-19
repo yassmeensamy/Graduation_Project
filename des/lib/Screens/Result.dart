@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ResultScreen extends StatelessWidget {
-   final int total_score;
-  const ResultScreen({super.key, required this.total_score});
+   final int totalScore;
+  const ResultScreen({super.key, required this.totalScore});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +61,7 @@ class ResultScreen extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "$total_score/125",
+                  "$totalScore/125",
                   style: TextStyle(
                     fontFamily: GoogleFonts.comfortaa().fontFamily,
                     fontSize: 55,

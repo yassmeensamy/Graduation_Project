@@ -70,7 +70,7 @@ class Testcreen extends StatelessWidget {
               } else if (state is TestFinished) {
                 // Handle the finished state, you can return a completion message or any other widget.
 
-                return ResultScreen(total_score: state.finalScore);
+                return ResultScreen(totalScore: state.finalScore);
               } else {
                 // Handle any other states here.
                 return Container();

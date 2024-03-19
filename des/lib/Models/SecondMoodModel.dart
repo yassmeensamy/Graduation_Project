@@ -1,7 +1,7 @@
 class SecondMoodModel 
 {
 final String moodText;
-final String Description;
-final String ImagePath;
- SecondMoodModel ({required this.Description,required this.ImagePath ,required this.moodText});
+final String description;
+final String imagePath;
+ SecondMoodModel ({required this.description,required this.imagePath ,required this.moodText});
 }

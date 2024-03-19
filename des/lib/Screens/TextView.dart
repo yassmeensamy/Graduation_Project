@@ -19,10 +19,10 @@ class TestView extends StatefulWidget
   });
 
   @override
-  _TestViewState createState() => _TestViewState();
+  TestViewState createState() => TestViewState();
 }
 
-class _TestViewState extends State<TestView> {
+class TestViewState extends State<TestView> {
   List<int> selectedAnswerIndices = List.filled(25, -1); // Initialize the list with -1 values for 25 questions
    bool Selected=false;
   @override
@@ -30,7 +30,7 @@ class _TestViewState extends State<TestView> {
  
     return Column(
       children: [
-          Padding(padding:EdgeInsets.only(top:30),
+          Padding(padding:const EdgeInsets.only(top:30),
             child:
             Row(
               children:[

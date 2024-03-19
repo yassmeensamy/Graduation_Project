@@ -1,3 +1,5 @@
+import 'package:des/Components/ProfilePhoto.dart';
+import 'package:des/Controllers/GoogleAuthController.dart';
 import 'package:des/Screens/TestScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -67,14 +69,15 @@ class Home extends StatelessWidget {
                                 await SharedPreferences.getInstance();
                             await prefs.remove('accessToken');
                             await prefs.remove('refreshToken');
+                            googleLogout();
                           },
                           child: Container(
                             margin: const EdgeInsets.only(top: 16),
                             width: 50,
                             height: 50,
-                            decoration: const BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle),
-                            child: Image.asset('assets/images/female.png'),
+                            decoration: BoxDecoration(
+                                color: Colors.white, shape: BoxShape.circle,
+                                image: DecorationImage(image: getProfilePhoto(context))),
                           ),
                         ),
                         const Spacer(),

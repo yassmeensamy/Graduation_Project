@@ -39,7 +39,7 @@ class JournalingScreen extends StatelessWidget {
             NextButton(
               ontap: ()
               {
-                 Navigator.push(context,MaterialPageRoute(builder: (context) => Activities()));
+                 Navigator.push(context,MaterialPageRoute(builder: (context) => const Activities()));
               },
             ),
           ],

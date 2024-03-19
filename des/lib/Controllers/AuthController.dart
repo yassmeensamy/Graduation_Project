@@ -4,16 +4,17 @@ import 'package:des/Tokens.dart';
 import 'package:des/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../constants.dart' as constants;
 
 Future<int> callLoginApi(
     BuildContext context, String email, String password) async {
   try {
-    Response response = await post(
-        Uri.parse('https://mentally.duckdns.org/api/auth/login/'),
-        body: {
-          "username": email,
-          "password": password,
-        });
+    Response response =
+        await post(Uri.parse('${constants.BaseURL}/api/auth/login/'), body: {
+      "email": email,
+      "password": password,
+    });
 
     if (response.statusCode == 200) {
       Tokens tokens = parseTokens(response.body);
@@ -38,11 +39,11 @@ Future<int> callRegisterApi(
     BuildContext context, String name, String email, String password) async {
   try {
     Response response = await post(
-        Uri.parse('https://mentally.duckdns.org/api/auth/register/'),
+        Uri.parse('${constants.BaseURL}/api/auth/register/'),
         body: {
           "first_name": name.split(' ')[0],
           "last_name": name.split(' ')[1],
-          "username": email,
+          "email": email,
           "password": password,
         });
 
@@ -55,7 +56,62 @@ Future<int> callRegisterApi(
             MaterialPageRoute(builder: (context) => const MainNavigator()));
       });
     } else if (response.statusCode == 400) {
+      print(response.body);
       errorToast('This Email is already used');
+    } else {
+      errorToast('Something went wrong. Please try again later');
+    }
+  } catch (e) {
+    errorToast('Something went wrong. Please try again later');
+  }
+
+  return 100;
+}
+
+Future<int> callVerifyOTPApi(BuildContext context, String otp) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  String? accessToken = prefs.getString('accessToken');
+
+  try {
+    Response response = await post(
+        Uri.parse('${constants.BaseURL}/api/auth/verify-email/'),
+        headers: {
+          'Authorization': 'Bearer $accessToken'
+        },
+        body: {
+          "otp": otp,
+        });
+    if (response.statusCode == 200) {
+      successToast('Verified Successfully');
+      Timer(const Duration(seconds: 2), () {
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const MainNavigator()));
+      });
+    } else if (response.statusCode == 400) {
+      errorToast('Invalid or expired OTP');
+    } else {
+      errorToast('Something went wrong. Please try again later');
+    }
+  } catch (e) {
+    errorToast('Something went wrong. Please try again later');
+  }
+
+  return 100;
+}
+
+Future<int> callResendOTPApi() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  String? accessToken = prefs.getString('accessToken');
+
+  try {
+    Response response = await post(
+        Uri.parse('${constants.BaseURL}/api/auth/resend-verification-otp/'),
+        headers: {'Authorization': 'Bearer $accessToken'});
+
+    if (response.statusCode == 200) {
+      successToast('OTP resent to your email.');
     } else {
       errorToast('Something went wrong. Please try again later');
     }

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../Models/user.dart';
 import '../../../Providers/UserProvider.dart';
 
-typedef ImageCallback = void Function(List<int>? image);
+typedef ImageCallback = void Function(String? image);
 
 class ImageForm extends StatefulWidget {
   final ImageCallback onImageSelected;
@@ -16,7 +16,6 @@ class ImageForm extends StatefulWidget {
 }
 
 class _ImageFormState extends State<ImageForm> {
-  List<int>? imageBytes;
   XFile? image;
   ImageProvider? photo;
   final ImagePicker picker = ImagePicker();
@@ -37,8 +36,7 @@ class _ImageFormState extends State<ImageForm> {
 
   Future getImage(ImageSource media) async {
     XFile? img = await picker.pickImage(source: media);
-    imageBytes = await img?.readAsBytes();
-    widget.onImageSelected(imageBytes);
+    widget.onImageSelected(img!.path);
 
     setState(() {
       image = img;

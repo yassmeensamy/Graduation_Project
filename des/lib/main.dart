@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:http/http.dart';
@@ -7,6 +6,7 @@ import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'Controllers/GoogleAuthController.dart';
 import 'Providers/UserProvider.dart';
 import 'Screens/Home.dart';
 import 'Screens/Register/Data.dart';
@@ -26,6 +26,13 @@ class MainNavigator extends StatefulWidget {
   MainNavigatorState createState() => MainNavigatorState();
 }
 
+logout() async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('accessToken');
+  await prefs.remove('refreshToken');
+  googleLogout();
+}
+
 class MainNavigatorState extends State<MainNavigator> {
   String? accessToken;
   String? refreshToken;
@@ -40,6 +47,7 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
+    // logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
@@ -52,8 +60,9 @@ class MainNavigatorState extends State<MainNavigator> {
 
   getProfile() async {
     Response response = await get(
-        Uri.parse('https://mentally.duckdns.org/api/profile/'),
+        Uri.parse('${constants.BaseURL}/api/auth/user/'),
         headers: {'Authorization': 'Bearer $accessToken'});
+    print(response.body);
     Map userData = jsonDecode(response.body);
     return userData;
   }
@@ -65,11 +74,10 @@ class MainNavigatorState extends State<MainNavigator> {
     user.firstName = userData?['first_name'];
     user.lastName = userData?['last_name'];
     user.gender = userData?['gender'];
-    user.dob = userData?['birth_date'];
-    user.email = 'yara@gmail.com';
-    user.isEmailVerified = true;
-    user.image = null;
-    user.googlePhoto = '';
+    user.dob = userData?['birthdate'];
+    user.email = userData?['email'];
+    user.isEmailVerified = userData?['is_verified'];
+    user.image = userData?['image'];
     userProvider!.setUser(user);
     setState(() {});
   }
@@ -77,8 +85,8 @@ class MainNavigatorState extends State<MainNavigator> {
   bool _isLoggedInVerifiedAndProfileComplete() {
     return accessToken != null &&
         refreshToken != null &&
-        user.isEmailVerified != null && // Perform null check here
-        user.isEmailVerified! && // Access property only if not null
+        user.isEmailVerified != null &&
+        user.isEmailVerified! &&
         user.gender != null &&
         user.dob != null;
   }
@@ -97,9 +105,9 @@ class MainNavigatorState extends State<MainNavigator> {
         user.isEmailVerified != null &&
         !user.isEmailVerified!;
   }
+
   bool _isnotLoggedIn() {
-    return accessToken == null ||
-        refreshToken == null;
+    return accessToken == null || refreshToken == null;
   }
 
   @override
