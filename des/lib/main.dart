@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
+import 'package:des/cubit/cubit/Test/answer_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +14,37 @@ import 'Screens/Home.dart';
 import 'Screens/Register/Data.dart';
 import 'Screens/Register/VerifyEmail.dart';
 import 'constants.dart' as constants;
+import 'cubit/EmotionCubit.dart';
+import 'cubit/cubit/Test/TestCubit.dart';
+import 'cubit/cubit/activity_card_cubit.dart';
+import 'cubit/cubit/home_cubit.dart';
+import 'cubit/cubit/insigths_cubit.dart';
+import 'cubit/cubit/slider_cubit.dart';
+import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MainNavigator());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => SecondLayerCubit()),
+        BlocProvider(create: (context) => ActivitiesCubit()),
+        BlocProvider(create: (context) => SliderCubit()),
+        BlocProvider(create: (context) => HomeCubit()),
+        BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
+        BlocProvider(create: (context)=>InsigthsCubit()),
+        BlocProvider<Testcubit>(
+          create: (context) => Testcubit(),
+        ),
+        BlocProvider<AnswerCubit>(
+          create: (context) => AnswerCubit(testcubit: context.read<Testcubit>()),
+        ),
+        BlocProvider(create: (context)=>InsigthsCubit())
+      ],
+      child: const MainNavigator(),
+    ),
+  );
 }
 
 class MainNavigator extends StatefulWidget {
@@ -47,7 +75,6 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
-    // logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');

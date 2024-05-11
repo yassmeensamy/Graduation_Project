@@ -96,6 +96,7 @@ class _LoginFromState extends State<LoginFrom> {
         String email = emailController.text.toString();
         String password = passwordController.text.toString();
         await callLoginApi(context, email, password);
+        
         setState(() {
           isLoading = false;
         });

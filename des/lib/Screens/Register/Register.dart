@@ -24,41 +24,43 @@ class Content extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        constants.VerticalPadding(310),
-        Text(
-          'Hello! ',
-          style: constants.welcomeTextStyle,
-        ),
-        constants.VerticalPadding(16),
-        Text(
-          'Our Journey to Well-being Starts Here.',
-          style: TextStyle(color: constants.txtGrey),
-        ),
-        constants.VerticalPadding(16),
-        RegisterFrom(),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Already have an account? ',
-              style: TextStyle(color: constants.lilac),
-            ),
-            NavigationLink(
-                Text(
-                  'Login Now',
-                  style: TextStyle(
-                      color: constants.lilac, fontWeight: FontWeight.bold),
-                ),
-                Login()),
-          ],
-        ),
-        SocialAuth('or sign up with', constants.lilac)
-      ],
+    return const SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          constants.VerticalPadding(310),
+          Text(
+            'Hello! ',
+            style: constants.welcomeTextStyle,
+          ),
+          constants.VerticalPadding(16),
+          Text(
+            'Our Journey to Well-being Starts Here.',
+            style: TextStyle(color: constants.txtGrey),
+          ),
+          constants.VerticalPadding(16),
+          RegisterFrom(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Already have an account? ',
+                style: TextStyle(color: constants.lilac),
+              ),
+              NavigationLink(
+                  Text(
+                    'Login Now',
+                    style: TextStyle(
+                        color: constants.lilac, fontWeight: FontWeight.bold),
+                  ),
+                  Login()),
+            ],
+          ),
+          SocialAuth('or sign up with', constants.lilac)
+        ],
+      ),
     );
   }
 }
@@ -94,7 +96,6 @@ class _RegisterFromState extends State<RegisterFrom> {
         });
       }
     }
-
     return Form(
       key: _formKey,
       child: Column(

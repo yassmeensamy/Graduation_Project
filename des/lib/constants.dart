@@ -19,6 +19,11 @@ List<Map<String, int>> scores = List.generate(25, (index) => {"value": -1});
 const TextStyle welcomeTextStyle = TextStyle(fontSize: 24);
 const TextStyle regularTextStyle = TextStyle(color: txtGrey);
 const TextStyle linkTextStyle = TextStyle(color: babyBlue);
+Color darkmint = const Color(0xff538279).withOpacity(0.83);
+
+
+const String clientId = "c9aa8c3a9b3048fe933227becece333e";
+const String clientSecret = "e997e98e0b284e0fab4da6128bba6ae6";
 
 InputDecoration getInputDecoration(String hintText, IconData suffixIcon) {
   return InputDecoration(
@@ -37,13 +42,12 @@ InputDecoration getInputDecoration(String hintText, IconData suffixIcon) {
     suffixIcon: Icon(suffixIcon),
     hintStyle: const TextStyle(color: txtGrey),
     suffixIconColor: txtGrey,
- 
   );
 }
 
 class VerticalPadding extends StatelessWidget {
   final double? padding;
-  const VerticalPadding(this.padding,{super.key});
+  const VerticalPadding(this.padding, {super.key});
 
   @override
   Widget build(BuildContext context) {

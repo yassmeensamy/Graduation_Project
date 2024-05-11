@@ -1,0 +1,95 @@
+
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../Models/TestResultModel.dart';
+import '../Home.dart';
+
+class ResultScreen extends StatelessWidget {
+   TestResultModel testResult;
+  ResultScreen({super.key, required this.testResult});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+     
+      body:Center(child:
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+
+        children: [
+          Padding(padding: const EdgeInsets.only(top:42),
+          child:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: 
+            [
+              Center(child:
+              Text("Result",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold)),
+              ),
+              //const SizedBox(width: 190),
+              IconButton(
+                onPressed: () 
+                {
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => Home()));
+                },
+                
+                icon: const Icon(Icons.close),
+              ), 
+            ],
+          ),
+          ),
+          const SizedBox(height: 80),
+          Center(
+          child :
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width:17,color: Colors.transparent ),
+                shape: BoxShape.circle,
+                 gradient: const LinearGradient(
+                  begin: Alignment.topLeft,      // Starting point
+                 end: Alignment.bottomRight,
+                colors:  [Color(0xFF6495ED), Color(0xFFB57EDC)], 
+                // Your gradient colors
+              ), // Set your desired background color
+              ),
+              child:
+               Container(
+              width: 230.0, // Adjust the width as needed
+              height: 230.0, // Adjust the height as needed
+              decoration: BoxDecoration(
+                border: Border.all(width:0,color: Colors.transparent ),
+                shape: BoxShape.circle,
+                color: Colors.white, // Set your desired background color
+              ),
+              child: Center(
+                child: Text(
+                   "${testResult.total_score.toString()}/100",
+                  style: TextStyle(
+                    fontFamily: GoogleFonts.comfortaa().fontFamily,
+                    fontSize: 55,
+                    fontWeight: FontWeight.w100,  
+                    color: const Color(0xFF6495ED),
+                  ),
+                ),
+              ),
+            ), 
+          ),
+          ),
+          
+          const SizedBox(height: 30,),
+           Text(testResult.level_of_depression,style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold),textAlign: TextAlign.center),
+          const SizedBox(height: 30,),
+          Padding(padding: const EdgeInsets.symmetric(horizontal: 28),
+            child:
+            Center(child:
+            Text("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia aut ipsa.",
+      style: TextStyle(fontSize: 24.0,fontFamily: GoogleFonts.comfortaa().fontFamily,fontWeight: FontWeight.w600),
+      textAlign: TextAlign.center,),
+          ),
+      ), 
+        ],
+      ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,62 @@
+
+
+import 'package:flutter/material.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+
+import '../../Models/TestResultModel.dart';
+
+class DepresionGraph extends StatefulWidget {
+   List<TestResultModel> salesData ;
+  DepresionGraph({required this.salesData});
+  @override
+  _DepresionGraphState createState() => _DepresionGraphState();
+}
+
+class _DepresionGraphState extends State<DepresionGraph> {
+  late TooltipBehavior _tooltipBehavior;
+
+  @override
+  void initState() {
+    _tooltipBehavior = TooltipBehavior(
+      color: Colors.white,
+      enable: true,
+      // Using builder to create custom content for tooltips
+      builder: (dynamic data, dynamic point, dynamic series, int pointIndex, int seriesIndex) 
+      {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('${data.level_of_depression}'),
+        );
+      },
+    );
+   
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+  
+    return Container(
+      height: 400,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        color: Colors.grey.withOpacity(.1),
+      ),
+      child: SfCartesianChart(
+        primaryXAxis: CategoryAxis(),
+        title: ChartTitle(text: 'Depression test'),
+        tooltipBehavior: _tooltipBehavior,
+        series: <LineSeries<TestResultModel, String>>[
+          LineSeries<TestResultModel, String>(
+            color: Color(0xff9A89FF).withOpacity(.7),
+            width: 4,
+            dataSource: widget.salesData,
+            xValueMapper: (TestResultModel sales, _) => sales.timestamp!,
+            yValueMapper: (TestResultModel sales, _) => sales.total_score,
+            dataLabelMapper: (TestResultModel sales, _) => sales.level_of_depression
+          )
+        ],
+      ),
+    );
+  }
+}

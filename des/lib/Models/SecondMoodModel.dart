@@ -1,7 +1,13 @@
 class SecondMoodModel 
 {
-final String moodText;
-final String description;
-final String imagePath;
- SecondMoodModel ({required this.description,required this.imagePath ,required this.moodText});
+final String Text;
+final String Description;
+final String ImagePath;
+ SecondMoodModel ({required this.Description,required this.ImagePath ,required this.Text});
+ 
+ factory SecondMoodModel.fromJson(Map<String,dynamic>json, String baseUrl)
+ {
+     String fullImagePath = "$baseUrl${json['image']}";
+    return SecondMoodModel(Description: json['description'], ImagePath: fullImagePath, Text:json['name']);
+ }
 }

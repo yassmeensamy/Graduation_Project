@@ -1,6 +1,5 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
-import 'package:des/Screens/TestScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -148,12 +147,13 @@ class Home extends StatelessWidget {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const TestScreen()));
-                                    //context.read<Testcubit>().fetchQuestions();
+                                  //   Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) =>
+                                  //               // const TestScreen()
+                                  //               );
+                                   
                                   },
                                   child: const Row(
                                     mainAxisSize: MainAxisSize.min,

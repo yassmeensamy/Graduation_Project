@@ -1,4 +1,5 @@
-import 'package:des/Models/AnswerOptionModel.dart';
+
+import 'AnswerOptionModel.dart';
 
 class Question {
   final String question;
