@@ -69,7 +69,6 @@ class MainNavigatorState extends State<MainNavigator> {
   User user = User();
 
   UserProvider? userProvider;
-
   @override
   void initState() {
     super.initState();

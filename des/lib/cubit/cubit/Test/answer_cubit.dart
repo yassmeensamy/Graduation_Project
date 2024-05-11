@@ -10,14 +10,12 @@ class AnswerCubit extends Cubit<AnswerState>
 {
   final Testcubit testcubit ;
   AnswerCubit({required this.testcubit}) : super(AnswerState());
- 
   void Selected(int answer)
   {
     testcubit.isselected=true;
     testcubit.value=answer;
     emit(state.copyWith(answer));
   }
-  
   void disSelected()
   {
     testcubit.isselected=false;
