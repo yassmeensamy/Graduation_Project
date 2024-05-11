@@ -58,6 +58,7 @@ class MainNavigator extends StatefulWidget {
 logout() async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove('accessToken');
+  //tgghkjf  ycgb
   await prefs.remove('refreshToken');
   googleLogout();
 }
