@@ -1,4 +1,5 @@
 
+import 'package:des/Screens/Temp.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -20,21 +21,23 @@ class ResultScreen extends StatelessWidget {
           Padding(padding: const EdgeInsets.only(top:42),
           child:
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: 
             [
-              Center(child:
-              Text("Result",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold)),
-              ),
+              
               //const SizedBox(width: 190),
               IconButton(
                 onPressed: () 
                 {
-                    Navigator.push(context,MaterialPageRoute(builder: (context) => Home()));
+                    Navigator.push(context,MaterialPageRoute(builder: (context) => temp()));
                 },
                 
                 icon: const Icon(Icons.close),
               ), 
+              const SizedBox(width: 95,),
+              Center(child:
+              Text("Result",style: TextStyle(fontFamily: GoogleFonts.comfortaa().fontFamily,fontSize: 32,fontWeight: FontWeight.bold)),
+              ),
             ],
           ),
           ),

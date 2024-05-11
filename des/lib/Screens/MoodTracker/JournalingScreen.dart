@@ -129,7 +129,7 @@ class JournalingImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Image(
-        image: AssetImage("Assets/Journaling.png"),
+        image: AssetImage("assets/images/Journaling.png"),
         width: 350,
         height: 205,
       ),

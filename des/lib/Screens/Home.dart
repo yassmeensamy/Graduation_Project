@@ -1,30 +1,28 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../Models/PrimaryEmotionsModel.dart';
 import '../Models/user.dart';
 import '../Providers/UserProvider.dart';
 import '../constants.dart' as constants;
+import '../cubit/EmotionCubit.dart';
+import '../cubit/EmotionCubitState.dart';
+import 'MoodTracker/SecondLayerMood.dart';
+import 'Test/TestScreen.dart';
 
-class Home extends StatelessWidget {
-  static const List<List<String>> emotions = [
-    [
-      'Happy',
-      'assets/images/Emotions/Proud.png',
-    ],
-    [
-      'Sad',
-      'assets/images/Emotions/Sad.png',
-    ],
+class _Home extends StatefulWidget {
+  final List<PrimaryMoodModel> emotions;
+
+   _Home({required this.emotions, Key? key}) : super(key: key);
+
+  static const List<List<String>> emotionsIcons = [
     [
       'Loved',
       'assets/images/Emotions/Loved.png',
-    ],
-    [
-      'Fear',
-      'assets/images/Emotions/Insecure.png',
     ],
     [
       'Disgust',
@@ -35,19 +33,88 @@ class Home extends StatelessWidget {
       'assets/images/Emotions/Startled.png',
     ],
     [
+      'Happy',
+      'assets/images/Emotions/Proud.png',
+    ],
+    [
+      'Fear',
+      'assets/images/Emotions/Insecure.png',
+    ],
+    [
       'Angry',
       'assets/images/Emotions/Threatended.png',
     ],
+    [
+      'Sad',
+      'assets/images/Emotions/Sad.png',
+    ],
   ];
 
-  const Home({super.key});
+  @override
+  State<_Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<_Home> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
 
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
+     void _openDrawer() {
+    _scaffoldKey.currentState!.openDrawer();
+  }
+
     return Scaffold(
+      drawerEnableOpenDragGesture: false,
+      drawer: Drawer(
+      child: ListView(children: [
+        // Row(
+              
+        //       children: [
+        //            CircleAvatar(
+        //             radius: 28,
+        //             backgroundImage:  AssetImage("Assets/Ellipse.png"),
+        //            ),
+        //            SizedBox(width: 10,),
+        //            Column(
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [
+        //               Text("Yara Muhammad",style: GoogleFonts.openSans(fontSize:18 ),),
+        //                Row(
+        //                 children: [
+        //                   Text("view profile ",style: GoogleFonts.openSans(fontWeight: FontWeight.bold,color: constants.darkGrey.withOpacity(.5)),)
+        //                    ,//Icon(Icons.arrow_back_ios_new),
+        //                 ],
+        //               ),
+        ListTile(
+          
+              onTap: (){},
+              title: Text("About you"),
+              leading: Icon(Icons.notification_add),
+            ),
+            ListTile(
+              onTap: (){},
+              title: Text("Notification"),
+              leading: Icon(Icons.notification_add),
+            ),
+             ListTile(
+               onTap: (){},
+              title: Text("AcountSettings"),
+              leading: Icon(Icons.notification_add),
+            ),
+             
+           
+            ListTile(
+               onTap: (){},
+              title: Text("Log Out"),
+              leading: Icon(Icons.notification_add),
+            ),
+          
+      ],)),
       backgroundColor: constants.pageColor,
       body: Column(
         children: [
@@ -69,14 +136,17 @@ class Home extends StatelessWidget {
                             await prefs.remove('accessToken');
                             await prefs.remove('refreshToken');
                             googleLogout();
+                          //  _openDrawer();
                           },
                           child: Container(
                             margin: const EdgeInsets.only(top: 16),
                             width: 50,
                             height: 50,
                             decoration: BoxDecoration(
-                                color: Colors.white, shape: BoxShape.circle,
-                                image: DecorationImage(image: getProfilePhoto(context))),
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image: getProfilePhoto(context))),
                           ),
                         ),
                         const Spacer(),
@@ -123,7 +193,7 @@ class Home extends StatelessWidget {
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: Row(
-                        children: getEmotions(),
+                        children: getEmotions(context),
                       ),
                     ),
                     RectangleContainer(
@@ -147,13 +217,11 @@ class Home extends StatelessWidget {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                  //   Navigator.push(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //           builder: (context) =>
-                                  //               // const TestScreen()
-                                  //               );
-                                   
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TestScreen()));
                                   },
                                   child: const Row(
                                     mainAxisSize: MainAxisSize.min,
@@ -263,60 +331,34 @@ class Home extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            decoration: const BoxDecoration(
-                color: constants.mint,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(25),
-                  topRight: Radius.circular(25),
-                )),
-            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Icon(
-                  Icons.home,
-                  color: constants.babyBlue,
-                ),
-                Icon(
-                  Icons.calendar_month,
-                  color: constants.txtGrey,
-                ),
-                Icon(
-                  Icons.group,
-                  color: constants.txtGrey,
-                ),
-                Icon(
-                  Icons.timer,
-                  color: constants.txtGrey,
-                ),
-                Icon(
-                  Icons.person,
-                  color: constants.txtGrey,
-                ),
-              ],
-            ),
-          ),
         ],
       ),
     );
   }
 
-  getEmotions() {
+  getEmotions(BuildContext context) {
     List<Widget> result = [];
-    for (int i = 0; i < emotions.length; i++) {
+    for (int i = 0; i < widget.emotions.length; i++) {
       result.add(
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
-          margin: const EdgeInsets.only(left: 8.0),
-          child: Column(
-            children: [
-              Image.asset(
-                emotions[i][1],
-                width: 63,
-              ),
-              Text(emotions[i][0]),
-            ],
+        GestureDetector(
+          onTap: () => {
+            BlocProvider.of<SecondLayerCubit>(context).getSecondEmotions(
+              widget.emotions[i].moodText,
+              _Home.emotionsIcons[i][1],
+            ),
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            margin: const EdgeInsets.only(left: 8.0),
+            child: Column(
+              children: [
+                Image.asset(
+                  _Home.emotionsIcons[i][1],
+                  width: 63,
+                ),
+                Text(widget.emotions[i].moodText),
+              ],
+            ),
           ),
         ),
       );
@@ -341,6 +383,41 @@ class RectangleContainer extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: child,
+    );
+  }
+}
+
+class Home extends StatelessWidget {
+  Home({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocConsumer<SecondLayerCubit, SecondLayerCubitCubitState>(
+          listener: (context, state) {
+        if (state is EmotionCubitStateSucess) //layer2
+        {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SecondViewMoodPage(),
+            ),
+          );
+        }
+      }, builder: (context, state) {
+        if (state is PrimaryEmotionsState) {
+          return _Home(
+              emotions:
+                  BlocProvider.of<SecondLayerCubit>(context).primaryEmotions);
+        } else {
+          print("offfffff");
+          print(state.runtimeType);
+
+          return Container(
+            color: Colors.black,
+          );
+        }
+      }),
     );
   }
 }

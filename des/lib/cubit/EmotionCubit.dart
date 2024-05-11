@@ -4,8 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 import 'package:http/http.dart';
-
-
+import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/ActivityModel.dart';
 import '../Models/PrimaryEmotionsModel.dart';
 import '../Models/ReasonModel.dart';
@@ -34,7 +33,7 @@ void resetState()
 
  void displaySnackBar(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
+    const SnackBar(
       content: Text("You should answer the previous question"),
       duration: Duration(seconds: 2), // Adjust duration as needed
     ),
@@ -63,10 +62,12 @@ Future<void> SaveReason() async
 {
     var data={"reasons":ReasonSelected};
     var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
    Map<String, String> headers = 
    {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+          'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
     Response response=await http.post(Uri.parse("http://157.175.185.222/api/reason-entries/"),
@@ -87,11 +88,13 @@ Future<void> SaveReason() async
 Future<void> SaveActivity() async
 {
     var data={"activities":ActivitiesSelected};
-    var json_data=jsonEncode(data); 
+    var json_data=jsonEncode(data);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
    Map<String, String> headers = 
    {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+          'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
     Response response=await http.post(Uri.parse("http://157.175.185.222/api/activity-entries/"),
@@ -126,9 +129,11 @@ void SaveAndNaviagtion(BuildContext context)
 }
 Future<void> GetPrimaryEmotions() async {
   try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
      Map<String, String> headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+          'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
     final response = await http.get(
@@ -150,11 +155,13 @@ Future<void> GetPrimaryEmotions() async {
   }
 }
 
-Future<void> getSecondEmotions(String type,String ImagePath) async
+Future<void> getSecondEmotions(String type,String imagePath) async
    {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
     Map<String, String> headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+          'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
 
@@ -173,12 +180,11 @@ Future<void> getSecondEmotions(String type,String ImagePath) async
         if (secondEmotions.isNotEmpty) 
         {
           EmotionType=type;
-          ImagePath=ImagePath;
+          ImagePath=imagePath;
           emit(EmotionCubitStateSucess());
         } 
         else 
         {
-       
           emit(EmotionCubitStateFailur("No data available"));
         }
       } 
@@ -196,10 +202,12 @@ async {
   print(note);
   var data={"notes":note};
   var json_data=jsonEncode(data);
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
 
    Map<String, String> headers = {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+          'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
     Response response=await http.post(Uri.parse("http://157.175.185.222/api/journal-entry/"),
@@ -225,10 +233,12 @@ Future<void> SaveSecondEmotions() async
 {
     var data={"mood":SelectedMood};
     var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
    Map<String, String> headers = 
    {
       'Authorization':
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+          'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
     Response response=await http.post(Uri.parse("http://157.175.185.222/api/mood-second-entry/"),
@@ -249,10 +259,12 @@ Future<void> SaveSecondEmotions() async
 Future<void> GetActivitiesandReason() async {
   List<ActivityModel> activities = [];
   List<ReasonModel> Reasons = [];
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
   Map<String, String> headers = 
        {
       'Authorization':
-      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI'
+      'Bearer $accessToken'
      ,'Content-Type': 'application/json' // You don't need this header for this request
     };
   Response response1 = await http.get(
@@ -303,14 +315,4 @@ void StoreReason(String Reason)
   Map<String, String> newReason = {"reason": Reason};
   ReasonSelected.add(newReason);
 }
-void printSelected() {
-  for (var activity in ActivitiesSelected) {
-    print(activity);
-  }
-
-  for (var reason in ReasonSelected) {
-    print(reason);
-  }
-}
-
 }

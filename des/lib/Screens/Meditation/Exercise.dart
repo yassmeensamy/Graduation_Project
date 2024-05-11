@@ -9,10 +9,10 @@ import 'MeditationScreen.dart';
 class ExerciseScreen extends StatelessWidget 
 {
  List <ExerciseModel>Exercise=[
-      ExerciseModel(Image: 'Assets/left.png',
+      ExerciseModel(Image: 'assets/images/left.png',
     title: 'Meditation',
     Content: 'Meditation is a practice for cultivating mental clarity, relaxation, and inner peace through focused attention or contemplation',),
-    ExerciseModel(Image: 'Assets/rigth.png',
+    ExerciseModel(Image: 'assets/images/rigth.png',
     title: 'Challenge Thougths',
     Content: 'CBT is a brief, goal-oriented therapy that targets and modifies negative thoughths.',)];
  

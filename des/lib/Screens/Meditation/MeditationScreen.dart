@@ -64,22 +64,18 @@ Widget build(BuildContext context)
   backgroundColor: constants.pageColor,
   appBar:
    AppBar(
+  iconTheme: IconThemeData(color: Colors.black),
   elevation: 0,
   backgroundColor: Colors.transparent,
-  title: Row(
-    children: [
-     
-      Text(
+  title:Text(
         "Meditation",
            style: GoogleFonts.nunitoSans(
                 fontWeight: FontWeight.w700,
                 fontSize: 24,
-  ), 
-      ),
-    ],
-  ),
+                color: Colors.black
+           ),
 ),
-
+   ),
     body: 
     Padding(
       padding: const EdgeInsets.only(top: 5, left: 17, right: 17),

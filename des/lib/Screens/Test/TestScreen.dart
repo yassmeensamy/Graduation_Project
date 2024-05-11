@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants.dart' as constants;
@@ -11,60 +10,43 @@ import 'CardQuestion.dart';
 import 'ResultScreen.dart';
 
 class TestScreen extends StatelessWidget {
-  
-  List<Question>questions=[];
+  List<Question> questions = [];
   @override
-  Widget build(BuildContext context) 
-  {
+  Widget build(BuildContext context) {
     BlocProvider.of<Testcubit>(context).getQuestions();
     return Scaffold(
       body: BlocConsumer<Testcubit, TestState>(
-        listener: (context, state)
-         {
-           if(state is HomeNaviagtion)
-           {
-             Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => temp()),
-              );
-            
-           
-           }
-        },
-          
-        builder: (context, state) 
-        {
-          if (state is TestLoading)
-           {
-             return Center(child: CircularProgressIndicator());
-          } 
-          else if (state is TestQuestion ) 
-          {
-            questions=state.questions;
-            return TestView(currentQuestion: 0, questions: questions);
-          } 
-          else if (state is TestQuestionChanged) 
-          {
-            print("lol");
-            print( state.currentQuestionIndex);
-            return TestView(currentQuestion: state.currentQuestionIndex, questions:questions);
-          } 
-          
-          else if(state is TestFinished)
-          {
-                     context.read<Testcubit>().scores;
-                for (int i = 0; i < context.read<Testcubit>().scores.length; i++) {
-                      print("Index $i: ${context.read<Testcubit>().scores[i]}");
-                }
-                return ResultScreen(testResult:state.testresult)  ;
+        listener: (context, state) {
+          if (state is HomeNaviagtion) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => temp()),
+            );
           }
-          
-           else 
-           {
-            print(state.runtimeType);
+        },
+        builder: (context, state) {
+          if (state is TestLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (state is TestQuestion) {
+            questions = state.questions;
+            return TestView(currentQuestion: 0, questions: questions);
+          } else if (state is TestQuestionChanged) {
+            print('q:${state.currentQuestionIndex}');
+            return TestView(
+                currentQuestion: state.currentQuestionIndex,
+                questions: questions);
+          } else if (state is TestFinished) {
+            context.read<Testcubit>().scores;
+            for (int i = 0; i < context.read<Testcubit>().scores.length; i++) {
+              print("Index $i: ${context.read<Testcubit>().scores[i]}");
+            }
+            return ResultScreen(testResult: state.testresult);
+          } 
+          else {
+            print(state);
             return Container(
               color: Colors.blue,
-            );  // Fallback for other states
+            ); // Fallback for other states
           }
         },
       ),
@@ -72,8 +54,7 @@ class TestScreen extends StatelessWidget {
   }
 }
 
-class TestView extends StatelessWidget 
-{
+class TestView extends StatelessWidget {
   final List<Question> questions;
   final int currentQuestion;
 
@@ -93,26 +74,28 @@ class TestView extends StatelessWidget
             children: [
               Icon(Icons.arrow_back_ios, size: 13),
               InkWell(
-                onTap: () 
-                {   
-                  BlocProvider.of<Testcubit>(context).fetchPreveriousQuestions(currentQuestion,context);
-                 
+                onTap: () {
+                  BlocProvider.of<Testcubit>(context)
+                      .fetchPreveriousQuestions(currentQuestion, context);
                 },
                 child: Text("Previous", style: TextStyle(color: Colors.black)),
               ),
             ],
           ),
-        ),   
+        ),
         Expanded(
           child: ListView(
             children: [
-              CardQuestion(Question: questions[currentQuestion].question),
+              CardQuestion(
+                Question: questions[currentQuestion].question
+              ),
               SizedBox(height: 8),
-              ...questions[currentQuestion].answerOptions.map((answerOption) => AnswerButton
-              (
-                  answeroption: answerOption,
-                
-              )).toList(),
+              ...questions[currentQuestion]
+                  .answerOptions
+                  .map((answerOption) => AnswerButton(
+                        answeroption: answerOption,
+                      ))
+                  .toList(),
             ],
           ),
         ),
@@ -127,9 +110,9 @@ class TestView extends StatelessWidget
             ),
             child: InkWell(
               onTap: () {
-                BlocProvider.of<Testcubit>(context).fetchNextQuestions(currentQuestion,context);
-                 
-                },
+                BlocProvider.of<Testcubit>(context)
+                    .fetchNextQuestions(currentQuestion, context);
+              },
               child: const Center(
                 child: Text('Next', style: TextStyle(color: Colors.white)),
               ),
@@ -140,6 +123,3 @@ class TestView extends StatelessWidget
     );
   }
 }
-
-
-

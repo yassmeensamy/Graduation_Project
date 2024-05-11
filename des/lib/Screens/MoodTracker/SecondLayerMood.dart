@@ -76,7 +76,7 @@ class  SecondViewMoodPage extends StatelessWidget {
             DateCard(date: currentTime()),
             const SizedBox(height: 25),
             Image(
-              image: AssetImage('Assets/Proud.png'),
+              image: AssetImage(ImagePath),
               width: 130.0,
               height: 130.0,
             ),
