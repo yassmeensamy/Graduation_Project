@@ -14,7 +14,7 @@ class TestScreen extends StatelessWidget {
   List<Question> questions = [];
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<Testcubit>(context).getQuestions();
+    BlocProvider.of<Testcubit>(context).getQuestions(context);
     return Scaffold(
       body: BlocConsumer<Testcubit, TestState>
       (
@@ -25,7 +25,7 @@ class TestScreen extends StatelessWidget {
             );
           }
         },
-        builder: (context, state) 
+        builder: (context, state) *
         {
           if (state is TestLoading) 
           {

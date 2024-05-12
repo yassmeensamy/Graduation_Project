@@ -17,11 +17,12 @@ class Testcubit extends Cubit<TestState> {
   List<Map<String, int>> scores = [];
   bool isselected = false; // علشان نعرف هو اتنيل  اختار ولا لا
   int value = -1;
-  void getQuestions() 
+  void getQuestions(BuildContext context) 
   {
     if (questions.isNotEmpty) 
     {
       scores = List.generate(questions.length, (index) => {"value": -1});
+      context.read<AnswerCubit>().disSelected();
       emit(TestQuestion(questions));
     }
      else 
@@ -128,7 +129,10 @@ void fetchNextQuestions(int currentQuestionIndex, BuildContext context)
     );
   }
 
-  void fetchFinalScore() async {
+  void fetchFinalScore() async 
+  {
+    
+
     var data = {"answers": scores};
     var jsonData = jsonEncode(data);
     SharedPreferences prefs = await SharedPreferences.getInstance();

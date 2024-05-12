@@ -1,5 +1,6 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
+import 'package:des/Screens/Homeloading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -409,15 +410,18 @@ class Home extends StatelessWidget {
           return _Home(
               emotions:
                   BlocProvider.of<SecondLayerCubit>(context).primaryEmotions);
-        } else {
-          print("offfffff");
-          print(state.runtimeType);
-
-          return Container(
-            color: Colors.black,
-          );
+        } else
+         {
+         
+          return HomeLoading();
         }
       }),
     );
   }
 }
+
+
+
+
+
+
