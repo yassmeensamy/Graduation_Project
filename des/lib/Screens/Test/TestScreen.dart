@@ -25,7 +25,7 @@ class TestScreen extends StatelessWidget {
             );
           }
         },
-        builder: (context, state) *
+        builder: (context, state) 
         {
           if (state is TestLoading) 
           {
