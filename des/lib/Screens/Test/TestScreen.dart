@@ -1,3 +1,4 @@
+import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants.dart' as constants;
@@ -13,37 +14,42 @@ class TestScreen extends StatelessWidget {
   List<Question> questions = [];
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<Testcubit>(context).getQuestions();
+    BlocProvider.of<Testcubit>(context).getQuestions(context);
     return Scaffold(
-      body: BlocConsumer<Testcubit, TestState>(
+      body: BlocConsumer<Testcubit, TestState>
+      (
         listener: (context, state) {
-          if (state is HomeNaviagtion) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => temp()),
+          if (state is HomeNaviagtion) 
+          {
+            Navigator.push(context,MaterialPageRoute(builder: (context) => temp()),
             );
           }
         },
-        builder: (context, state) {
-          if (state is TestLoading) {
+        builder: (context, state) 
+        {
+          if (state is TestLoading) 
+          {
             return Center(child: CircularProgressIndicator());
-          } else if (state is TestQuestion) {
-            questions = state.questions;
-            return TestView(currentQuestion: 0, questions: questions);
-          } else if (state is TestQuestionChanged) {
-            print('q:${state.currentQuestionIndex}');
-            return TestView(
-                currentQuestion: state.currentQuestionIndex,
-                questions: questions);
-          } else if (state is TestFinished) {
-            context.read<Testcubit>().scores;
-            for (int i = 0; i < context.read<Testcubit>().scores.length; i++) {
-              print("Index $i: ${context.read<Testcubit>().scores[i]}");
-            }
-            return ResultScreen(testResult: state.testresult);
           } 
-          else {
-            print(state);
+          else if (state is TestQuestion) 
+          {
+                
+            questions = context.read<Testcubit>().questions;
+            return TestView(currentQuestion: 0, questions: questions);
+          } 
+          else if (state is TestQuestionChanged)
+           {
+                 print("${state.currentQuestionIndex}");
+                 return TestView(currentQuestion: state.currentQuestionIndex,questions: questions);
+           } 
+          else if (state is TestFinished)
+           {  
+            /*           لو داس باك يرجع للهوم ولا سؤال الي قبله احط pop   */
+             return ResultScreen(testResult: state.testresult);
+           } 
+          else 
+          {
+            print(state.runtimeType);
             return Container(
               color: Colors.blue,
             ); // Fallback for other states
@@ -70,23 +76,26 @@ class TestView extends StatelessWidget {
       children: [
         Padding(
           padding: EdgeInsets.only(top: 40, left: 20),
-          child: Row(
-            children: [
-              Icon(Icons.arrow_back_ios, size: 13),
-              InkWell(
-                onTap: () {
-                  BlocProvider.of<Testcubit>(context)
-                      .fetchPreveriousQuestions(currentQuestion, context);
-                },
-                child: Text("Previous", style: TextStyle(color: Colors.black)),
-              ),
-            ],
+          child:   currentQuestion != 0
+    ? Row(
+        children: [
+          Icon(Icons.arrow_back_ios, size: 13),
+          InkWell(
+            onTap: () {
+              BlocProvider.of<Testcubit>(context)
+                  .fetchPreveriousQuestions(currentQuestion, context);
+            },
+            child: Text("Previous", style: TextStyle(color: Colors.black)),
           ),
+        ],
+      )
+    : SizedBox(),
         ),
         Expanded(
           child: ListView(
             children: [
               CardQuestion(
+                
                 Question: questions[currentQuestion].question
               ),
               SizedBox(height: 8),

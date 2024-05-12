@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
+import 'package:des/Screens/Homeloading.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,7 +70,6 @@ class MainNavigatorState extends State<MainNavigator> {
   User user = User();
 
   UserProvider? userProvider;
-
   @override
   void initState() {
     super.initState();
@@ -162,7 +162,8 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: homeWidget,
+            body: //HomeLoading(),
+           homeWidget,
           ),
         ),
       ),

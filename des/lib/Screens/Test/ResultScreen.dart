@@ -68,7 +68,7 @@ class ResultScreen extends StatelessWidget {
                 child: Text(
                    "${testResult.total_score.toString()}/100",
                   style: TextStyle(
-                    fontFamily: GoogleFonts.comfortaa().fontFamily,
+                    
                     fontSize: 55,
                     fontWeight: FontWeight.w100,  
                     color: const Color(0xFF6495ED),
@@ -86,8 +86,8 @@ class ResultScreen extends StatelessWidget {
             child:
             Center(child:
             Text("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia aut ipsa.",
-      style: TextStyle(fontSize: 24.0,fontFamily: GoogleFonts.comfortaa().fontFamily,fontWeight: FontWeight.w600),
-      textAlign: TextAlign.center,),
+      style: TextStyle(fontSize: 24.0,
+            ),textAlign: TextAlign.center,),
           ),
       ), 
         ],

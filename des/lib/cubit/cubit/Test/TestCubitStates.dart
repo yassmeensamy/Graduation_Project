@@ -19,26 +19,9 @@ class TestQuestion extends TestState
     this.questions,
 
   );
-  /*
-  List<Question> questions;
-  int questionNumber;
-  Question currentQuestion;
-
-  TestQuestion({
-    required this.questionNumber,
-    required this.questions,
-    required this.currentQuestion,
-  });
-  */
 }
 
-/*
-class TestAnswer extends TestState 
-{
-  final int selectedChoiceScore;
-  TestAnswer(this.selectedChoiceScore);
-}
-*/
+
 class TestFinished extends TestState 
 {
   TestResultModel testresult;
