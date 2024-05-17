@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
+import 'package:des/Screens/ReportScreen.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -161,7 +162,10 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: homeWidget,
+            body: //homeWidget,
+            ReportScreen(),
+            //ExampleScreen()
+            
           ),
         ),
       ),
