@@ -123,3 +123,38 @@ class TestView extends StatelessWidget {
     );
   }
 }
+class testViewLoading extends StatelessWidget {
+  const testViewLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: [
+             Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+           borderRadius: BorderRadius.circular(30), ),
+           //color: ,
+            child: Container(
+              width: 400,
+              height: 200,
+            ),
+             ),
+              Container(
+              width: 320,
+              height: 55,
+              decoration: BoxDecoration(
+                border: Border.all(
+                
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(30),
+                
+              ),
+              ),
+      ],
+      
+
+    );
+  }
+}

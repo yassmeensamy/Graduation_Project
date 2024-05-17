@@ -16,8 +16,7 @@ class Conclusion extends StatelessWidget {
           IconButton(
             onPressed: () {
               // Reset the state of SecondLayerCubit
-              BlocProvider.of<SecondLayerCubit>(context).resetState();
-
+            
               // Navigate back to the Home screen
               Navigator.push(
                 context,

@@ -14,7 +14,7 @@ import 'EmotionCubitState.dart';
 class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
   SecondLayerCubit() : super(EmotionCubitStateIntial ())
   {
-         GetPrimaryEmotions();
+         
   }
   List<SecondMoodModel> secondEmotions = [];
    List<PrimaryMoodModel> primaryEmotions=[];
@@ -26,10 +26,7 @@ class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
 
 
 
-void resetState() 
-{
-  emit(PrimaryEmotionsState()); // Assuming EmotionCubitStateIntial is your initial state
-}
+
 
  void displaySnackBar(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -41,7 +38,7 @@ void resetState()
   );
 }
 
-void saveansNavigateConclusion(BuildContext context)
+void saveansNavigateJournaling(BuildContext context)
 {
   if(ActivitiesSelected.isEmpty || ReasonSelected.isEmpty )
   {
@@ -51,7 +48,6 @@ void saveansNavigateConclusion(BuildContext context)
   {
       SaveActivity();
       SaveReason();
-     
       emit(JournalingState());
       
   }
@@ -130,7 +126,8 @@ void SaveAndNaviagtion(BuildContext context)
 Future<void> GetPrimaryEmotions() async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
+    //String ? accessToken = prefs.getString('accessToken');
+    String ? accessToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI";
      Map<String, String> headers = {
       'Authorization':
           'Bearer $accessToken'
@@ -140,18 +137,21 @@ Future<void> GetPrimaryEmotions() async {
       Uri.parse("http://157.175.185.222/api/primary-emotions/"),
       headers: headers,
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) 
+    {
       List<dynamic> responseData = jsonDecode(response.body);
        primaryEmotions = (responseData).map((item) =>PrimaryMoodModel.fromJson(item)).toList();
-      emit(PrimaryEmotionsState());
+     
     } 
     else 
     {
-      emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
+      print(response.statusCode);
+     
     }
   } catch (e) 
   { 
-    emit(EmotionCubitStateFailur("An error occurred: $e"));
+    print("lol");
+   
   }
 }
 
@@ -178,10 +178,11 @@ Future<void> getSecondEmotions(String type,String imagePath) async
          List<dynamic> responseData = jsonDecode(response.body);
          secondEmotions = responseData.map((item) => SecondMoodModel.fromJson(item, "http://157.175.185.222")).toList();
         if (secondEmotions.isNotEmpty) 
-        {
-          EmotionType=type;
-          ImagePath=imagePath;
-          emit(EmotionCubitStateSucess());
+        { 
+           EmotionType=type;
+           ImagePath=imagePath;
+
+          emit(EmotionCubitStateSucess( secondEmotions,imagePath,type ));
         } 
         else 
         {
@@ -215,14 +216,12 @@ async {
      headers: headers);
      if(response.statusCode==200)
      {
-      
          dynamic responseData = jsonDecode(response.body);
-        emit(conclusionState());
-         
+         emit(conclusionState());     
      }
       else 
       { 
-        print(response.statusCode);
+          print(response.statusCode);
           emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
       }
 

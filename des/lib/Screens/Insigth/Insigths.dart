@@ -6,8 +6,6 @@ import '../../cubit/cubit/insigths_cubit.dart';
 import 'MoodGraph.dart';
 import 'graph.dart';
 
-
-
 class InsightScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,8 @@ class InsightScreen extends StatelessWidget {
       {
         if (state is InsightLoading) 
         {
-          return  InsigthView();
+          return InsigthViewLoading();
+        
         } 
         else if (state is InsightLoaded) 
         {
@@ -56,7 +55,7 @@ class InsightScreen extends StatelessWidget {
     );
   }
 }
-class InsigthView extends StatelessWidget {
+class InsigthViewLoading extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
@@ -64,17 +63,21 @@ class InsigthView extends StatelessWidget {
       body: 
       ListView(
         children: [
-           Container(
-      height: 400,
+           Padding(padding: EdgeInsets.only(left:20),
+       child: 
+        Text("Insigths",style: GoogleFonts.roboto(fontSize: 40),),
+       ),
+      Container(
+      height: 340,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: Colors.grey.withOpacity(.1),
       ),
       
            ),
-           SizedBox(height: 10,),
-            Container(
-       height: 340,
+       SizedBox(height: 10,),
+      Container(
+       height: 400,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: Colors.grey.withOpacity(.1),

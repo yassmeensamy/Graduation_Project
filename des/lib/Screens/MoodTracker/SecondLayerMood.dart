@@ -1,3 +1,5 @@
+import 'package:des/Screens/ReportScreen.dart';
+import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -18,32 +20,77 @@ class  SecondViewMoodPage extends StatelessWidget {
   const SecondViewMoodPage({Key? key});
   @override
   Widget build(BuildContext context) {
-    String currentTime()
-     {
-      DateTime now = DateTime.now();
-      String formattedTime = DateFormat.Hm().format(now);
-      return formattedTime;
-    }
-    List<SecondMoodModel> moods=BlocProvider.of<SecondLayerCubit>(context).secondEmotions;
-    String EmotionType=BlocProvider.of<SecondLayerCubit>(context).EmotionType;
-    String ImagePath=BlocProvider.of<SecondLayerCubit>(context).ImagePath;
-    return  BlocListener<SecondLayerCubit, SecondLayerCubitCubitState>(
+   
+   
+    return WillPopScope(
+      onWillPop: () async {
+        BlocProvider.of<HandleHomeCubit>(context).resetState();
+        return true;
+      },
+      child:BlocConsumer<SecondLayerCubit, SecondLayerCubitCubitState>(
       listener: (context, state) 
       {
         if (state is Activities_ReasonsState) 
         {
-          print("1233");
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>Activities(activitiesList:state.Activities,reasonList:state.Reasons)
-            ));
+             Navigator.push(context, MaterialPageRoute(builder: (context) => Activities(
+              activitiesList: state.Activities, 
+              reasonList: state.Reasons
+            ))).then((_) {
+              BlocProvider.of<SecondLayerCubit>(context).emit(EmotionCubitStateSucess(
+                 BlocProvider.of<SecondLayerCubit>(context).secondEmotions,
+                   BlocProvider.of<SecondLayerCubit>(context).ImagePath,
+                 BlocProvider.of<SecondLayerCubit>(context).EmotionType,
+              
+              ));
+            });
         }
         else if (state is JournalingState)
         {
              Navigator.push(context, MaterialPageRoute(builder: (context)=>Journalingcreen()));
         }
+        else if ( state is conclusionState)
+        {
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>ReportScreen()));
+        }
         
       },
+       builder: (BuildContext context, SecondLayerCubitCubitState state) 
+       { 
+        if(state is EmotionCubitStateSucess  )
+        {
+         return  SecondLayerView(EmotionType: state.moodname
+         ,moods: state.Emotions
+         ,ImagePath: state.ImagePath,);
+        }
+        else 
+        {
+           print(state.runtimeType);
+           return Container(color:Colors.blue);
+        }
+      },
      
-      child: Scaffold(
+   
+    ),
+    );
+      }
+    
+  
+  }
+
+class SecondLayerView extends StatelessWidget {
+   List<SecondMoodModel> moods;
+    String EmotionType;
+    String ImagePath;
+ SecondLayerView({required this.moods,required this.ImagePath,required this.EmotionType});
+ String currentTime()
+     {
+      DateTime now = DateTime.now();
+      String formattedTime = DateFormat.Hm().format(now);
+      return formattedTime;
+    }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(30),
@@ -54,14 +101,8 @@ class  SecondViewMoodPage extends StatelessWidget {
                 IconButton(
                   onPressed: () 
                   {
-                    
-              BlocProvider.of<SecondLayerCubit>(context).resetState();
-
-              // Navigate back to the Home screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => temp()),
-              );
+                 // هنا كده لما يرجع لللهوم مش هينفع يرجع لاي حاجة قبلها 
+                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => temp()), (route) => false,);
                   },
                   icon: const Icon(Icons.arrow_back_ios, size: 13),
                 ),
@@ -129,12 +170,10 @@ class  SecondViewMoodPage extends StatelessWidget {
           ],
         ),
       ),
-        ),
-    );
-      }
-    
-  
+        );
   }
+}
+
 
 class DateCard extends StatelessWidget {
   final String date;
