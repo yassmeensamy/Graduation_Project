@@ -438,13 +438,13 @@ class Home extends StatelessWidget {
       body: BlocBuilder<HandleHomeCubit, HandleHomeState>(
         builder: (context, state) 
       {  
-        /*
+        
           if (state is HomeLoading) 
           {
             return Center(child: CircularProgressIndicator());
           } 
-          */
-         if (state is HomeLoaded) 
+          
+         else if (state is HomeLoaded) 
           {
             return  _Home(
               emotions:state.primaryEmotions);         

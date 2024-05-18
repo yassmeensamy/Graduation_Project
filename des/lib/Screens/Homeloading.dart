@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart'; // Import shimmer package
 import 'package:intl/intl.dart';
 
-class HomeLoading extends StatelessWidget {
-  const HomeLoading();
+class Homeloading extends StatelessWidget {
+  const Homeloading();
 
   @override
   Widget build(BuildContext context) {
