@@ -1,6 +1,10 @@
 import 'dart:convert';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
+import 'package:des/MeditationScreen.dart';
 import 'package:des/Models/user.dart';
+import 'package:des/NotificationServices.dart';
+import 'package:des/Schedule.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
@@ -26,8 +30,20 @@ import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async
+{
+  WidgetsFlutterBinding.ensureInitialized(); //done
+  await AwesomeNotifications().isNotificationAllowed().then   //يطلب الاذن انه يعمل 
+  (
+
+    (isAllowed) 
+    {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();          
+      }
+    },
+  );
+  await NotificationServices.initializeNotification();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -69,6 +85,8 @@ logout() async {
   await prefs.remove('refreshToken');
   googleLogout();
 }
+
+ 
 
 class MainNavigatorState extends State<MainNavigator> {
   String? accessToken;
@@ -160,6 +178,9 @@ class MainNavigatorState extends State<MainNavigator> {
     }
   }
 
+
+
+
   Widget _buildMaterialApp(Widget homeWidget) {
     return ChangeNotifierProvider.value(
       value: userProvider,
@@ -168,7 +189,8 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: homeWidget,
+            body: MeditationReminder(),
+            //homeWidget,
           ),
         ),
       ),
