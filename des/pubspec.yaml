@@ -67,7 +67,7 @@ dependencies:
   percent_indicator: ^4.2.3
   syncfusion_flutter_charts: ^19.1.55
   intl: ^0.17.0
-
+  awesome_notifications: ^0.7.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

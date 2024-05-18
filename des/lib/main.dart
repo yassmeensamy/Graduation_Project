@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
+import 'package:des/NotificationServices.dart';
+import 'package:des/Schedule.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,8 +27,20 @@ import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
 
-void main() {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> main() async
+{
+  WidgetsFlutterBinding.ensureInitialized(); //done
+  await AwesomeNotifications().isNotificationAllowed().then   //يطلب الاذن انه يعمل 
+  (
+
+    (isAllowed) 
+    {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();          
+      }
+    },
+  );
+  await NotificationServices.initializeNotification();
   runApp(
     MultiBlocProvider(
       providers: [
@@ -61,6 +76,93 @@ logout() async {
   await prefs.remove('refreshToken');
   googleLogout();
 }
+
+class MeditationReminder extends StatefulWidget {
+  @override
+  _MeditationReminderState createState() => _MeditationReminderState();
+}
+
+class _MeditationReminderState extends State<MeditationReminder> {
+  List<bool> _selectedDays = List.generate(7, (index) => false);
+  TimeOfDay _selectedTime = TimeOfDay.now();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // واجهة اختيار الأيام
+        ToggleButtons(
+          children: [
+            Text('Mon'),
+            Text('Tue'),
+            Text('Wed'),
+            Text('Thu'),
+            Text('Fri'),
+            Text('Sat'),
+            Text('Sun'),
+          ],
+          isSelected: _selectedDays,
+          onPressed: (index) {
+            setState(() {
+              _selectedDays[index] = !_selectedDays[index];
+            });
+          },
+        ),
+        // واجهة اختيار الوقت
+        ElevatedButton(
+          onPressed: () async {
+            TimeOfDay? pickedTime = await showTimePicker(
+              context: context,
+              initialTime: _selectedTime,
+            );
+            if (pickedTime != null) {
+              setState(() {
+                _selectedTime = pickedTime;
+              });
+            }
+          },
+          child: Text('Select Time'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            scheduleMeditationReminders();
+             //NotificationServices.cancelAllNotifications();
+          },
+          child: Text('Schedule Reminder'),
+        ),
+      ],
+    );
+  }
+
+  void scheduleMeditationReminders() {
+    DateTime now = DateTime.now();
+    for (int i = 0; i < _selectedDays.length; i++) {
+      if (_selectedDays[i]) {
+        DateTime scheduledTime = DateTime(
+          now.year,
+          now.month,
+          now.day,
+          _selectedTime.hour,
+          _selectedTime.minute,
+        ).add(Duration(days: i - now.weekday + 1));
+        if (scheduledTime.isBefore(now)) 
+        {
+          scheduledTime = scheduledTime.add(Duration(days: 7));
+        }
+        NotificationServices.scheduleNotification(
+          Schedule(
+            details: "Meditation Reminder",
+            time: scheduledTime,
+          ) 
+        );
+      }
+    }
+  }
+}
+
+
+
+ 
 
 class MainNavigatorState extends State<MainNavigator> {
   String? accessToken;
@@ -153,6 +255,9 @@ class MainNavigatorState extends State<MainNavigator> {
     }
   }
 
+
+
+
   Widget _buildMaterialApp(Widget homeWidget) {
     return ChangeNotifierProvider.value(
       value: userProvider,
@@ -161,7 +266,8 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: homeWidget,
+            body: MeditationReminder(),
+            //homeWidget,
           ),
         ),
       ),
