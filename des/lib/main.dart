@@ -1,9 +1,10 @@
 import 'dart:convert';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
-import 'package:des/Screens/Homeloading.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
+import 'package:des/cubit/cubit/handle_home_cubit.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:oktoast/oktoast.dart';
@@ -42,7 +43,12 @@ void main() {
         BlocProvider<AnswerCubit>(
           create: (context) => AnswerCubit(testcubit: context.read<Testcubit>()),
         ),
-        BlocProvider(create: (context)=>InsigthsCubit())
+        BlocProvider(create: (context)=>InsigthsCubit()),
+         BlocProvider<HandleHomeCubit>(
+          create: (context) => HandleHomeCubit(
+            moodCubit: BlocProvider.of<SecondLayerCubit>(context),
+          )..loadHomeData(),
+        ),
       ],
       child: const MainNavigator(),
     ),
@@ -162,8 +168,7 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: //HomeLoading(),
-           homeWidget,
+            body: homeWidget,
           ),
         ),
       ),

@@ -30,7 +30,7 @@ class Activities extends StatelessWidget {
                   IconButton(
                     onPressed: () {
                       Navigator.pop(context);
-                      print("opppppp");
+                    
                     },
                     icon: const Icon(Icons.arrow_back_ios, size: 20),
                   ),
@@ -53,7 +53,7 @@ class Activities extends StatelessWidget {
               NextButton(
                 ontap: () {
                   BlocProvider.of<SecondLayerCubit>(context)
-                      .saveansNavigateConclusion(context);
+                      . saveansNavigateJournaling(context);
                 },
                 groundColor: constants.mint,
                 text: "Next",

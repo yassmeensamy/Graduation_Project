@@ -1,6 +1,7 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
 import 'package:des/Screens/Homeloading.dart';
+import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -342,11 +343,20 @@ class _HomeState extends State<_Home> {
     for (int i = 0; i < widget.emotions.length; i++) {
       result.add(
         GestureDetector(
-          onTap: () => {
+          onTap: () => 
+          {
             BlocProvider.of<SecondLayerCubit>(context).getSecondEmotions(
               widget.emotions[i].moodText,
               _Home.emotionsIcons[i][1],
             ),
+             print( _Home.emotionsIcons[i][1],),
+              
+              Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SecondViewMoodPage(),
+            ),
+          )  
           },
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -387,7 +397,7 @@ class RectangleContainer extends StatelessWidget {
     );
   }
 }
-
+ /*
 class Home extends StatelessWidget {
   Home({Key? key}) : super(key: key);
 
@@ -420,8 +430,33 @@ class Home extends StatelessWidget {
   }
 }
 
-
-
-
-
+*/
+class Home extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<HandleHomeCubit, HandleHomeState>(
+        builder: (context, state) 
+      {  
+        /*
+          if (state is HomeLoading) 
+          {
+            return Center(child: CircularProgressIndicator());
+          } 
+          */
+         if (state is HomeLoaded) 
+          {
+            return  _Home(
+              emotions:state.primaryEmotions);         
+         }
+           else if (state is HomeError) {
+            return Center(child: Text('Error: ${state.errormessge}')); // Corrected variable name
+          }
+          print("homess");
+          return Container(color: Colors.red,);
+        },
+      ),
+    );
+  }
+}
 

@@ -10,10 +10,14 @@ const Color lilac80 = Color.fromRGBO(181, 126, 220, 0.8);
 const Color lilac70 = Color.fromRGBO(181, 126, 220, 0.7);
 const Color lilac30 = Color.fromRGBO(181, 126, 220, 0.3);
 const Color txtGrey = Color(0xff7F7F7F);
+ Color textGrey= const Color(0xff100F11).withOpacity(.9);
+const Color TipColor= Color(0xffE8B50E);
+
 const Color lightGrey = Color(0xffECE9EC);
 const Color darkGrey = Color(0xff1E1E1E);
 const Color mint = Color(0xffD5E8E4);
 const Color green = Color(0xff6FDFC7);
+const Color darkpurple =Color(0xff8B4CFC);
 const String BaseURL = "http://157.175.185.222";
 List<Map<String, int>> scores = List.generate(25, (index) => {"value": -1});
 const TextStyle welcomeTextStyle = TextStyle(fontSize: 24);
