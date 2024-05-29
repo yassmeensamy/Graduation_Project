@@ -14,8 +14,7 @@ class temp extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body:  BlocProvider.of<HomeCubit>(context).Screens[BlocProvider.of<HomeCubit>(context).currentIndex],
-          bottomNavigationBar: 
-          BottomNavigator(),
+          bottomNavigationBar:BottomNavigator(),
         );
       },
     );

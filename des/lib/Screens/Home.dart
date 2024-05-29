@@ -1,9 +1,11 @@
+
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
 import 'package:des/Screens/Homeloading.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -169,12 +171,19 @@ class _HomeState extends State<_Home> {
                         const SizedBox(
                           width: 16,
                         ),
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(top: 16.0),
-                          child: Icon(
+                          child: IconButton(onPressed:()
+                          {
+                           print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+                           print(DateFormat('d').format(DateTime.now()));
+                          } ,
+                          icon:  Icon(
                             Icons.calendar_month_outlined,
                             color: constants.darkGrey,
                           ),
+                          )
+                         
                         )
                       ],
                     ),
@@ -185,19 +194,27 @@ class _HomeState extends State<_Home> {
                       'Welcome Back, ${currentUser!.firstName}',
                       style: const TextStyle(fontSize: 22),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10.0),
-                      child: Text(
-                        'How\'s your mental status at the moment?',
-                        style: TextStyle(color: constants.txtGrey),
-                      ),
-                    ),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: getEmotions(context),
-                      ),
-                    ),
+                    BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty() == false
+  ? 
+  Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10.0),
+          child: Text(
+            'How\'s your mental status at the moment?',
+            style: TextStyle(color: constants.txtGrey),
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: getEmotions(context),
+          ),
+        ),
+      ],
+    )
+  : MoodSelectedContainer(),
+
                     RectangleContainer(
                       constants.mint,
                       Column(
@@ -459,4 +476,123 @@ class Home extends StatelessWidget {
     );
   }
 }
+
+class MoodSelectedContainer extends StatelessWidget {
+   MoodSelectedContainer({Key? key}) : super(key: key);
+  List<String>Activities=["dancing","dancing","dancing"];
+   List<String>mood=["Happy"];
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 8), // Adjust bottom padding only
+      child: 
+       Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.only(right: 4),
+                    minimumSize: Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink wrap
+                    visualDensity: VisualDensity.compact, // Make the button more compact
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "delete",
+                    style: GoogleFonts.abhayaLibre(
+                      fontSize: 18,
+                      color: Color(0xffFC4C4C),
+                    ),
+                  ),
+                ),
+                Container(
+                  width: 2,
+                  height: 20,
+                  color: Color(0xff100F11).withOpacity(.2),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.only(left: 4), // Remove default padding
+                    minimumSize: Size(0, 0), // Minimum size to zero
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink wrap
+                    visualDensity: VisualDensity.compact, // Make the button more compact
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    "Edit",
+                    style: GoogleFonts.abhayaLibre(
+                      fontSize: 18,
+                      color: Color(0xff8B4CFC),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 4), // Adjust this height to control the space between the rows
+            Row(
+              children: [
+                Image.asset(
+                  "assets/images/Emotions/Loved.png",
+                  width: 70,
+                  height: 63,
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextRich(
+                        first: "You are feeling",
+                        second: mood,
+                      ),
+                      TextRich(
+                        first: "You made these Activities",
+                        second: Activities,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+  }
+}
+class TextRich extends StatelessWidget {
+  final String first;
+  final List<String> second;
+
+  TextRich({required this.first, required this.second});
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      softWrap: true,
+      text: TextSpan(
+        text: first + " ",
+        style: GoogleFonts.abhayaLibre(
+          fontSize: 19,
+          color: Color(0xff100F11).withOpacity(.74),
+          fontWeight: FontWeight.normal,
+        ),
+        children: List.generate(
+          second.length,
+          (index) => TextSpan(
+            text: second[index],
+            style: GoogleFonts.abhayaLibre(
+              fontSize: 19,
+              color: Color(0xff100F11),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(), 
+      ),
+    );
+  }
+}
+
 

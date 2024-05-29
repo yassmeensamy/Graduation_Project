@@ -1,3 +1,5 @@
+import 'package:des/Screens/Insigth/WeeklyGraph.dart';
+import 'package:des/bargraph.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,7 +11,7 @@ import 'graph.dart';
 class InsightScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<InsigthsCubit, InsigthsState>(
+  return BlocConsumer<InsigthsCubit, InsigthsState>(
       listener: (context, state) {
         if (state is InsightError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -26,12 +28,12 @@ class InsightScreen extends StatelessWidget {
         } 
         else if (state is InsightLoaded) 
         {
-          return 
-        Scaffold(
-    body: SafeArea(
-    child: Padding(padding: EdgeInsets.only(left:7,right: 7),
+          return  Scaffold(
+               body: SingleChildScrollView(
+    child: Padding(padding: EdgeInsets.only(left:7,right: 7 ,bottom: 5),
     child:
-     ListView(
+     Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
        Padding(padding: EdgeInsets.only(left:20),
        child: 
@@ -39,7 +41,11 @@ class InsightScreen extends StatelessWidget {
        ),
         MoodGraph(),
         SizedBox(height: 7,),
-        DepresionGraph(salesData: state.data1),
+        DepresionGraph(depressionhistory: state.data1),
+         SizedBox(height: 7,),
+        Bargraph(),
+        SizedBox(height: 7,),
+        WeeklyGraph(),
       ],
     ),
   ),

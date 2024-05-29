@@ -234,6 +234,7 @@ Future<void> SaveSecondEmotions() async
     var json_data=jsonEncode(data); 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
+    print(accessToken);
    Map<String, String> headers = 
    {
       'Authorization':
@@ -245,7 +246,9 @@ Future<void> SaveSecondEmotions() async
      headers: headers);
      if(response.statusCode==200)
      {
+          print ("done");
           dynamic responseData = jsonDecode(response.body);
+          print(responseData);
      }
       else 
       {

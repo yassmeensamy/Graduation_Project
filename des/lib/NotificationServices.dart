@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Schedule.dart';
+import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:flutter/material.dart';
 class NotificationServices 
 {
@@ -27,8 +28,21 @@ class NotificationServices
   }
    static void cancelAllNotifications() {
   AwesomeNotifications().cancelAll();
+
 }
 
+  static void setupNotifications() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AwesomeNotifications().setListeners(
+        onActionReceivedMethod: (ReceivedAction action) async {
+          // Ensure that navigatorKey is initialized and context is available
+         (
+            MaterialPageRoute(builder: (context) => WeeklySurvey()),
+          );
+        },
+      );
+    });
+  }
   static Future<void> scheduleNotification(Schedule schedule,) async {
     Random random = Random();
     await AwesomeNotifications().createNotification(

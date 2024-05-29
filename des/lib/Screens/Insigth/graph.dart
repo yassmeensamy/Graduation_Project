@@ -1,13 +1,10 @@
 
-
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../../Models/TestResultModel.dart';
-
 class DepresionGraph extends StatefulWidget {
-   List<TestResultModel> salesData ;
-  DepresionGraph({required this.salesData});
+   List<TestResultModel> depressionhistory ;
+  DepresionGraph({required this.depressionhistory});
   @override
   _DepresionGraphState createState() => _DepresionGraphState();
 }
@@ -50,10 +47,10 @@ class _DepresionGraphState extends State<DepresionGraph> {
           LineSeries<TestResultModel, String>(
             color: Color(0xff9A89FF).withOpacity(.7),
             width: 4,
-            dataSource: widget.salesData,
-            xValueMapper: (TestResultModel sales, _) => sales.timestamp!,
-            yValueMapper: (TestResultModel sales, _) => sales.total_score,
-            dataLabelMapper: (TestResultModel sales, _) => sales.level_of_depression
+            dataSource: widget.depressionhistory,
+            xValueMapper: (TestResultModel depressionhistory, _) => depressionhistory.timestamp!,
+            yValueMapper: (TestResultModel depressionhistory, _) => depressionhistory.total_score,
+            dataLabelMapper: (TestResultModel depressionhistory, _) => depressionhistory.level_of_depression
           )
         ],
       ),

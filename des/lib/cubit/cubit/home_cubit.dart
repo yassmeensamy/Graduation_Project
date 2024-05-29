@@ -1,3 +1,4 @@
+import 'package:des/Screens/Learning/ContentsLearning.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,7 +11,7 @@ class HomeCubit extends Cubit<HomeState>
 {
   HomeCubit() : super(HomeInitial());
   int currentIndex=0;
-  List<Widget>Screens=[Home(),ExerciseScreen(),InsightScreen() ];
+  List<Widget>Screens=[Home(),ExerciseScreen(),InsightScreen(),ContentsLearning() ];
   void changeIndex(index)
   {
       currentIndex=index;

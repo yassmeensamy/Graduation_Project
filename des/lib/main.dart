@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
-import 'package:des/MeditationScreen.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Schedule.dart';
 import 'package:des/Screens/Temp.dart';
+import 'package:des/bargraph.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:oktoast/oktoast.dart';
@@ -17,7 +15,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Controllers/GoogleAuthController.dart';
 import 'Providers/UserProvider.dart';
-import 'Screens/Home.dart';
+
+import 'Screens/Insigth/WeeklyGraph.dart';
 import 'Screens/Register/Data.dart';
 import 'Screens/Register/VerifyEmail.dart';
 import 'constants.dart' as constants;
@@ -29,6 +28,12 @@ import 'cubit/cubit/insigths_cubit.dart';
 import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
+
+
+
+
+
+
 
 Future<void> main() async
 {
@@ -63,8 +68,13 @@ Future<void> main() async
          BlocProvider<HandleHomeCubit>(
           create: (context) => HandleHomeCubit(
             moodCubit: BlocProvider.of<SecondLayerCubit>(context),
-          )..loadHomeData(),
+            insigthsCubit: BlocProvider.of<InsigthsCubit>(context),
+          )
         ),
+         BlocProvider(
+        create: (context) => TabCubit(),
+        child: Bargraph(),
+         ),
       ],
       child: const MainNavigator(),
     ),
@@ -189,8 +199,16 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body: MeditationReminder(),
-            //homeWidget,
+            body://MyListViewPage(),
+            //TotalLessons(),
+            //ContentsLearning(),
+            //MyImageScreen(),
+           // // ReportScreen(),
+            //MeditationReminder(),
+          homeWidget,
+        
+         //Bargraph(),
+        
           ),
         ),
       ),

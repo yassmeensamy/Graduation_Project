@@ -41,6 +41,11 @@ class _MeditationScreenState extends State<MeditationScreen>
 // حاسه انها غلط لانه افرض ضاف حاجة جديده؟
 //الصح  اني اعمل  زي الاسكرين الي بعدها color genetetate 
 // دي بس  حاليا لهندله الايرورز ميحصلش
+ 
+ 
+ //الصح حاجة من 2 في اللوم بنعمل %  او  نطلع اللون من باك جراوند بتاعت صوره
+ 
+ 
   final List<Color> colors = [
     Color(0xFFE7F6FF),
     Color(0xFFFFE8EC),
