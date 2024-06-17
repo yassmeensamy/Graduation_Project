@@ -1,7 +1,6 @@
-
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
-import 'package:des/Screens/Homeloading.dart';
+import 'package:des/Models/WeeklyToDoModel.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,14 +13,44 @@ import '../Models/user.dart';
 import '../Providers/UserProvider.dart';
 import '../constants.dart' as constants;
 import '../cubit/EmotionCubit.dart';
-import '../cubit/EmotionCubitState.dart';
 import 'MoodTracker/SecondLayerMood.dart';
 import 'Test/TestScreen.dart';
 
+
+class Home extends StatelessWidget 
+{
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocBuilder<HandleHomeCubit, HandleHomeState>(
+        builder: (context, state) 
+      {  
+          if (state is HomeLoading) 
+          {
+            return Center(child: CircularProgressIndicator());
+          } 
+         else if (state is HomeLoaded) 
+          {
+            return  _Home(
+              emotions:state.primaryEmotions , weeklyToDo:state.WeeklyToDo);         
+         }
+           else if (state is HomeError) {
+            return Center(child: Text('Error: ${state.errormessge}')); // Corrected variable name
+          }
+          print("homess");
+          return Container(color: Colors.red,);
+        },
+      ),
+    );
+  }
+}
+
+
+
 class _Home extends StatefulWidget {
   final List<PrimaryMoodModel> emotions;
-
-   _Home({required this.emotions, Key? key}) : super(key: key);
+  final List<WeeklyToDoPlan> weeklyToDo;
+   _Home({required this.emotions, required this.weeklyToDo});
 
   static const List<List<String>> emotionsIcons = [
     [
@@ -57,12 +86,9 @@ class _Home extends StatefulWidget {
   @override
   State<_Home> createState() => _HomeState();
 }
-
-class _HomeState extends State<_Home> {
+class _HomeState extends State<_Home> 
+{
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider =
@@ -71,54 +97,7 @@ class _HomeState extends State<_Home> {
      void _openDrawer() {
     _scaffoldKey.currentState!.openDrawer();
   }
-
     return Scaffold(
-      drawerEnableOpenDragGesture: false,
-      drawer: Drawer(
-      child: ListView(children: [
-        // Row(
-              
-        //       children: [
-        //            CircleAvatar(
-        //             radius: 28,
-        //             backgroundImage:  AssetImage("Assets/Ellipse.png"),
-        //            ),
-        //            SizedBox(width: 10,),
-        //            Column(
-        //             crossAxisAlignment: CrossAxisAlignment.start,
-        //             children: [
-        //               Text("Yara Muhammad",style: GoogleFonts.openSans(fontSize:18 ),),
-        //                Row(
-        //                 children: [
-        //                   Text("view profile ",style: GoogleFonts.openSans(fontWeight: FontWeight.bold,color: constants.darkGrey.withOpacity(.5)),)
-        //                    ,//Icon(Icons.arrow_back_ios_new),
-        //                 ],
-        //               ),
-        ListTile(
-          
-              onTap: (){},
-              title: Text("About you"),
-              leading: Icon(Icons.notification_add),
-            ),
-            ListTile(
-              onTap: (){},
-              title: Text("Notification"),
-              leading: Icon(Icons.notification_add),
-            ),
-             ListTile(
-               onTap: (){},
-              title: Text("AcountSettings"),
-              leading: Icon(Icons.notification_add),
-            ),
-             
-           
-            ListTile(
-               onTap: (){},
-              title: Text("Log Out"),
-              leading: Icon(Icons.notification_add),
-            ),
-          
-      ],)),
       backgroundColor: constants.pageColor,
       body: Column(
         children: [
@@ -183,7 +162,6 @@ class _HomeState extends State<_Home> {
                             color: constants.darkGrey,
                           ),
                           )
-                         
                         )
                       ],
                     ),
@@ -265,50 +243,7 @@ class _HomeState extends State<_Home> {
                             )
                           ]),
                     ),
-                    RectangleContainer(
-                      constants.lilac30,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Depression Test',
-                                  style: TextStyle(fontSize: 22),
-                                ),
-                                Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: const Text(
-                                    'Take a test to determine your \n depression level',
-                                    style: TextStyle(color: constants.darkGrey),
-                                  ),
-                                ),
-                                const Row(
-                                  children: [
-                                    Text(
-                                      'Join Now',
-                                      style: TextStyle(
-                                          color: constants.lilac,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 17),
-                                    ),
-                                    Icon(
-                                      Icons.play_arrow,
-                                      color: constants.lilac,
-                                      size: 20,
-                                    )
-                                  ],
-                                )
-                              ]),
-                          Image.asset(
-                            'assets/images/Emotions/meetup.png',
-                            width: 92,
-                          ),
-                        ],
-                      ),
-                    ),
+                    /*
                     RectangleContainer(
                         constants.babyBlue30,
                         Column(
@@ -345,16 +280,55 @@ class _HomeState extends State<_Home> {
                                     Checkbox(value: false, onChanged: (b) {}),
                               ),
                             ])),
+                            */
+                 RectangleContainer(
+                          constants.lilac30,
+                       Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                           children: [
+                                /*
+                                  const Text(
+                                         'Weekly Tasks',
+                                     style: TextStyle(fontSize: 22),
+                                         ),
+                                */
+       Container(
+        height: 250, 
+        child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
+          builder: (context, state) 
+          { 
+            if(state is HomeLoaded)
+            {
+            return  ListView.builder(
+                  itemCount:  3,//BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
+                  itemBuilder: (BuildContext context, int index) {
+            return BlocProvider<CheckboxCubit>(
+              create: (context) => CheckboxCubit(),
+              child: TODo(widget.weeklyToDo[index]),
+
+            );
+          },
+         );
+            }
+            return Container();
+          }
+          
+        ),
+      ),
+    ],
+  ),
+)
                   ],
+                  )
+                   )
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
+        ]
+      )
     );
+        
   }
-
   getEmotions(BuildContext context) {
     List<Widget> result = [];
     for (int i = 0; i < widget.emotions.length; i++) {
@@ -414,68 +388,32 @@ class RectangleContainer extends StatelessWidget {
     );
   }
 }
- /*
-class Home extends StatelessWidget {
-  Home({Key? key}) : super(key: key);
+class TODo extends StatelessWidget {
+  final WeeklyToDoPlan todo;
+  TODo(this.todo);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<SecondLayerCubit, SecondLayerCubitCubitState>(
-          listener: (context, state) {
-        if (state is EmotionCubitStateSucess) //layer2
-        {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SecondViewMoodPage(),
-            ),
+    return ListTile(
+      title: Text(todo.activityName ,style: TextStyle(fontSize: 20),),
+      subtitle: Text(todo.activityDescription),
+      trailing: BlocBuilder<CheckboxCubit, bool>(
+        builder: (context, isChecked) {
+          return Checkbox(
+            value: isChecked,
+            onChanged: (newValue)
+             {
+              context.read<CheckboxCubit>().toggleCheckbox(newValue!);
+              BlocProvider.of<HandleHomeCubit>(context).RemoveFromToDoList(todo.id);
+             }, 
           );
-        }
-      }, builder: (context, state) {
-        if (state is PrimaryEmotionsState) {
-          return _Home(
-              emotions:
-                  BlocProvider.of<SecondLayerCubit>(context).primaryEmotions);
-        } else
-         {
-         
-          return HomeLoading();
-        }
-      }),
-    );
-  }
-}
-
-*/
-class Home extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocBuilder<HandleHomeCubit, HandleHomeState>(
-        builder: (context, state) 
-      {  
-        
-          if (state is HomeLoading) 
-          {
-            return Center(child: CircularProgressIndicator());
-          } 
-          
-         else if (state is HomeLoaded) 
-          {
-            return  _Home(
-              emotions:state.primaryEmotions);         
-         }
-           else if (state is HomeError) {
-            return Center(child: Text('Error: ${state.errormessge}')); // Corrected variable name
-          }
-          print("homess");
-          return Container(color: Colors.red,);
         },
       ),
     );
   }
 }
+
+
 
 class MoodSelectedContainer extends StatelessWidget {
    MoodSelectedContainer({Key? key}) : super(key: key);
@@ -562,6 +500,29 @@ class MoodSelectedContainer extends StatelessWidget {
       );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class TextRich extends StatelessWidget {
   final String first;
   final List<String> second;

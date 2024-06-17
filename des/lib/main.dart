@@ -3,9 +3,11 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/bargraph.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
+import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -15,8 +17,6 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Controllers/GoogleAuthController.dart';
 import 'Providers/UserProvider.dart';
-
-import 'Screens/Insigth/WeeklyGraph.dart';
 import 'Screens/Register/Data.dart';
 import 'Screens/Register/VerifyEmail.dart';
 import 'constants.dart' as constants;
@@ -29,18 +29,11 @@ import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
 
-
-
-
-
-
-
 Future<void> main() async
 {
   WidgetsFlutterBinding.ensureInitialized(); //done
   await AwesomeNotifications().isNotificationAllowed().then   //يطلب الاذن انه يعمل 
   (
-
     (isAllowed) 
     {
       if (!isAllowed) {
@@ -52,22 +45,27 @@ Future<void> main() async
   runApp(
     MultiBlocProvider(
       providers: [
+         BlocProvider(
+        create: (context) => WeeklyCubit(),
+         ),
+       BlocProvider(create: (context)=>InsigthsCubit()),
         BlocProvider(create: (context) => SecondLayerCubit()),
         BlocProvider(create: (context) => ActivitiesCubit()),
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => HomeCubit()),
         BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
-        BlocProvider(create: (context)=>InsigthsCubit()),
+       
         BlocProvider<Testcubit>(
           create: (context) => Testcubit(),
         ),
         BlocProvider<AnswerCubit>(
           create: (context) => AnswerCubit(testcubit: context.read<Testcubit>()),
         ),
-        BlocProvider(create: (context)=>InsigthsCubit()),
+         
          BlocProvider<HandleHomeCubit>(
           create: (context) => HandleHomeCubit(
             moodCubit: BlocProvider.of<SecondLayerCubit>(context),
+            weeklyCubit:BlocProvider.of<WeeklyCubit>(context),
             insigthsCubit: BlocProvider.of<InsigthsCubit>(context),
           )
         ),
@@ -75,6 +73,7 @@ Future<void> main() async
         create: (context) => TabCubit(),
         child: Bargraph(),
          ),
+      
       ],
       child: const MainNavigator(),
     ),
@@ -111,6 +110,7 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
+    //logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
@@ -122,6 +122,7 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   getProfile() async {
+    
     Response response = await get(
         Uri.parse('${constants.BaseURL}/api/auth/user/'),
         headers: {'Authorization': 'Bearer $accessToken'});
@@ -175,7 +176,8 @@ class MainNavigatorState extends State<MainNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoggedInVerifiedAndProfileComplete()) {
+    if (_isLoggedInVerifiedAndProfileComplete()) 
+    {
       return _buildMaterialApp( const temp());
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
       return _buildMaterialApp(const Data());
@@ -187,10 +189,6 @@ class MainNavigatorState extends State<MainNavigator> {
       return _buildMaterialApp(const Loader());
     }
   }
-
-
-
-
   Widget _buildMaterialApp(Widget homeWidget) {
     return ChangeNotifierProvider.value(
       value: userProvider,
@@ -199,16 +197,8 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body://MyListViewPage(),
-            //TotalLessons(),
-            //ContentsLearning(),
-            //MyImageScreen(),
-           // // ReportScreen(),
-            //MeditationReminder(),
-          homeWidget,
-        
-         //Bargraph(),
-        
+            body:homeWidget,
+            //WeeklyGraph()
           ),
         ),
       ),

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-
 import '../../Models/MoodgraphModel.dart';
-
-
 
 class MoodCount extends StatelessWidget {
   final String text;
@@ -110,7 +107,7 @@ return
             ),
           ),
           Positioned(
-            top: 80, // Adjust the top position as needed to create space for the row
+            top: 50, // Adjust the top position as needed to create space for the row
             left: 210,
             child: SizedBox(
               width: 160,

@@ -7,7 +7,8 @@ final class  HomeLoading extends  HandleHomeState {}
 final class HomeLoaded extends  HandleHomeState 
 {
   List<PrimaryMoodModel> primaryEmotions=[];
-  HomeLoaded(this.primaryEmotions);
+  List<WeeklyToDoPlan>WeeklyToDo=[];
+  HomeLoaded(this.primaryEmotions ,this.WeeklyToDo);
 }
 final class  HomeError extends  HandleHomeState {
   String errormessge;

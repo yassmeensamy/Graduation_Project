@@ -9,11 +9,12 @@ class InsightLoading extends InsigthsState {}
 
 class InsightLoaded extends InsigthsState
 {
-  List<TestResultModel> data1;
+  List<TestResultModel> depressionhistory;
+  WeeklyHistoryModel weeklyHistory;
   //final DataModel data2;
   //final DataModel data3;
 
-  InsightLoaded(this.data1,);
+  InsightLoaded(this.depressionhistory ,this.weeklyHistory);
 }
 
 class InsightError extends InsigthsState 

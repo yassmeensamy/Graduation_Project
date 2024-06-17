@@ -92,9 +92,11 @@ class SelectedTime extends StatelessWidget {
                 children: [
                     Stack(
                      children: [
-    InkWell( onTap: () {
-    context.read<TabCubit>().selectTab(Tab.Monthly);
-  },
+    InkWell( 
+      onTap: () 
+      {
+            context.read<TabCubit>().selectTab(Tab.Monthly);
+      },
   child: Container(
     width: 179,
     height: 38,
@@ -124,7 +126,10 @@ class SelectedTime extends StatelessWidget {
     Positioned(
       left: 80, // Adjust the position of the red container horizontally to overlap with the blue container
       child:   InkWell(
-      onTap: () { context.read<TabCubit>().selectTab(Tab.Annually);}, // Use onTap instead of onPressed
+      onTap: () 
+      { 
+        context.read<TabCubit>().selectTab(Tab.Annually);
+      }, // Use onTap instead of onPressed
        child:  Container(
         width: 99, // Adjust the width of the red container to extend beyond the blue container
         height: 38,
