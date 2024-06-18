@@ -104,7 +104,6 @@ class AspectsLife extends StatelessWidget {
 }
 
 }
-
 class LineGraph extends StatefulWidget {
   final List<WeelklyModel> weeklyHistory;
 
@@ -125,22 +124,25 @@ class _LineGraphState extends State<LineGraph> {
 
   @override
   Widget build(BuildContext context) {
+    final weeklyData = widget.weeklyHistory;
+ 
+    if (weeklyData.length == 1) {
+      final singlePoint = weeklyData.first;
+      weeklyData.add(WeelklyModel(timestamp: singlePoint.timestamp, score: singlePoint.score ,id:singlePoint.id)); // Add dummy second point
+    }
+
     return Container(
-      
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
         color: Colors.transparent,
       ),
-      child:
-       SfCartesianChart(
+      child: SfCartesianChart(
         primaryXAxis: CategoryAxis(),
-        tooltipBehavior: _tooltipBehavior,
-        series: <LineSeries<WeelklyModel, String>>
-        [
+        series: <LineSeries<WeelklyModel, String>>[
           LineSeries<WeelklyModel, String>(
             color: Color(0xff9A89FF).withOpacity(.7),
-            width: 4,
-            dataSource: widget.weeklyHistory,
+            width: weeklyData.length>2? 4: 10,
+            dataSource: weeklyData,
             xValueMapper: (WeelklyModel weekdata, _) => weekdata.timestamp,
             yValueMapper: (WeelklyModel weekdata, _) => weekdata.score,
           ),

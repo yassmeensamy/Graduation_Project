@@ -9,20 +9,3 @@ class SliderCubit extends Cubit<double> {
     emit(newValue);
   }
 }
-/*
-
-class WeeklyRating extends Cubit<Map<String,double>>
-{
-
-   WeeklyRating():super();
-   setAspects()
-   {
-
-   }
-   void SaveAspectRating(String Aspect,Double)
-   {
-     
-   }
-
-}
-*/

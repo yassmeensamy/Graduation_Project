@@ -33,8 +33,12 @@ class _DepresionGraphState extends State<DepresionGraph> {
   }
 
   @override
-  Widget build(BuildContext context) {
-  
+  Widget build(BuildContext context) 
+  {
+     if (widget.depressionhistory.length == 1) {
+      final singlePoint = widget.depressionhistory.first;
+      widget.depressionhistory.add(TestResultModel(timestamp: singlePoint.timestamp, total_score: singlePoint.total_score,level_of_depression: singlePoint.level_of_depression)); // Add dummy second point
+    }
     return Container(
       height: 400,
       decoration: BoxDecoration(

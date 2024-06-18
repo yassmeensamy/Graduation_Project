@@ -1,14 +1,16 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
+import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
+import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../Models/PrimaryEmotionsModel.dart';
 import '../Models/user.dart';
 import '../Providers/UserProvider.dart';
 import '../constants.dart' as constants;
@@ -32,12 +34,12 @@ class Home extends StatelessWidget
          else if (state is HomeLoaded) 
           {
             return  _Home(
-              emotions:state.primaryEmotions , weeklyToDo:state.WeeklyToDo);         
-         }
-           else if (state is HomeError) {
+              emotions:state.primaryEmotions , weeklyToDo:state.WeeklyToDo);       
+          }
+           else if (state is HomeError) 
+          {
             return Center(child: Text('Error: ${state.errormessge}')); // Corrected variable name
           }
-          print("homess");
           return Container(color: Colors.red,);
         },
       ),
@@ -45,10 +47,8 @@ class Home extends StatelessWidget
   }
 }
 
-
-
 class _Home extends StatefulWidget {
-  final List<PrimaryMoodModel> emotions;
+  final List<MoodModel> emotions;
   final List<WeeklyToDoPlan> weeklyToDo;
    _Home({required this.emotions, required this.weeklyToDo});
 
@@ -88,15 +88,11 @@ class _Home extends StatefulWidget {
 }
 class _HomeState extends State<_Home> 
 {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
-     void _openDrawer() {
-    _scaffoldKey.currentState!.openDrawer();
-  }
     return Scaffold(
       backgroundColor: constants.pageColor,
       body: Column(
@@ -244,6 +240,7 @@ class _HomeState extends State<_Home>
                           ]),
                     ),
                     /*
+
                     RectangleContainer(
                         constants.babyBlue30,
                         Column(
@@ -281,36 +278,33 @@ class _HomeState extends State<_Home>
                               ),
                             ])),
                             */
+                 BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.history.isNotEmpty?
                  RectangleContainer(
                           constants.lilac30,
                        Column(
                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
-                           children: [
-                                /*
-                                  const Text(
-                                         'Weekly Tasks',
-                                     style: TextStyle(fontSize: 22),
-                                         ),
-                                */
+                           children: [                   
        Container(
-        height: 250, 
+        //height: 250, 
         child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
           builder: (context, state) 
           { 
             if(state is HomeLoaded)
             {
-            return  ListView.builder(
-                  itemCount:  3,//BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
+              return 
+              BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length!=0 ?
+                 ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length >3 ?3 : BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
                   itemBuilder: (BuildContext context, int index) {
-            return BlocProvider<CheckboxCubit>(
-              create: (context) => CheckboxCubit(),
-              child: TODo(widget.weeklyToDo[index]),
-
-            );
-          },
-         );
-            }
+                   return BlocProvider<CheckboxCubit>(create: (context) => CheckboxCubit(),
+                              child: TODo(todo:widget.weeklyToDo[index]),
+                                   );
+                                 },
+                                   ):  Center(child:
+                                   Text(" Weekly Tasks done, Celebrate this achievement and keep moving forward." ,style:TextStyle(fontSize: 20)));
+           }
             return Container();
           }
           
@@ -318,7 +312,63 @@ class _HomeState extends State<_Home>
       ),
     ],
   ),
-)
+):  RectangleContainer(
+                      constants.lilac30,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Weekly Check in',
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: const Text(
+                                    'Take a test to determine your \n depression level',
+                                    style: TextStyle(color: constants.darkGrey),
+                                  ),
+                                ),
+                                 InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                WeeklySurvey()));
+                                  },
+                                  child:Row(
+                                  children: [
+                                    Text(
+                                      'Join Now',
+                                      style: TextStyle(
+                                          color: constants.lilac,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17),
+                                    ),
+                                    Icon(
+                                      Icons.play_arrow,
+                                      color: constants.lilac,
+                                      size: 20,
+                                    )
+                                  ],
+                                )
+                                 ),
+                              ]),
+                          Image.asset(
+                            'assets/images/Emotions/meetup.png',
+                            width: 92,
+                          ),
+                        ],
+                      ),
+                    ),
+    
+
+
+
                   ],
                   )
                    )
@@ -336,17 +386,18 @@ class _HomeState extends State<_Home>
         GestureDetector(
           onTap: () => 
           {
-            BlocProvider.of<SecondLayerCubit>(context).getSecondEmotions(
-              widget.emotions[i].moodText,
+            //print(widget.emotions[i].Text),
+            BlocProvider.of<SecondLayerCubit>(context).SavePrimaryEmotions( widget.emotions[i].Text),
+            (
+              widget.emotions[i].Text,
               _Home.emotionsIcons[i][1],
             ),
-             print( _Home.emotionsIcons[i][1],),
-              
-              Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SecondViewMoodPage(),
+            BlocProvider.of<SecondLayerCubit>(context).getSecondEmotions
+            (
+              widget.emotions[i].Text,
+              _Home.emotionsIcons[i][1],
             ),
+            Navigator.push(context,MaterialPageRoute(  builder: (context) => SecondViewMoodPage(),),
           )  
           },
           child: Container(
@@ -358,7 +409,7 @@ class _HomeState extends State<_Home>
                   _Home.emotionsIcons[i][1],
                   width: 63,
                 ),
-                Text(widget.emotions[i].moodText),
+                Text(widget.emotions[i].Text),
               ],
             ),
           ),
@@ -390,7 +441,7 @@ class RectangleContainer extends StatelessWidget {
 }
 class TODo extends StatelessWidget {
   final WeeklyToDoPlan todo;
-  TODo(this.todo);
+  TODo( { required this.todo});
 
   @override
   Widget build(BuildContext context) {
@@ -405,6 +456,7 @@ class TODo extends StatelessWidget {
              {
               context.read<CheckboxCubit>().toggleCheckbox(newValue!);
               BlocProvider.of<HandleHomeCubit>(context).RemoveFromToDoList(todo.id);
+               context.read<CheckboxCubit>().toggleCheckbox(!newValue);
              }, 
           );
         },
@@ -422,7 +474,7 @@ class MoodSelectedContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 8), // Adjust bottom padding only
+      padding: EdgeInsets.only(bottom: 12), // Adjust bottom padding only
       child: 
        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -500,29 +552,6 @@ class MoodSelectedContainer extends StatelessWidget {
       );
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 class TextRich extends StatelessWidget {
   final String first;
   final List<String> second;

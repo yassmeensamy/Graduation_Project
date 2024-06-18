@@ -35,7 +35,10 @@ class Bargraph extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top:0),
-      child: Container(
+      child:  BlocProvider(
+        create: (context) => TabCubit(),
+        child:
+      Container(
         width: double.infinity,
         height: 340,
         decoration: BoxDecoration(
@@ -78,6 +81,7 @@ class Bargraph extends StatelessWidget {
           ),
         ),
       ),
+    ),
     );
   }
 }

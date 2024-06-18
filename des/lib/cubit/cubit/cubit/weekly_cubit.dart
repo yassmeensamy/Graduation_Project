@@ -31,7 +31,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
        SharedPreferences prefs = await SharedPreferences.getInstance();
        String ? accessToken = prefs.getString('accessToken'); 
       Map<String, String> headers = {
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI',
+      'Authorization': 'Bearer $accessToken',
     };
     http.Response response = await http.get(
       Uri.parse(
@@ -56,19 +56,17 @@ class WeeklyCubit extends Cubit<WeeklyState>
     var data = {"scores": Rating};
     print(data);
     var jsonData = jsonEncode(data);
-    /*
+    
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     
     Map<String, String> headers = {
-      //'Authorization': 'Bearer $accessToken',
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
       
     };
-    */
-      Map<String, String> headers = {
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI',
-      "Content-Type": "application/json"
-    };
+    
+    
     
     Response response = await http.post(
       Uri.parse("http://157.175.185.222/api/life-record/"),
@@ -82,6 +80,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
     }
     else 
     {
+      print(response.statusCode);
       print("off");
     }
     }

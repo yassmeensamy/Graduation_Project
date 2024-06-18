@@ -1,6 +1,6 @@
 
 
-import 'package:des/Models/SecondMoodModel.dart';
+import 'package:des/Models/MoodModel.dart';
 
 import '../Models/ActivityModel.dart';
 import '../Models/ReasonModel.dart';
@@ -26,7 +26,7 @@ class EmotionCubitStateFailur extends SecondLayerCubitCubitState
 }
 class EmotionCubitStateSucess extends SecondLayerCubitCubitState 
 {
-  final List<SecondMoodModel>Emotions;
+  final List<MoodModel>Emotions;
   String moodname;
   String ImagePath;
   EmotionCubitStateSucess( this.Emotions ,this.ImagePath, this.moodname);

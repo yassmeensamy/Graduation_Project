@@ -6,7 +6,7 @@ final class HandleHomeInitial extends HandleHomeState {}
 final class  HomeLoading extends  HandleHomeState {}
 final class HomeLoaded extends  HandleHomeState 
 {
-  List<PrimaryMoodModel> primaryEmotions=[];
+  List<MoodModel> primaryEmotions=[];
   List<WeeklyToDoPlan>WeeklyToDo=[];
   HomeLoaded(this.primaryEmotions ,this.WeeklyToDo);
 }

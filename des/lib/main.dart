@@ -3,7 +3,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/bargraph.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
@@ -48,7 +47,7 @@ Future<void> main() async
          BlocProvider(
         create: (context) => WeeklyCubit(),
          ),
-       BlocProvider(create: (context)=>InsigthsCubit()),
+        BlocProvider(create: (context)=>InsigthsCubit()),
         BlocProvider(create: (context) => SecondLayerCubit()),
         BlocProvider(create: (context) => ActivitiesCubit()),
         BlocProvider(create: (context) => SliderCubit()),
@@ -69,10 +68,7 @@ Future<void> main() async
             insigthsCubit: BlocProvider.of<InsigthsCubit>(context),
           )
         ),
-         BlocProvider(
-        create: (context) => TabCubit(),
-        child: Bargraph(),
-         ),
+       
       
       ],
       child: const MainNavigator(),

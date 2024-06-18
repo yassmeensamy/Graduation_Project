@@ -63,16 +63,12 @@ class InsigthsCubit extends Cubit<InsigthsState>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
     try {
-      /*
+      
       Map<String, String> headers = {
         'Authorization':
             'Bearer $accessToken',
       };
-      */
-       Map<String, String> headers = {
-        'Authorization':
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI',
-      };
+      
       var response = await http.get(
         Uri.parse(
           "http://157.175.185.222/api/life-record-history/",
@@ -117,7 +113,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
         result.timestamp = extractDayAndMonth(result.timestamp!);
        });
        var  Weeklyhistory=await fetchWeeklyHistory();
-       print("second");
        emit(InsightLoaded(testHistory ,Weeklyhistory));
     } catch (e) {
       emit(InsightError('Failed to fetch data: ${e.toString()}'));
@@ -134,7 +129,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
     if (weeklyhistoy.history.containsKey(Category)) 
     {
       List<WeelklyModel> results =weeklyhistoy.history[Category]!;
-      print("Results for $Category:");
       return  results;
     }
    else 

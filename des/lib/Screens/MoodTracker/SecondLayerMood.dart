@@ -5,9 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import '../../../constants.dart' as constants;
 import 'package:just_the_tooltip/just_the_tooltip.dart';
-
 import '../../Components/NextButton.dart';
-import '../../Models/SecondMoodModel.dart';
+import '../../Models/MoodModel.dart';
 import '../../cubit/EmotionCubit.dart';
 import '../../cubit/EmotionCubitState.dart';
 import '../../cubit/mood_card_cubit.dart';
@@ -65,7 +64,8 @@ class  SecondViewMoodPage extends StatelessWidget {
         else 
         {
            print(state.runtimeType);
-           return Container(color:Colors.blue);
+           return Scaffold(body: Center(child: CircularProgressIndicator(),),)
+           ;
         }
       },
      
@@ -78,7 +78,7 @@ class  SecondViewMoodPage extends StatelessWidget {
   }
 
 class SecondLayerView extends StatelessWidget {
-   List<SecondMoodModel> moods;
+   List<MoodModel> moods;
     String EmotionType;
     String ImagePath;
  SecondLayerView({required this.moods,required this.ImagePath,required this.EmotionType});
@@ -151,7 +151,7 @@ class SecondLayerView extends StatelessWidget {
                     backgroundColorAfter: constants.mint ,
                     backgroundColorBefore: Colors.white10, 
                   ),
-                  description: moods[index].Description,
+                  description: moods[index].Description!,
                   );
                 },
               ),

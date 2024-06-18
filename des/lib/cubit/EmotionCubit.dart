@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,9 +7,9 @@ import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/ActivityModel.dart';
-import '../Models/PrimaryEmotionsModel.dart';
+
 import '../Models/ReasonModel.dart';
-import '../Models/SecondMoodModel.dart';
+import '../Models/MoodModel.dart';
 import 'EmotionCubitState.dart';
 
 class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
@@ -16,8 +17,8 @@ class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
   {
          
   }
-  List<SecondMoodModel> secondEmotions = [];
-   List<PrimaryMoodModel> primaryEmotions=[];
+  List<MoodModel> secondEmotions = [];
+   List<MoodModel> primaryEmotions=[];
   List<Map<String, String>> ActivitiesSelected=[];
   List<Map<String, String>> ReasonSelected=[];
     String SelectedMood=" ";
@@ -25,13 +26,10 @@ class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
     String ImagePath=" ";
 
 
-
-
-
  void displaySnackBar(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
-      content: Text("You should answer the previous question"),
+      content: Text("You should Select Icons"),
       duration: Duration(seconds: 2), // Adjust duration as needed
     ),
   
@@ -140,8 +138,7 @@ Future<void> GetPrimaryEmotions() async {
     if (response.statusCode == 200) 
     {
       List<dynamic> responseData = jsonDecode(response.body);
-       primaryEmotions = (responseData).map((item) =>PrimaryMoodModel.fromJson(item)).toList();
-     
+       primaryEmotions = (responseData).map((item) =>MoodModel.fromJson(item,"http://157.175.185.222")).toList();
     } 
     else 
     {
@@ -150,7 +147,7 @@ Future<void> GetPrimaryEmotions() async {
     }
   } catch (e) 
   { 
-    print("lol");
+    
    
   }
 }
@@ -176,7 +173,7 @@ Future<void> getSecondEmotions(String type,String imagePath) async
       if (response.statusCode == 200) 
       {
          List<dynamic> responseData = jsonDecode(response.body);
-         secondEmotions = responseData.map((item) => SecondMoodModel.fromJson(item, "http://157.175.185.222")).toList();
+         secondEmotions = responseData.map((item) => MoodModel.fromJson(item, "http://157.175.185.222")).toList();
         if (secondEmotions.isNotEmpty) 
         { 
            EmotionType=type;
@@ -228,6 +225,34 @@ async {
 
 }
 
+Future<void> SavePrimaryEmotions(String SelectedMood) async
+{
+    var data={"mood":SelectedMood};
+    var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+    print(accessToken);
+   Map<String, String> headers = 
+   {
+      'Authorization':
+          'Bearer $accessToken'
+      ,'Content-Type': 'application/json' // You don't need this header for this request
+    };
+    Response response=await http.post(Uri.parse("http://157.175.185.222/api/mood-primary-entry/"),
+     body: json_data, 
+     headers: headers);
+     if(response.statusCode==200)
+     {
+          dynamic responseData = jsonDecode(response.body);
+          print("primary done");
+     }
+      else 
+      {
+            print("primary bayez");
+          emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
+      }
+}
+
 Future<void> SaveSecondEmotions() async
 {
     var data={"mood":SelectedMood};
@@ -257,7 +282,6 @@ Future<void> SaveSecondEmotions() async
 
 }
 
-
 Future<void> GetActivitiesandReason() async {
   List<ActivityModel> activities = [];
   List<ReasonModel> Reasons = [];
@@ -268,7 +292,7 @@ Future<void> GetActivitiesandReason() async {
       'Authorization':
       'Bearer $accessToken'
      ,'Content-Type': 'application/json' // You don't need this header for this request
-    };
+       };
   Response response1 = await http.get(
     Uri.parse("http://157.175.185.222/api/activities/"),
     headers: headers,
@@ -277,7 +301,6 @@ Future<void> GetActivitiesandReason() async {
   {
     List<dynamic> responseData1 = jsonDecode(response1.body);
     activities = responseData1.map((item) => ActivityModel.fromjson(item)).toList();
-    //print(activities);
   } 
   else 
   {
