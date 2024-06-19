@@ -1,4 +1,5 @@
 
+import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Screens/Register/Data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,74 +18,104 @@ class TabCubit extends Cubit<TabState> {
       emit(TabState(tab));
   }
 }
-class Bargraph extends StatelessWidget {
-    final List<Map<String, dynamic>> monthlyData = [
-    {"totalActivity": 20, "totalDays": 30, "activityName": "Work"},
-    {"totalActivity": 15, "totalDays": 30, "activityName": "Exercise"},
-    {"totalActivity": 25, "totalDays": 30, "activityName": "Study"},
-    {"totalActivity": 10, "totalDays": 30, "activityName": "Hobby"},
-  ];
-  final List<Map<String, dynamic>> annuallyData = [
-    {"totalActivity": 240, "totalDays": 365, "activityName": "Work"},
-    {"totalActivity": 180, "totalDays": 365, "activityName": "Exercise"},
-    {"totalActivity": 200, "totalDays": 365, "activityName": "Study"},
-    {"totalActivity": 120, "totalDays": 365, "activityName": "Hobby"},
-  ];
-  Bargraph({Key? key}) : super(key: key);
+
+
+  class Bargraph extends StatelessWidget {
+  final List<ActivityModel> monthlyData;
+  final List<ActivityModel> annuallyData;
+
+  Bargraph({required this.monthlyData, required this.annuallyData});
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top:0),
-      child:  BlocProvider(
+      padding: const EdgeInsets.only(top: 0),
+      child: BlocProvider(
         create: (context) => TabCubit(),
-        child:
-      Container(
-        width: double.infinity,
-        height: 340,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.grey.withOpacity(0.1),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Activities Tracker",
-                style: GoogleFonts.roboto(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
+        child: BlocBuilder<TabCubit, TabState>(
+          builder: (context, state) {
+            final data = state.selectedTab == Tab.Monthly
+                ? monthlyData
+                : annuallyData;
+       
+            return 
+            ConstrainedBox(constraints: 
+            BoxConstraints(
+              maxHeight: 340,
+            ),
+              child:Container(
+              width: double.infinity,
+              //height:data.length >=3 ? 340 : 200,
+              // containerHeight,
+              
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: Colors.grey.withOpacity(0.1),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Activities Tracker",
+                      style: GoogleFonts.roboto(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    SelectedTime(), 
+                    Expanded(
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount:data.length,
+                        itemBuilder: (BuildContext context, int index) {   
+                          return BarActivity(
+                            totalactivity: data[index].Count!,//activity.totalActivity,
+                            totaldays: state.selectedTab == Tab.Monthly ? 30 : 365,
+                            ActivityName: data[index].Text,
+                          );
+                        },
+                      ),
+                    ),
+                    
+                  ],
                 ),
               ),
-              SelectedTime(),
-               Expanded(
-                child: BlocBuilder<TabCubit, TabState>(
-                  builder: (context, state) {
-                    final data = state.selectedTab == Tab.Monthly
-                        ? monthlyData
-                        : annuallyData;
-                    return ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return BarActivity(
-                          totalactivity: data[index]["totalActivity"],
-                          totaldays: data[index]["totalDays"],
-                          ActivityName: data[index]["activityName"],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+            
+            );
+          },
         ),
       ),
-    ),
     );
   }
 }
+/*
+class Bars extends StatelessWidget
+ {
+
+  const Bars({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return  Expanded(
+                      child: ListView.builder(
+                        physics: BouncingScrollPhysics(),
+                        itemCount: data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          //final activity = data[index];
+                          return BarActivity(
+                            totalactivity: 5 ,//activity.totalActivity,
+                            totaldays: state.selectedTab == Tab.Monthly ? 30 : 365,
+                            ActivityName: "shop",
+                          );
+                        },
+                      ),
+                    ),
+  }
+}
+*/
 class SelectedTime extends StatelessWidget {
   const SelectedTime({super.key});
   @override
@@ -156,7 +187,7 @@ class SelectedTime extends StatelessWidget {
 
 class BarActivity extends StatelessWidget {
   final int totaldays;
-  final int totalactivity;
+  final num totalactivity;
   final String ActivityName;
 
   const BarActivity({

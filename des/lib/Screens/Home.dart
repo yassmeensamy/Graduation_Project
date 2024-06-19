@@ -285,8 +285,7 @@ class _HomeState extends State<_Home>
                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                            children: [                   
-       Container(
-        //height: 250, 
+       Container( 
         child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
           builder: (context, state) 
           { 

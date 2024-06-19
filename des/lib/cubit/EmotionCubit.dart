@@ -138,7 +138,7 @@ Future<void> GetPrimaryEmotions() async {
     if (response.statusCode == 200) 
     {
       List<dynamic> responseData = jsonDecode(response.body);
-       primaryEmotions = (responseData).map((item) =>MoodModel.fromJson(item,"${constants.BaseURL}")).toList();
+       primaryEmotions = (responseData).map((item) =>MoodModel.fromJson(item)).toList();
     } 
     else 
     {
@@ -173,7 +173,7 @@ Future<void> getSecondEmotions(String type,String imagePath) async
       if (response.statusCode == 200) 
       {
          List<dynamic> responseData = jsonDecode(response.body);
-         secondEmotions = responseData.map((item) => MoodModel.fromJson(item, "${constants.BaseURL}")).toList();
+         secondEmotions = responseData.map((item) => MoodModel.fromJson(item, )).toList();
         if (secondEmotions.isNotEmpty) 
         { 
            EmotionType=type;

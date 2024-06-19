@@ -195,8 +195,8 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body://homeWidget,
-            ContentsLearning(),
+            body:homeWidget,
+            //ContentsLearning(),
             //TotalLessons(),
             //WeeklyGraph()
             //WeeklySurvey(),

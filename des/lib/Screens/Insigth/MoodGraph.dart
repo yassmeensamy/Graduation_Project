@@ -1,3 +1,4 @@
+import 'package:des/Models/MoodModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -6,16 +7,17 @@ import '../../Models/MoodgraphModel.dart';
 class MoodCount extends StatelessWidget {
   final String text;
   final Color col;
-
-  MoodCount({required this.col, required this.text});
+  final num count;
+  MoodCount({required this.col, required this.text ,required this.count});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(bottom: 10,right: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          
          Row(
           children: [
              CircleAvatar(radius: 4, backgroundColor: col),
@@ -23,7 +25,7 @@ class MoodCount extends StatelessWidget {
           Text(text, style: GoogleFonts.roboto(fontSize: 20)),
           ],
          ),
-          Text("4", style: GoogleFonts.roboto(fontSize: 20)),
+          Text(count.toString(), style: GoogleFonts.roboto(fontSize: 20)),
         ],
       ),
     );
@@ -31,7 +33,8 @@ class MoodCount extends StatelessWidget {
 }
 
 class MoodGraph extends StatelessWidget {
-  MoodGraph({super.key});
+  List<MoodModel>chartData;
+  MoodGraph(this.chartData);
 
   @override
   Widget build(BuildContext context) {
@@ -45,17 +48,19 @@ class MoodGraph extends StatelessWidget {
   //Color(0xff)
 ];
 
-
-    final List<MoodGraphModel> chartData = [
+    /*
+    final List<MoodGraphModel> chartData = 
+    [
       MoodGraphModel(mood: 'Happy', moodcount: 25),
       MoodGraphModel(mood: 'Fear', moodcount: 38),
       MoodGraphModel(mood: 'Loved', moodcount: 34),
       MoodGraphModel(mood: 'Angry', moodcount: 52),
-       MoodGraphModel(mood: 'Sad', moodcount: 10),
-        MoodGraphModel(mood: 'Disgust', moodcount: 4),
+      MoodGraphModel(mood: 'Sad', moodcount: 10),
+      MoodGraphModel(mood: 'Disgust', moodcount: 4),
     ];
-
-    for (int i = 0; i < chartData.length; i++) {
+    */
+    for (int i = 0; i < chartData.length; i++)
+     {
       int colorIndex = i % colors.length;
       chartData[i].colormood = colors[colorIndex];
     }
@@ -95,11 +100,11 @@ return
               height: 200, // Specify the size of the chart
               child: SfCircularChart(
                 series: <CircularSeries>[
-                  DoughnutSeries<MoodGraphModel, String>(
+                  DoughnutSeries<MoodModel, String>(
                     dataSource: chartData,
                     pointColorMapper: (data, _) => data.colormood,
-                    xValueMapper: (MoodGraphModel data, _) => data.mood,
-                    yValueMapper: (MoodGraphModel data, _) => data.moodcount,
+                    xValueMapper: (MoodModel data, _) => data.Text,
+                    yValueMapper: (MoodModel data, _) => data.count,
                     radius: '100%',
                   ),
                 ],
@@ -117,7 +122,7 @@ return
               (
                 itemCount: chartData.length,
                 itemBuilder: (context, index) {
-                  return MoodCount(col: chartData[index].colormood!, text: chartData[index].mood);
+                  return MoodCount(col: chartData[index].colormood!, text: chartData[index].Text,count: chartData[index].count!);
                 },
                 //separatorBuilder: (context, index) => SizedBox(height: 5), // Add separation between items
               ),
@@ -130,97 +135,3 @@ return
 
   }
 }
-/*
-
-
-class MoodGraph extends StatelessWidget {
-  MoodGraph({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-   List<Color> colors = [
-  Color(0xff14B8A6),
-  Color(0xff3B82F6),
-  Color(0xff6366F1),
-  Color(0xffEC4899),
-  Color(0xffF59E0B),
-  Color(0xffFACC15),
-  //Color(0xff)
-];
-
-
-    final List<MoodGraphModel> chartData = [
-      MoodGraphModel(mood: 'Happy', moodcount: 25),
-      MoodGraphModel(mood: 'Fear', moodcount: 38),
-      MoodGraphModel(mood: 'Loved', moodcount: 34),
-      MoodGraphModel(mood: 'Angry', moodcount: 52),
-       MoodGraphModel(mood: 'Sad', moodcount: 10),
-        MoodGraphModel(mood: 'Disgust', moodcount: 4),
-    ];
-
-    for (int i = 0; i < chartData.length; i++) {
-      int colorIndex = i % colors.length;
-      chartData[i].colormood = colors[colorIndex];
-    }
-
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: 400,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
-          color: Colors.grey.withOpacity(.1),
-        ),
-        child: 
-        Padding(
-          padding: const EdgeInsets.only(left:10,right: 10),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top:100),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text("Mood Tracker", style: GoogleFonts.roboto(fontSize: 20)),
-                    Text("Label", style: GoogleFonts.roboto(fontSize: 20)),
-                    Text("Days", style: GoogleFonts.roboto(fontSize: 20)),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SfCircularChart(
-                        series: <CircularSeries>[
-                          DoughnutSeries<MoodGraphModel, String>(
-                            dataSource: chartData,
-                            pointColorMapper: (data, _) => data.colormood,
-                            xValueMapper: (MoodGraphModel data, _) => data.mood,
-                            yValueMapper: (MoodGraphModel data, _) => data.moodcount,
-                            radius: '85%',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: ListView.builder(
-                          itemCount: chartData.length,
-                          itemBuilder: (context, index) {
-                            return MoodCount(col: chartData[index].colormood!, text: chartData[index].mood);
-                          },
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}*/

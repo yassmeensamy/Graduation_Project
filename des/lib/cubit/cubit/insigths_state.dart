@@ -11,10 +11,13 @@ class InsightLoaded extends InsigthsState
 {
   List<TestResultModel> depressionhistory;
   WeeklyHistoryModel weeklyHistory;
+  List<ActivityModel>ActivitiesYear;
+  List<ActivityModel>ActivitiesMonth;
+  List<MoodModel>MoodHistory;
   //final DataModel data2;
   //final DataModel data3;
 
-  InsightLoaded(this.depressionhistory ,this.weeklyHistory);
+  InsightLoaded(this.depressionhistory ,this.weeklyHistory ,this.ActivitiesMonth,this.ActivitiesYear ,this.MoodHistory);
 }
 
 class InsightError extends InsigthsState 

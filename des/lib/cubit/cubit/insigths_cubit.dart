@@ -1,8 +1,10 @@
 import 'dart:convert';
-import 'dart:io';
+
+import 'package:des/Models/ActivityModel.dart';
+import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/WeeklyHistory.dart';
 import 'package:des/Models/WeeklyModel.dart';
-import 'package:des/Models/WeeklyToDoModel.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http; // Use http from package:http/http.dart
@@ -26,6 +28,97 @@ class InsigthsCubit extends Cubit<InsigthsState>
     String monthName = DateFormat('MMM').format(timestamp);
     String day = timestamp.day.toString();
     return "$day $monthName";
+  }
+  Future<List<MoodModel>> fetchMoodHistory() async 
+  { 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+    print(accessToken);
+    try {
+      Map<String, String> headers = 
+      {
+        'Authorization':
+            'Bearer $accessToken',
+      };
+      var response= await http.get(Uri.parse("${constants.BaseURL}/api/emotion-count/"),headers:headers);
+      if(response.statusCode==200)
+      {
+       List<dynamic> data= jsonDecode(response.body);
+       print("moodhistory done");
+        return data.map((e) => MoodModel.fromJson(e)).toList();
+      }
+      else 
+      {
+        return [];
+      }
+    }
+    catch(e)
+    {
+       throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+              
+  }
+  Future<List<ActivityModel>> fetchActivitiesYearHistory() async 
+  { 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+    print(accessToken);
+    try {
+      Map<String, String> headers = 
+      {
+        'Authorization':
+            'Bearer $accessToken',
+      };
+
+      var response= await http.get(Uri.parse("${constants.BaseURL}/api/activity-count/"),headers:headers);
+      if(response.statusCode==200)
+      {
+       List<dynamic> data= jsonDecode(response.body);
+        return data.map((e) => ActivityModel.fromjson(e)).toList();
+      
+      }
+      else 
+      {
+        return [];
+      }
+    }
+    catch(e)
+    {
+       throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+              
+  }
+  
+  Future<List<ActivityModel>> fetchActivitiesMonthHistory() async 
+  { 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+    print(accessToken);
+    try {
+      Map<String, String> headers = 
+      {
+        'Authorization':
+            'Bearer $accessToken',
+      };
+
+      var response= await http.get(Uri.parse("${constants.BaseURL}/api/activity-count-this-month/"),headers:headers);
+      if(response.statusCode==200)
+      {
+       List<dynamic> data= jsonDecode(response.body);
+       print("monthDone");
+        return data.map((e) => ActivityModel.fromjson(e)).toList();
+      
+      }
+      else 
+      {
+        return [];
+      }
+    }
+    catch(e)
+    {
+       throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+              
   }
 
   Future<List<TestResultModel>> fetchDepressionTestHistory() async {
@@ -113,8 +206,12 @@ class InsigthsCubit extends Cubit<InsigthsState>
         result.timestamp = extractDayAndMonth(result.timestamp!);
        });
        var  Weeklyhistory=await fetchWeeklyHistory();
-       emit(InsightLoaded(testHistory ,Weeklyhistory));
-    } catch (e) {
+       var ActivitiesYearHistory=   await fetchActivitiesYearHistory();
+       var ActivitiesMonthHistory=   await fetchActivitiesMonthHistory();
+       var MoodHistory= await fetchMoodHistory();
+       emit(InsightLoaded(testHistory ,Weeklyhistory,ActivitiesYearHistory,ActivitiesMonthHistory,MoodHistory));
+    }  
+    catch (e) {
       emit(InsightError('Failed to fetch data: ${e.toString()}'));
     }
   }
