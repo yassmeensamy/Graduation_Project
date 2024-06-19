@@ -15,7 +15,7 @@ class SelectedIndexCubit extends Cubit<int> {
 }
 class TotalLessons extends StatelessWidget {
   const TotalLessons({Key? key}) : super(key: key);
-
+  
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -79,8 +79,9 @@ class TotalLessons extends StatelessWidget {
                   top: screenHeight * 0.5,
                   left: 7,
                   right: 7,
-                  bottom: 0, // Set bottom to 0 to make ListView fill remaining space
+                  bottom: 0, 
                   child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     itemCount: 3,
                     itemBuilder: (context, index) {
                       return Column(
@@ -94,7 +95,7 @@ class TotalLessons extends StatelessWidget {
                               height: 54,
                               decoration: BoxDecoration(
                                 border: Border(
-                                  bottom: BorderSide(color: Colors.black.withOpacity(.2), width: 2.0),
+                                  bottom: BorderSide(color: Colors.black.withOpacity(.2), width: 2),
                                 ),
                               ),
                               child: Row(
@@ -119,8 +120,7 @@ class TotalLessons extends StatelessWidget {
                             ),
                           ),
                           if (selectedIndex == index)
-                           IntrinsicHeight(
-                                child: Column(
+                            Column(
                                                children: List.generate(8, (innerIndex) {
                                       return Container( 
                                         height: 80,      
@@ -134,7 +134,7 @@ class TotalLessons extends StatelessWidget {
                                 },
                               ),
                                 )
-                            ),
+                            
                         ],
                       );
                     },

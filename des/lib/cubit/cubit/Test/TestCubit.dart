@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '/constants.dart' as constants;
 import '../../../Models/QuestionModel.dart';
 import '../../../Models/TestResultModel.dart';
 
@@ -39,7 +39,7 @@ class Testcubit extends Cubit<TestState> {
     };
     http.Response response = await http.get(
       Uri.parse(
-        "http://157.175.185.222/api/questions/",
+        "${constants.BaseURL}/api/questions/",
       ),
       headers: headers,
     );
@@ -143,7 +143,7 @@ void fetchNextQuestions(int currentQuestionIndex, BuildContext context)
       "Content-Type": "application/json"
     };
     Response response = await http.post(
-      Uri.parse("http://157.175.185.222/api/questions/"),
+      Uri.parse("${constants.BaseURL}/api/questions/"),
       body: jsonData,
       headers: headers,
     );

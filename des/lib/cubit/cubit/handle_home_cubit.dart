@@ -1,12 +1,11 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:des/Models/CalenderModel.dart';
-
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
 import 'package:des/cubit/EmotionCubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
-
+import '/constants.dart' as constants;
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +36,6 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     emit(HomeLoading());
     try 
     {
-      
       await moodCubit.GetPrimaryEmotions();
       primaryEmotions = moodCubit.primaryEmotions;
       await MoodHistory();
@@ -60,7 +58,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
       };
       print(accessToken);
     final response = await http.get(
-      Uri.parse("http://157.175.185.222/api/current-month-moods/"),
+      Uri.parse("${constants.BaseURL}/api/current-month-moods/"),
       headers: headers,
     );
     if (response.statusCode == 200) 
@@ -112,7 +110,7 @@ Future <bool>CheckActivity(int ActivityId) async
     
     };
     print(ActivityId);
-    String baseUrl="http://157.175.185.222/api/check-activity/";
+    String baseUrl="${constants.BaseURL}/api/check-activity/";
     String Url=baseUrl+ActivityId.toString()+"/";
     http.Response response= await http.patch(Uri.parse(Url),headers: headers );
     if(response.statusCode==200)
@@ -143,7 +141,7 @@ Future<void> GetWeeklyToDo() async
    
     http.Response response = await http.get(
       Uri.parse(
-        "http://157.175.185.222/api/unchecked-activities/",
+        "${constants.BaseURL}/api/unchecked-activities/",
       ),
       headers: headers,
     );

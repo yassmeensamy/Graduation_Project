@@ -1,5 +1,6 @@
 import 'package:des/Components/NextButton.dart';
 import 'package:des/Models/WeeklyModel.dart';
+import 'package:des/Screens/Home.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/slider_cubit.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +68,12 @@ class WeeklySurvey extends StatelessWidget {
                 NextButton(
                   ontap: () {
                     context.read<WeeklyCubit>().CreateRecord();
+                      Navigator.push( context,
+                       MaterialPageRoute(builder: (context) => Home()),
+                                 );
+                    
                   },
-                  groundColor: Color(0xff6A6DCD),
+                  groundColor: constants.purpledark,
                   text: "Submit",
                 ),
               ],
@@ -104,11 +109,11 @@ class SliderButton extends StatelessWidget {
       padding: const EdgeInsets.only(top: 6),
       child: SliderTheme(
           data: SliderTheme.of(context).copyWith(
-            activeTrackColor: Color(0xff6A6DCD), //
+            activeTrackColor: constants.purpledark, //
             inactiveTrackColor: Color(0xff307FE2)
                 .withOpacity(.3), // Customize the inactive track color
-            thumbColor: Color(0xff6A6DCD), // Customize the thumb color
-            overlayColor: Color(0xff6A6DCD), // Customize the overlay color
+            thumbColor:  constants.purpledark, // Customize the thumb color
+            overlayColor:  constants.purpledark, // Customize the overlay color
             trackHeight: 8.0,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 12.0),
             tickMarkShape: RoundSliderTickMarkShape(tickMarkRadius: 4.0),

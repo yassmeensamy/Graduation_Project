@@ -4,9 +4,9 @@ import 'package:des/Models/WeeklyModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
+import '/constants.dart' as constants;
 import 'package:shared_preferences/shared_preferences.dart';
 part 'weekly_state.dart';
-
 
 class WeeklyCubit extends Cubit<WeeklyState> 
 {
@@ -35,7 +35,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
     };
     http.Response response = await http.get(
       Uri.parse(
-        "http://157.175.185.222/api/life-aspect-types/",
+        "${constants.BaseURL}/api/life-aspect-types/",
       ),
       headers: headers,
     );
@@ -69,7 +69,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
     
     
     Response response = await http.post(
-      Uri.parse("http://157.175.185.222/api/life-record/"),
+      Uri.parse("${constants.BaseURL}/api/life-record/"),
       body: jsonData,
       headers: headers,
     );

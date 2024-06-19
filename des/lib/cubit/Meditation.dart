@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
-
+import '../constants.dart' as constants;
 import '../Models/MeditationModel.dart';
 
 class GetMeditation {
   Future<List<MeditationModel>> GetMeditations() async {
 
     Response response = await http.get(
-      Uri.parse("http://157.175.185.222/api/meditations/"),
+      Uri.parse("${constants.BaseURL}/api/meditations/"),
     );
     
     if (response.statusCode == 200) {

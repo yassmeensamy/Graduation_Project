@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/ActivityModel.dart';
-
+import '../constants.dart' as constants;
 import '../Models/ReasonModel.dart';
 import '../Models/MoodModel.dart';
 import 'EmotionCubitState.dart';
@@ -64,7 +64,7 @@ Future<void> SaveReason() async
           'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
-    Response response=await http.post(Uri.parse("http://157.175.185.222/api/reason-entries/"),
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/reason-entries/"),
      body: json_data, 
      headers: headers);
      if(response.statusCode==201)
@@ -91,7 +91,7 @@ Future<void> SaveActivity() async
           'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
-    Response response=await http.post(Uri.parse("http://157.175.185.222/api/activity-entries/"),
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/activity-entries/"),
      body: json_data, 
      headers: headers);
      if(response.statusCode==201)
@@ -132,13 +132,13 @@ Future<void> GetPrimaryEmotions() async {
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
     final response = await http.get(
-      Uri.parse("http://157.175.185.222/api/primary-emotions/"),
+      Uri.parse("${constants.BaseURL}/api/primary-emotions/"),
       headers: headers,
     );
     if (response.statusCode == 200) 
     {
       List<dynamic> responseData = jsonDecode(response.body);
-       primaryEmotions = (responseData).map((item) =>MoodModel.fromJson(item,"http://157.175.185.222")).toList();
+       primaryEmotions = (responseData).map((item) =>MoodModel.fromJson(item,"${constants.BaseURL}")).toList();
     } 
     else 
     {
@@ -166,14 +166,14 @@ Future<void> getSecondEmotions(String type,String imagePath) async
       var data = {'type': type};
       var jsonData = jsonEncode(data); 
       var response = await http.post(
-        Uri.parse("http://157.175.185.222/api/emotions/"), // Use Uri.parse for the URL
+        Uri.parse("${constants.BaseURL}/api/emotions/"), // Use Uri.parse for the URL
         body: jsonData,
         headers: headers,
         );
       if (response.statusCode == 200) 
       {
          List<dynamic> responseData = jsonDecode(response.body);
-         secondEmotions = responseData.map((item) => MoodModel.fromJson(item, "http://157.175.185.222")).toList();
+         secondEmotions = responseData.map((item) => MoodModel.fromJson(item, "${constants.BaseURL}")).toList();
         if (secondEmotions.isNotEmpty) 
         { 
            EmotionType=type;
@@ -208,7 +208,7 @@ async {
           'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
-    Response response=await http.post(Uri.parse("http://157.175.185.222/api/journal-entry/"),
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/journal-entry/"),
      body: json_data, 
      headers: headers);
      if(response.statusCode==200)
@@ -238,7 +238,7 @@ Future<void> SavePrimaryEmotions(String SelectedMood) async
           'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
-    Response response=await http.post(Uri.parse("http://157.175.185.222/api/mood-primary-entry/"),
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/mood-primary-entry/"),
      body: json_data, 
      headers: headers);
      if(response.statusCode==200)
@@ -266,7 +266,7 @@ Future<void> SaveSecondEmotions() async
           'Bearer $accessToken'
       ,'Content-Type': 'application/json' // You don't need this header for this request
     };
-    Response response=await http.post(Uri.parse("http://157.175.185.222/api/mood-second-entry/"),
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/mood-second-entry/"),
      body: json_data, 
      headers: headers);
      if(response.statusCode==200)
@@ -294,7 +294,7 @@ Future<void> GetActivitiesandReason() async {
      ,'Content-Type': 'application/json' // You don't need this header for this request
        };
   Response response1 = await http.get(
-    Uri.parse("http://157.175.185.222/api/activities/"),
+    Uri.parse("${constants.BaseURL}/api/activities/"),
     headers: headers,
   );
   if (response1.statusCode == 200) 
@@ -309,7 +309,7 @@ Future<void> GetActivitiesandReason() async {
   }
 
   Response response2 = await http.get(
-    Uri.parse("http://157.175.185.222/api/reasons/"),
+    Uri.parse("${constants.BaseURL}/api/reasons/"),
     headers: headers,
   );
 

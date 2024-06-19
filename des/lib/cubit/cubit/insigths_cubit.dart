@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 import 'package:shared_preferences/shared_preferences.dart';
-
+import '/constants.dart' as constants;
 import '../../Models/TestResultModel.dart';
 
 part 'insigths_state.dart';
@@ -39,7 +39,7 @@ class InsigthsCubit extends Cubit<InsigthsState>
       };
       var response = await http.get(
         Uri.parse(
-          "http://157.175.185.222/api/test-history/",
+          "${constants.BaseURL}/api/test-history/",
         ),
         headers: headers,
       );
@@ -71,7 +71,7 @@ class InsigthsCubit extends Cubit<InsigthsState>
       
       var response = await http.get(
         Uri.parse(
-          "http://157.175.185.222/api/life-record-history/",
+          "${constants.BaseURL}/api/life-record-history/",
         ),
         headers: headers,
       );
