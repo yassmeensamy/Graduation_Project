@@ -10,7 +10,7 @@ final num? Count;
  {
    return  ActivityModel(
     ImagePath: json["activity_image"],
-    Text:json[ "activity_text"]?? json["activity"],
+    Text:json[ "activity_text"]?? json["activity"]?? "None",
     Count: json["count"]);
  }
 }

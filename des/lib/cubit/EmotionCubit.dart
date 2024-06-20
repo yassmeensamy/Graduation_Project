@@ -16,7 +16,7 @@ import 'EmotionCubitState.dart';
 class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
   SecondLayerCubit() : super(EmotionCubitStateIntial ())
   {
-      GetDailyReport();    
+      //GetDailyReport();    
   }
   List<MoodModel> secondEmotions = [];
    List<MoodModel> primaryEmotions=[];

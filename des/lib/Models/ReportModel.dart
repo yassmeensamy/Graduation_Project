@@ -18,23 +18,22 @@ class ReportModel
     required this.Secondmood,
     required this.activities,
     required this.reasons,
-    required this.journaling,
-    required this.stressTip,
-    
+     this.journaling,
+     this.stressTip,
      this.dayTip,
   });
 
   factory ReportModel.fromJson(Map<String, dynamic> json) 
   {
 
-     MoodModel primarymood= MoodModel.fromJson(json["primary_mood"]);
-     MoodModel  Secondmood=MoodModel.fromJson(json["secondary_mood"]);
-     List<dynamic> activities=json["activity"];
+     MoodModel primarymood= MoodModel.fromJson(json["primary_mood"]??null);
+     MoodModel  Secondmood=MoodModel.fromJson(json["secondary_mood"]??null);
+     List<dynamic> activities=json["activity"]?? [];
       final Activitylist= activities.map((item)
       { 
         return ActivityModel.fromjson(item);
       }).toList();
-      List<dynamic>reasons=json["reason"];
+      List<dynamic>reasons=json["reason"]?? [];
       final Reasonlist= reasons.map((item)
       { 
         return ReasonModel.fromjson(item);

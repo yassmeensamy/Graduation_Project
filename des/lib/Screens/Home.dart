@@ -239,45 +239,7 @@ class _HomeState extends State<_Home>
                             )
                           ]),
                     ),
-                    /*
-
-                    RectangleContainer(
-                        constants.babyBlue30,
-                        Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16),
-                                child: const Text(
-                                  'Daily Tasks',
-                                  style: TextStyle(fontSize: 22),
-                                ),
-                              ),
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.sports_gymnastics,
-                                  color: Colors.white,
-                                  size: 36,
-                                ),
-                                title: const Text('Meditate for 5 minutes'),
-                                subtitle: const Text('Meditaion Plan'),
-                                trailing:
-                                    Checkbox(value: false, onChanged: (b) {}),
-                              ),
-                              ListTile(
-                                leading: const Icon(
-                                  Icons.work,
-                                  color: Colors.white,
-                                  size: 36,
-                                ),
-                                title: const Text('Meditate for 5 minutes'),
-                                subtitle: const Text('Meditaion Plan'),
-                                trailing:
-                                    Checkbox(value: false, onChanged: (b) {}),
-                              ),
-                            ])),
-                            */
+                
                  BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.history.isNotEmpty?
                  RectangleContainer(
                           constants.lilac30,
@@ -585,3 +547,49 @@ class TextRich extends StatelessWidget {
 }
 
 
+
+
+
+
+
+  //Plan
+
+    /*
+
+                    RectangleContainer(
+                        constants.babyBlue30,
+                        Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: const Text(
+                                  'Daily Tasks',
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.sports_gymnastics,
+                                  color: Colors.white,
+                                  size: 36,
+                                ),
+                                title: const Text('Meditate for 5 minutes'),
+                                subtitle: const Text('Meditaion Plan'),
+                                trailing:
+                                    Checkbox(value: false, onChanged: (b) {}),
+                              ),
+                              ListTile(
+                                leading: const Icon(
+                                  Icons.work,
+                                  color: Colors.white,
+                                  size: 36,
+                                ),
+                                title: const Text('Meditate for 5 minutes'),
+                                subtitle: const Text('Meditaion Plan'),
+                                trailing:
+                                    Checkbox(value: false, onChanged: (b) {}),
+                              ),
+                            ])),
+                            */

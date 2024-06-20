@@ -13,11 +13,9 @@ factory WeeklyHistoryModel.fromJson(Map<String, dynamic> json) {
   Map<String, List<WeelklyModel>> history = {};
   historyJson.forEach((key, value)
    {
-    print(value.runtimeType);
      final plans = (value as List).map((e) {
       return WeelklyModel.fromJson(e);
-    }).toList(); // convert the Iterable to List
-
+    }).toList(); 
    
     history[key] = plans;
   });

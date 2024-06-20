@@ -15,7 +15,7 @@ Color? colormood ;
      String fullImagePath = "${constants.BaseURL}{json['image']}"?? json["emotion_image"];
     return MoodModel(Description: json['description'],
      ImagePath: fullImagePath, 
-     Text:json['name'] ?? json["mood"],
+     Text:json['name'] ?? json["mood"]?? "None",
      count: json["count"],
      );
  }

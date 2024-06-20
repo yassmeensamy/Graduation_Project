@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:des/Models/CalenderModel.dart';
 import 'package:des/Models/MoodModel.dart';
+import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
 import 'package:des/cubit/EmotionCubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
@@ -20,7 +21,6 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
   final SecondLayerCubit moodCubit;
   final InsigthsCubit insigthsCubit;
   final WeeklyCubit weeklyCubit;
-  List<CalenderModel>moodhistory=[];
   List<MoodModel> primaryEmotions=[];
   List<WeeklyToDoPlan>WeeklyToDo=[];
   HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit}) : super(HandleHomeInitial())
@@ -38,14 +38,15 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     {
       await moodCubit.GetPrimaryEmotions();
       primaryEmotions = moodCubit.primaryEmotions;
-      await MoodHistory();
       await GetWeeklyToDo();
+      await ReportHistory();
       emit(HomeLoaded(primaryEmotions ,WeeklyToDo));
     } 
     catch (e) {
       emit(HomeError('Failed to load data: $e'));
     }
   }
+  //ReportModel ReportDaty()
   Future<void>  MoodHistory() async
   {
     try {
@@ -64,7 +65,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     if (response.statusCode == 200) 
     {
       List<dynamic> responseData = jsonDecode(response.body);
-      moodhistory = (responseData).map((item) =>CalenderModel.fromJson(item)).toList();
+      List<CalenderModel>moodhistory=(responseData).map((item) =>CalenderModel.fromJson(item)).toList();
     } 
     else 
     {
@@ -84,23 +85,22 @@ void RemoveFromToDoList(int ActivityId ) async
   WeeklyToDo.removeWhere((item) => item.id == ActivityId);
   
   }
-  emit(HomeLoaded(primaryEmotions, WeeklyToDo));
-    
+  emit(HomeLoaded(primaryEmotions, WeeklyToDo));  
 }
 
-bool chechMoodEnrty()
+Future<bool> chechMoodEnrty() async 
 {
-   
-   if(moodhistory[int.parse(DateFormat('d').format(DateTime.now()))-1].SelectedMood!="Null")  //معناها انه هلاص دخل
-   {
-      
-        return true;
-   }
-   else 
-   {
-    return false;
-   }  
+  Map<String,ReportModel> reportHistory= await ReportHistory();
+  if(reportHistory.containsKey(DateFormat('y-MM-dd').format(DateTime.now())))
+  {
+    return true;
+  }
+  else 
+  { 
+    return false ;
+  }
 }
+
 Future <bool>CheckActivity(int ActivityId) async
 {
      SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -161,8 +161,50 @@ Future<void> GetWeeklyToDo() async
    {
      emit(HomeLoaded(primaryEmotions,WeeklyToDo));
    }
-   
+
+   Future<Map<String,ReportModel>> ReportHistory() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
+      
+      Map<String, String> headers = {
+        'Authorization': 'Bearer $accessToken'
+      };
+      
+      final response = await http.get(
+        Uri.parse("${constants.BaseURL}/api/report-month/"),
+        headers: headers,
+      );
+      
+      if (response.statusCode == 200) 
+      {
+        Map<String, ReportModel> reportHistory = {};
+        dynamic responseData = jsonDecode(response.body);
+        responseData.forEach((key, value) 
+        {
+          reportHistory[key] = ReportModel.fromJson(value); 
+
+        });
+        return reportHistory;
+        
+      
+      } 
+      else
+       {
+         return {};
+      }
+    } 
+    catch (e) 
+    {
+      return {};
+    }
+  }
 }
+
+
+
+   
+
 
 
 

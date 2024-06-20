@@ -8,7 +8,7 @@ final String? ImagePath;
  factory  ReasonModel.fromjson(Map<String,dynamic>json)
  {
    return ReasonModel(ImagePath: json["reason_image"], 
-   Text:json[ "reason_text"]??json["reason"]
+   Text:json[ "reason_text"]??json["reason"]?? "None"
    );
  }
 }
