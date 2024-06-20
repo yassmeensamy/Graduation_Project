@@ -1,11 +1,15 @@
 
+import 'package:des/Models/ActivityModel.dart';
+import 'package:des/Models/ReportModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../constants.dart' as constants;
-class ReportScreen extends StatelessWidget {
-  const ReportScreen({super.key});
-
+class ReportScreen extends StatelessWidget 
+{
+  ReportModel dailyreport;
+   ReportScreen(this.dailyreport);
+  
   @override
   Widget build(BuildContext context) 
   {
@@ -50,17 +54,23 @@ class ReportScreen extends StatelessWidget {
             child:
              Row(
               children: [
-                //NetworkImage()
-                   Image.asset(
-                   "assets/images/Emotions/Sad.png",
-                    width: 63,
-                    height: 63,
-                  ),
+               
+                Container(
+                       width: 63,
+                       height: 63,
+                       decoration: BoxDecoration(                 
+                           image: DecorationImage(
+                           fit: BoxFit.cover,
+                           image: NetworkImage(dailyreport.primarymood.ImagePath ?? ''),
+                                                  ),
+                                                  ),
+                                                ),
+
                    SizedBox(width: 7,),
                    Column(
                     children: 
                     [
-                      Text("Sad" ,style: GoogleFonts.abhayaLibre(fontSize:24, fontWeight: FontWeight.bold ),),
+                      Text( dailyreport.primarymood.Text,style: GoogleFonts.abhayaLibre(fontSize:24, fontWeight: FontWeight.bold ),),
                       SizedBox(height: 2,),
                       Text(DateFormat('hh:mm ').format(DateTime.now())),
                     ],
@@ -70,10 +80,11 @@ class ReportScreen extends StatelessWidget {
              ),
             ),
               
-              textline(first:"you felt",Second: "Disappointed",),
-              textline(first:"You made this Activities",Second: "walking,Reading",),
+              textline(first:"you felt",Second: dailyreport.Secondmood.Text,),
+              textline(first:"You made this Activities",Second: 
+              "walking,Reading",),
               SizedBox(height: 14,),
-              DescriptionTextWidget(text:"Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework Flutter is Google’s mobile UI framework "),
+              DescriptionTextWidget(text:dailyreport.journaling!),
               SizedBox(height: 10,),
               Line(),
               SizedBox(height: 14,),
@@ -81,7 +92,7 @@ class ReportScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: 
                 [
-                   Text("Connect With Natural" ,style: GoogleFonts.abhayaLibre(fontSize: 22,color: Colors.black ,fontWeight: FontWeight.bold),),
+                   Text("StressTip" ,style: GoogleFonts.abhayaLibre(fontSize: 22,color: Colors.black ,fontWeight: FontWeight.bold),),
                       Row(
                         children:
                          [
@@ -218,6 +229,7 @@ class Line extends StatelessWidget {
     );
   }
 }
+
 class textline extends StatelessWidget
  {
   String first;
@@ -226,8 +238,10 @@ class textline extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return  Text.rich(
-          TextSpan(
+    return   RichText(
+      softWrap: true,
+      text:
+TextSpan(
             text: first,
             style: GoogleFonts.abhayaLibre(fontSize: 20,color: constants.textGrey),
             children: [
@@ -246,5 +260,34 @@ class textline extends StatelessWidget
           ),
         );
         
+  }
+}
+
+class TextLine extends StatelessWidget {
+  final String first;
+  final List<ActivityModel> second;
+
+  TextLine({required this.first, required this.second});
+
+  @override
+  Widget build(BuildContext context) {
+    return RichText(
+      softWrap: true,
+      text: TextSpan(
+        text: first,
+        style: GoogleFonts.abhayaLibre(fontSize: 20, color: constants.textGrey),
+        children: [
+          TextSpan(text: ' '),
+          ...second.map((activity) => TextSpan(
+            text: activity.Text!,
+            style: GoogleFonts.abhayaLibre(
+              fontSize: 19,
+              color: Color(0xff100F11),
+              fontWeight: FontWeight.bold,
+            ),
+          )).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(),
+        ],
+      ),
+    );
   }
 }

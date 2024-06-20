@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:des/Models/ReportModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +16,7 @@ import 'EmotionCubitState.dart';
 class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
   SecondLayerCubit() : super(EmotionCubitStateIntial ())
   {
-         
+      GetDailyReport();    
   }
   List<MoodModel> secondEmotions = [];
    List<MoodModel> primaryEmotions=[];
@@ -70,7 +71,6 @@ Future<void> SaveReason() async
      if(response.statusCode==201)
      {
           dynamic responseData = jsonDecode(response.body);
-          print("done2");
      }
       else 
       {
@@ -97,12 +97,9 @@ Future<void> SaveActivity() async
      if(response.statusCode==201)
      {
           dynamic responseData = jsonDecode(response.body);
-          print("done1");
      }
       else 
-      {
-
-          
+      { 
           emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
       }
 
@@ -121,11 +118,11 @@ void SaveAndNaviagtion(BuildContext context)
 
   }
 }
+
 Future<void> GetPrimaryEmotions() async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //String ? accessToken = prefs.getString('accessToken');
-    String ? accessToken ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI";
+    String ? accessToken = prefs.getString('accessToken');
      Map<String, String> headers = {
       'Authorization':
           'Bearer $accessToken'
@@ -152,6 +149,39 @@ Future<void> GetPrimaryEmotions() async {
   }
 }
 
+Future<void> GetDailyReport() async   
+{
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+     Map<String, String> headers = 
+     {
+        'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2MjUwMjg1LCJpYXQiOjE3MTAyNTAyODUsImp0aSI6IjQ2YTg5NWE2ZjBmZDRlMGViNTRlNTk1MDIyMDJiNjg5IiwidXNlcl9pZCI6MX0.mTx7JXgwDzp1N7H9yd5xcKDa92WMK-T_S_PnwWX7vGI',
+     };
+    final response = await http.get(
+      Uri.parse("${constants.BaseURL}/api/report/"),
+      headers: headers);
+    if (response.statusCode == 200) 
+    {
+       dynamic responseData = jsonDecode(response.body);
+       
+       ReportModel DailyReport= ReportModel.fromJson(responseData);
+       print(DailyReport);
+       //print("lillll");
+       //print(DailyReport);
+       
+    } 
+    else 
+    { 
+      print("error ${response.statusCode}");
+     
+    }
+  } catch (e) 
+  { 
+    print("error ${e}");
+   
+  }
+}
 Future<void> getSecondEmotions(String type,String imagePath) async
    {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -340,4 +370,5 @@ void StoreReason(String Reason)
   Map<String, String> newReason = {"reason": Reason};
   ReasonSelected.add(newReason);
 }
+
 }

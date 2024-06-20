@@ -12,7 +12,7 @@ Color? colormood ;
  
  factory MoodModel.fromJson(Map<String,dynamic>json)
  {
-     String fullImagePath = "${constants.BaseURL}{json['image']}";
+     String fullImagePath = "${constants.BaseURL}{json['image']}"?? json["emotion_image"];
     return MoodModel(Description: json['description'],
      ImagePath: fullImagePath, 
      Text:json['name'] ?? json["mood"],

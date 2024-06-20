@@ -49,7 +49,7 @@ class  SecondViewMoodPage extends StatelessWidget {
         }
         else if ( state is conclusionState)
         {
-             Navigator.push(context, MaterialPageRoute(builder: (context)=>ReportScreen()));
+             //Navigator.push(context, MaterialPageRoute(builder: (context)=>ReportScreen()));
         }
         
       },
