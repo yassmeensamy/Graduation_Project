@@ -3,13 +3,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Home.dart';
-import 'package:des/Screens/Learning/ContentsLearning.dart';
-import 'package:des/Screens/Learning/TotalLessons.dart';
-import 'package:des/Screens/MoodTracker/ReportScreen.dart';
-import 'package:des/Screens/MoodTracker/SecondLayerMood.dart';
 import 'package:des/Screens/Temp.dart';
-import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
@@ -58,14 +52,6 @@ Future<void> main() async
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => HomeCubit()),
         BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
-       
-        BlocProvider<Testcubit>(
-          create: (context) => Testcubit(),
-        ),
-        BlocProvider<AnswerCubit>(
-          create: (context) => AnswerCubit(testcubit: context.read<Testcubit>()),
-        ),
-         
          BlocProvider<HandleHomeCubit>(
           create: (context) => HandleHomeCubit(
             moodCubit: BlocProvider.of<SecondLayerCubit>(context),
@@ -111,7 +97,7 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
-  //logout();
+    //logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
@@ -196,7 +182,7 @@ class MainNavigatorState extends State<MainNavigator> {
       child: OKToast(
         child: MaterialApp(
            routes: {
-        '/home': (context) => Home(),
+        '/home': (context) => temp(),
       },
           debugShowCheckedModeBanner: false,
           home: Scaffold(

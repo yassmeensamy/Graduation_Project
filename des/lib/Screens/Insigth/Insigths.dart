@@ -11,7 +11,16 @@ import 'graph.dart';
 class InsightScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-  return BlocConsumer<InsigthsCubit, InsigthsState>(
+
+
+    /*
+    BlocProvider.of<InsigthsCubit>(context).loadInsights();
+        قدامنا حالين ان ترن اول ما تفتح خالص  او لما اخلص كل حاجة نرن
+
+    */
+    
+  return 
+   BlocConsumer<InsigthsCubit, InsigthsState>(
       listener: (context, state) {
         if (state is InsightError) {
           ScaffoldMessenger.of(context).showSnackBar(

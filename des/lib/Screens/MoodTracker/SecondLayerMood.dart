@@ -23,7 +23,7 @@ class  SecondViewMoodPage extends StatelessWidget {
    
     return WillPopScope(
       onWillPop: () async {
-        BlocProvider.of<HandleHomeCubit>(context).resetState();
+        //BlocProvider.of<HandleHomeCubit>(context).resetState();
         return true;
       },
       child:BlocConsumer<SecondLayerCubit, SecondLayerCubitCubitState>(
@@ -69,7 +69,7 @@ class  SecondViewMoodPage extends StatelessWidget {
         }
         else 
         {
-           print(state.runtimeType);
+           
            return Scaffold(body: Center(child: CircularProgressIndicator(),),)
            ;
         }

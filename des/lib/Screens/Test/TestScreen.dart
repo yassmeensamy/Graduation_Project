@@ -13,9 +13,15 @@ import 'ResultScreen.dart';
 class TestScreen extends StatelessWidget {
   List<Question> questions = [];
   @override
-  Widget build(BuildContext context) {
-    BlocProvider.of<Testcubit>(context).getQuestions(context);
-    return Scaffold(
+  Widget build(BuildContext context)
+   {
+   //BlocProvider.of<Testcubit>(context).getQuestions(context);
+   return  BlocProvider<Testcubit>(
+      create: (context) => Testcubit(context),
+      child:BlocProvider<AnswerCubit>(
+          create: (context) => AnswerCubit(testcubit: context.read<Testcubit>()),
+        child:
+        Scaffold(
       body: BlocConsumer<Testcubit, TestState>
       (
         listener: (context, state) {
@@ -56,7 +62,9 @@ class TestScreen extends StatelessWidget {
           }
         },
       ),
-    );
+    ),
+   ),
+   );
   }
 }
 

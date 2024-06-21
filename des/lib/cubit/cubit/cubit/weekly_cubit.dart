@@ -65,9 +65,6 @@ class WeeklyCubit extends Cubit<WeeklyState>
       'Content-Type': 'application/json',
       
     };
-    
-    
-    
     Response response = await http.post(
       Uri.parse("${constants.BaseURL}/api/life-record/"),
       body: jsonData,

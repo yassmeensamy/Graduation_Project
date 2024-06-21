@@ -12,11 +12,16 @@ import '../../../Models/TestResultModel.dart';
 
 class Testcubit extends Cubit<TestState> {
   String? accessToken ;
-  Testcubit() : super(TestLoading());
+  Testcubit(BuildContext context) : super(TestLoading())
+  {
+    getQuestions(context);
+  }
   List<Question> questions = [];
   List<Map<String, int>> scores = [];
   bool isselected = false; // علشان نعرف هو اتنيل  اختار ولا لا
   int value = -1;
+
+
   void getQuestions(BuildContext context) 
   {
     if (questions.isNotEmpty) 

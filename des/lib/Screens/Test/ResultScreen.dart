@@ -1,6 +1,8 @@
 
 import 'package:des/Screens/Temp.dart';
+import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../Models/TestResultModel.dart';
@@ -29,6 +31,7 @@ class ResultScreen extends StatelessWidget {
               IconButton(
                 onPressed: () 
                 {
+                    BlocProvider.of<InsigthsCubit>(context).loadInsights();
                     Navigator.push(context,MaterialPageRoute(builder: (context) => temp()));
                 },
                 

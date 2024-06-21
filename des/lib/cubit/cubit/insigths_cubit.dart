@@ -23,8 +23,9 @@ class InsigthsCubit extends Cubit<InsigthsState>
     loadInsights();
   }
 
-  String extractDayAndMonth(String timestampString) {
-    DateTime timestamp = DateTime.parse(timestampString);
+  String extractDayAndMonth(String timestampString) 
+  { 
+    DateTime timestamp = DateTime.parse(timestampString).toLocal();
     String monthName = DateFormat('MMM').format(timestamp);
     String day = timestamp.day.toString();
     return "$day $monthName";
@@ -137,14 +138,16 @@ class InsigthsCubit extends Cubit<InsigthsState>
         headers: headers,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200) 
+      {
         List<dynamic> data = jsonDecode(response.body);
         return data
             .map((item) => TestResultModel.fromJson(item))
             .toList()
             .reversed
             .toList();
-      } else {
+      } 
+      else {
         throw Exception('Failed to load test history');
       }
     } catch (e) {
@@ -206,6 +209,7 @@ class InsigthsCubit extends Cubit<InsigthsState>
         result.timestamp = extractDayAndMonth(result.timestamp!);
        });
        var  Weeklyhistory=await fetchWeeklyHistory();
+      
        var ActivitiesYearHistory=   await fetchActivitiesYearHistory();
        var ActivitiesMonthHistory=   await fetchActivitiesMonthHistory();
        var MoodHistory= await fetchMoodHistory();

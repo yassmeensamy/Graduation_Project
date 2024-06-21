@@ -26,6 +26,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
   List<MoodModel> primaryEmotions=[];
   List<WeeklyToDoPlan>WeeklyToDo=[];
   ReportModel? dailyReport = null;
+  Map<String,ReportModel> reportHistory={};
 
   HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit }) : super(HandleHomeInitial())
   {
@@ -41,12 +42,12 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     emit(HomeLoading());
     try 
     {
-      primaryEmotions = await moodCubit.GetPrimaryEmotions();
+      primaryEmotions = await moodCubit.GetPrimaryEmotions(); 
       await GetWeeklyToDo();
-      print("return homeloaded");
-      emit(HomeLoaded(primaryEmotions ,WeeklyToDo));
+       chechMoodEnrty();
     } 
-    catch (e) {
+    catch (e) 
+    {
       emit(HomeError('Failed to load data: $e'));
     }
   }
@@ -58,10 +59,8 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     String ? accessToken = prefs.getString('accessToken');
      Map<String, String> headers =
       {
-      'Authorization':
-          'Bearer $accessToken'
+      'Authorization':'Bearer $accessToken'
       };
-      print(accessToken);
     final response = await http.get(
       Uri.parse("${constants.BaseURL}/api/current-month-moods/"),
       headers: headers,
@@ -86,28 +85,35 @@ void RemoveFromToDoList(int ActivityId ) async
 {
   if (await CheckActivity(ActivityId)==true)
   {
-  WeeklyToDo.removeWhere((item) => item.id == ActivityId);
-  
+  WeeklyToDo.removeWhere((item) => item.id == ActivityId); 
   }
-  emit(HomeLoaded(primaryEmotions, WeeklyToDo));  
-}
-
-Future<bool> chechMoodEnrty() async 
-{
-  Map<String,ReportModel> reportHistory= await ReportHistory();
-  if(reportHistory.containsKey(DateFormat('y-MM-dd').format(DateTime.now())))
+  if(isEntry==true)
   {
-    dailyReport=reportHistory[DateFormat('y-MM-dd').format(DateTime.now())]!;
-    print("return true");
-    return  true;
-    //emit(HomeLoaded(primaryEmotions, WeeklyToDo))
+         emit(HomeLoaded(report: dailyReport,isEntry: true,WeeklyToDo: WeeklyToDo));
   }
   else 
-  { 
-    print("return false");
-    return  false ;
+  {
+           emit(HomeLoaded(primaryEmotions: primaryEmotions,isEntry: true,WeeklyToDo: WeeklyToDo));
   }
+
 }
+
+Future<void> chechMoodEnrty() async 
+{
+   reportHistory= await ReportHistory();
+  if(reportHistory.containsKey(DateFormat('y-MM-dd').format(DateTime.now())))
+ {
+    dailyReport=reportHistory[DateFormat('y-MM-dd').format(DateTime.now())];
+    isEntry=true;
+    emit(HomeLoaded(WeeklyToDo: WeeklyToDo,isEntry: true,report:dailyReport));
+  }
+  else 
+   { 
+       isEntry=false ;
+      emit(HomeLoaded (primaryEmotions:primaryEmotions ,WeeklyToDo: WeeklyToDo,isEntry: false));
+   } 
+}
+
 Future <bool>CheckActivity(int ActivityId) async
 {
      SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -115,18 +121,17 @@ Future <bool>CheckActivity(int ActivityId) async
      Map<String, String> headers = {
       'Authorization': 'Bearer $accessToken'
     };
-    print(ActivityId);
     String baseUrl="${constants.BaseURL}/api/check-activity/";
     String Url=baseUrl+ActivityId.toString()+"/";
     http.Response response= await http.patch(Uri.parse(Url),headers: headers );
     if(response.statusCode==200)
     {
-      isEntry=true;
+      
        return true;
     }
     else 
     {
-          isEntry=false;
+          
              return false ;
     }
 
@@ -142,8 +147,6 @@ Future<void> GetWeeklyToDo() async
     {
       'Authorization': 'Bearer $accessToken',
     };
-    
-   
     http.Response response = await http.get(
       Uri.parse(
         "${constants.BaseURL}/api/unchecked-activities/",
@@ -162,16 +165,27 @@ Future<void> GetWeeklyToDo() async
       print(response.statusCode); 
     }
 }
-   void resetState() 
+
+
+   void resetHomeAfterWeeklycheckin()  async
    {
-     emit(HomeLoaded(primaryEmotions,WeeklyToDo));
+      await GetWeeklyToDo();
+      if(isEntry==true)
+  {
+         emit(HomeLoaded(report: dailyReport,isEntry: true,WeeklyToDo: WeeklyToDo));
+  }
+  else 
+  {
+           emit(HomeLoaded(primaryEmotions: primaryEmotions,isEntry: false,WeeklyToDo: WeeklyToDo));
+  }
+
    }
+   
 
    Future<Map<String,ReportModel>> ReportHistory() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? accessToken = prefs.getString('accessToken');
-      
       Map<String, String> headers = {
         'Authorization': 'Bearer $accessToken'
       };
@@ -234,6 +248,11 @@ Future<void> GetWeeklyToDo() async
   { 
     print("error${e}");
   }
+}
+
+void FinishEntry(ReportModel report)
+{
+    emit(HomeLoaded(WeeklyToDo: WeeklyToDo,isEntry: true,report: report));
 }
 }
 

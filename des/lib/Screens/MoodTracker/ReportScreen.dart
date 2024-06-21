@@ -3,6 +3,7 @@ import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Screens/Home.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,7 +21,10 @@ class ReportScreen extends StatelessWidget
     return  WillPopScope(
       onWillPop: () async
       {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+        
+           BlocProvider.of<HandleHomeCubit>(context).FinishEntry(dailyreport);
+           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          //Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
           return true;
       },
       child: Scaffold

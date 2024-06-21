@@ -4,7 +4,9 @@ import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
+import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -32,14 +34,14 @@ class Home extends StatelessWidget
           } 
          else if (state is HomeLoaded) 
           {
-             print("home123");
-            return  _Home(
-              emotions:state.primaryEmotions! , weeklyToDo:state.WeeklyToDo!);       
+            print("weekly ${state.WeeklyToDo}");
+            return  _Home( emotions:state.primaryEmotions,weeklyToDo:state.WeeklyToDo,IsEntry: state.isEntry!,dailyReport: state.report,);       
           }
            else if (state is HomeError) 
           {
-            return Center(child: Text('Error: ${state.errormessge}')); // Corrected variable name
+            return Center(child: Text('Error: ${state.errormessge}')); 
           }
+
           return Container(color: Colors.red,);
         },
       ),
@@ -48,9 +50,11 @@ class Home extends StatelessWidget
 }
 
 class _Home extends StatefulWidget {
-  final List<MoodModel> emotions;
-  final List<WeeklyToDoPlan> weeklyToDo;
-   _Home({required this.emotions, required this.weeklyToDo});
+  final List<MoodModel>? emotions;
+  final List<WeeklyToDoPlan>? weeklyToDo;
+  final bool IsEntry;
+  final ReportModel? dailyReport;
+   _Home({ this.dailyReport,this.emotions,  this.weeklyToDo ,required this.IsEntry });
   static const List<List<String>> emotionsIcons = [
     [
       'Loved',
@@ -87,30 +91,12 @@ class _Home extends StatefulWidget {
 }
 class _HomeState extends State<_Home> 
 { 
-  
-
-   @override
-    void initState() {
-    super.initState();
-    check(); // Call your async function here
-  }
-
- 
-  bool myBoolVariable = true;
-  /*   العيب انه كل ما بيروح الhome بيرجع يبنيها من الاول خالص خالص   */
-  void check() async
-  {
-     bool moodEntry = await BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty();
-     myBoolVariable=moodEntry;
-      setState(() {
-     myBoolVariable=moodEntry;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    print(widget.emotions);
     UserProvider userProvider =Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
+    print(widget.IsEntry);
     return Scaffold(
       backgroundColor: constants.pageColor,
       body: Column(
@@ -187,8 +173,8 @@ class _HomeState extends State<_Home>
                     ),
     
                     
-              
-    myBoolVariable==false             
+           
+  widget.IsEntry==false    
   ? 
   Column(
       children: [
@@ -207,7 +193,7 @@ class _HomeState extends State<_Home>
         ),
       ],
     )
-  : MoodSelectedContainer(),
+  : MoodSelectedContainer(dailyreport: widget.dailyReport!,),
 
                     RectangleContainer(
                       constants.mint,
@@ -259,41 +245,13 @@ class _HomeState extends State<_Home>
                             )
                           ]),
                     ),
-                /*
-                 BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.history.isNotEmpty?
-                 RectangleContainer(
-                          constants.lilac30,
-                       Column(
-                           crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                           children: [                   
-       Container( 
-        child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
-          builder: (context, state) 
-          { 
-            if(state is HomeLoaded)
-            {
-              return 
-              BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length!=0 ?
-                 ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length >3 ?3 : BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
-                  itemBuilder: (BuildContext context, int index) {
-                   return BlocProvider<CheckboxCubit>(create: (context) => CheckboxCubit(),
-                              child: TODo(todo:widget.weeklyToDo[index]),
-                                   );
-                                 },
-                                   ):  Center(child:
-                                   Text(" Weekly Tasks done, Celebrate this achievement and keep moving forward." ,style:TextStyle(fontSize: 20)));
-           }
-            return Container();
-          }
-          
-        ),
-      ),
-    ],
-  ),
-):  RectangleContainer(
+          BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.is7DaysAgo== false 
+          ?
+          Column
+          (
+            children: 
+            [
+               RectangleContainer(
                       constants.lilac30,
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -346,11 +304,53 @@ class _HomeState extends State<_Home>
                         ],
                       ),
                     ),
-                    */
-    
+                
+            ],
 
-
-
+          ):SizedBox.shrink(),
+           BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.history.isNotEmpty?
+           RectangleContainer(
+                          constants.lilac30,
+                       Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                           children: [                   
+       Container( 
+        child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
+          builder: (context, state) 
+          { 
+            print("stateeeeeeee ${state.runtimeType}");
+            if( state is HomeLoaded )
+            {
+              print("length${BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length}");
+              return 
+              BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length!=0 ?
+                 ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length >3 ?3 : BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
+                  itemBuilder: (BuildContext context, int index) {
+                   return BlocProvider<CheckboxCubit>(create: (context) => CheckboxCubit(),
+                              child: TODo(todo:widget.weeklyToDo![index]),
+                                   );
+                                 },
+                                   ):  Center(child:
+                                   Text(" Weekly Tasks done, Celebrate this achievement and keep moving forward." ,style:TextStyle(fontSize: 20)));
+           }
+          else 
+          {
+            return Container();
+          }
+          
+          }
+        ),
+      ),
+    ],
+  ),
+):
+SizedBox.shrink(),
+          
+                
                   ],
                   )
                    )
@@ -363,19 +363,19 @@ class _HomeState extends State<_Home>
   }
   getEmotions(BuildContext context) {
     List<Widget> result = [];
-    for (int i = 0; i < widget.emotions.length; i++) {
+    for (int i = 0; i < widget.emotions!.length; i++) {
       result.add(
         GestureDetector(
           onTap: () => 
           {
-            BlocProvider.of<SecondLayerCubit>(context).SavePrimaryEmotions( widget.emotions[i].Text),
+            BlocProvider.of<SecondLayerCubit>(context).SavePrimaryEmotions( widget.emotions![i].Text),
             (
-              widget.emotions[i].Text,
+              widget.emotions![i].Text,
               _Home.emotionsIcons[i][1],
             ),
             BlocProvider.of<SecondLayerCubit>(context).getSecondEmotions
             (
-              widget.emotions[i].Text,
+              widget.emotions![i].Text,
               _Home.emotionsIcons[i][1],
             ),
             Navigator.push(context,MaterialPageRoute(  builder: (context) => SecondViewMoodPage(),),
@@ -390,7 +390,7 @@ class _HomeState extends State<_Home>
                   _Home.emotionsIcons[i][1],
                   width: 63,
                 ),
-                Text(widget.emotions[i].Text),
+                Text(widget.emotions![i].Text),
               ],
             ),
           ),
@@ -436,7 +436,7 @@ class TODo extends StatelessWidget {
             onChanged: (newValue)
              {
               context.read<CheckboxCubit>().toggleCheckbox(newValue!);
-              BlocProvider.of<HandleHomeCubit>(context).RemoveFromToDoList(todo.id);
+               BlocProvider.of<HandleHomeCubit>(context).RemoveFromToDoList(todo.id);
                context.read<CheckboxCubit>().toggleCheckbox(!newValue);
              }, 
           );
@@ -450,13 +450,14 @@ class TODo extends StatelessWidget {
 
 class MoodSelectedContainer extends StatelessWidget 
 {
-  
-   MoodSelectedContainer({Key? key}) : super(key: key);
+  ReportModel dailyreport;
+   MoodSelectedContainer({required this.dailyreport}) ;
  
   @override
   Widget build(BuildContext context) 
   {
-     ReportModel dailyreport=BlocProvider.of<HandleHomeCubit>(context).dailyReport!;
+    print(dailyreport.activities.length);
+     //ReportModel dailyreport=BlocProvider.of<HandleHomeCubit>(context).dailyReport!;
     return Padding(
       padding: EdgeInsets.only(bottom: 12), // Adjust bottom padding only
       child: 
@@ -532,10 +533,12 @@ class MoodSelectedContainer extends StatelessWidget
                         first: "You are feeling",
                         second:dailyreport.primarymood.Text,
                       ),
+                      
                       TextLine(
                         first: "You made these Activities",
                         second: dailyreport.activities,
                       ),
+                      
                     ],
                   ),
                 ),
@@ -546,13 +549,16 @@ class MoodSelectedContainer extends StatelessWidget
       );
   }
 }
+
+
 class TextLine extends StatelessWidget {
   final String first;
-  final dynamic second; 
+  final dynamic second;
+
   TextLine({required this.first, required this.second});
+
   @override
-  Widget build(BuildContext context) 
-  {
+  Widget build(BuildContext context) {
     return RichText(
       softWrap: true,
       text: TextSpan(
@@ -562,12 +568,37 @@ class TextLine extends StatelessWidget {
       ),
     );
   }
+
   List<TextSpan> _buildChildren() {
     if (second is String) {
+      return _buildStringChildren(second as String);
+    } else if (second is List<ActivityModel>) {
+      return _buildListChildren(second as List<ActivityModel>);
+    } else {
+      throw ArgumentError('Invalid type for second parameter');
+    }
+  }
+
+  List<TextSpan> _buildStringChildren(String text) {
+    return [
+      TextSpan(text: ' '),
+      TextSpan(
+        text: text,
+        style: GoogleFonts.abhayaLibre(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
+        ),
+      ),
+    ];
+  }
+
+  List<TextSpan> _buildListChildren(List<ActivityModel> activities) {
+    if (activities.isEmpty) {
       return [
         TextSpan(text: ' '),
         TextSpan(
-          text: second,
+          text: "None",
           style: GoogleFonts.abhayaLibre(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -575,23 +606,33 @@ class TextLine extends StatelessWidget {
           ),
         ),
       ];
-    } else if (second is List<ActivityModel>) {
+    } else {
+      List<TextSpan> activitySpans = activities.map((activity) => TextSpan(
+        text: activity.Text!,
+        style: GoogleFonts.abhayaLibre(
+          fontSize: 19,
+          color: Color(0xff100F11),
+          fontWeight: FontWeight.bold,
+        ),
+      )).toList();
+
+      // Add comma separator between activities
+      List<TextSpan> spansWithCommas = [];
+      for (int i = 0; i < activitySpans.length; i++) {
+        spansWithCommas.add(activitySpans[i]);
+        if (i < activitySpans.length - 1) {
+          spansWithCommas.add(TextSpan(text: ", "));
+        }
+      }
+
       return [
         TextSpan(text: ' '),
-        ...second.map((activity) => TextSpan(
-          text: activity.Text!,
-          style: GoogleFonts.abhayaLibre(
-            fontSize: 19,
-            color: Color(0xff100F11),
-            fontWeight: FontWeight.bold,
-          ),
-        )).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(),
+        ...spansWithCommas,
       ];
-    } else {
-      throw ArgumentError('Invalid type for second parameter');
     }
   }
 }
+
 
 
 
@@ -637,3 +678,100 @@ class TextLine extends StatelessWidget {
                               ),
                             ])),
                             */
+
+
+
+
+
+ /*
+                 BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.history.isNotEmpty?
+                 RectangleContainer(
+                          constants.lilac30,
+                       Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                           children: [                   
+       Container( 
+        child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
+          builder: (context, state) 
+          { 
+            if(state is ToDoDoneClass || state is HomeLoaded )
+            {
+              print("error in buildeing");
+              return 
+              BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length!=0 ?
+                 ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length >3 ?3 : BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
+                  itemBuilder: (BuildContext context, int index) {
+                   return BlocProvider<CheckboxCubit>(create: (context) => CheckboxCubit(),
+                              child: TODo(todo:widget.weeklyToDo[index]),
+                                   );
+                                 },
+                                   ):  Center(child:
+                                   Text(" Weekly Tasks done, Celebrate this achievement and keep moving forward." ,style:TextStyle(fontSize: 20)));
+           }
+          else 
+          {
+            return Container();
+          }
+          
+          }
+        ),
+      ),
+    ],
+  ),
+):  RectangleContainer(
+                      constants.lilac30,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Weekly Check in',
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                                Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8.0),
+                                  child: const Text(
+                                    'Take a test to determine your \n depression level',
+                                    style: TextStyle(color: constants.darkGrey),
+                                  ),
+                                ),
+                                 InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                WeeklySurvey()));
+                                  },
+                                  child:Row(
+                                  children: [
+                                    Text(
+                                      'Join Now',
+                                      style: TextStyle(
+                                          color: constants.lilac,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 17),
+                                    ),
+                                    Icon(
+                                      Icons.play_arrow,
+                                      color: constants.lilac,
+                                      size: 20,
+                                    )
+                                  ],
+                                )
+                                 ),
+                              ]),
+                          Image.asset(
+                            'assets/images/Emotions/meetup.png',
+                            width: 92,
+                          ),
+                        ],
+                      ),
+                    ),
+                    */

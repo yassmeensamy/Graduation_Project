@@ -70,6 +70,7 @@ class AspectsLife extends StatelessWidget {
      GridView.builder(
       shrinkWrap: true,
       itemCount: Aspects.length,
+      physics: BouncingScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4, // Number of columns
         mainAxisSpacing: 10.0,

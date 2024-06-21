@@ -1,7 +1,10 @@
 import 'package:des/Components/NextButton.dart';
 import 'package:des/Models/WeeklyModel.dart';
 import 'package:des/Screens/Home.dart';
+import 'package:des/Screens/temp.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
+import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:des/cubit/cubit/slider_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +45,7 @@ class WeeklySurvey extends StatelessWidget {
                 SizedBox(height: 10),
                 Expanded(
                   child: ListView.builder(
+                    physics: BouncingScrollPhysics(),
                     itemCount: aspects.length,
                     itemBuilder: (BuildContext context, int index) {
                       return BlocProvider<SliderCubit>(
@@ -68,8 +72,11 @@ class WeeklySurvey extends StatelessWidget {
                 NextButton(
                   ontap: () {
                     context.read<WeeklyCubit>().CreateRecord();
+                    //BlocProvider.of<InsigthsCubit>(context).loadInsights();
+                     BlocProvider.of<HandleHomeCubit>(context).resetHomeAfterWeeklycheckin() ;
+                     
                       Navigator.push( context,
-                       MaterialPageRoute(builder: (context) => Home()),
+                       MaterialPageRoute(builder: (context) => temp()),
                                  );
                     
                   },
