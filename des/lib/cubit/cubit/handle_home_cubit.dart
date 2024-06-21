@@ -21,6 +21,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
   final SecondLayerCubit moodCubit;
   final InsigthsCubit insigthsCubit;
   final WeeklyCubit weeklyCubit;
+  bool isEntry=false;
   List<MoodModel> primaryEmotions=[];
   List<WeeklyToDoPlan>WeeklyToDo=[];
   HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit}) : super(HandleHomeInitial())
@@ -31,22 +32,23 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
   {
      loadHomeData();  
   }
+
   void loadHomeData() async 
   {
     emit(HomeLoading());
     try 
     {
-      await moodCubit.GetPrimaryEmotions();
-      primaryEmotions = moodCubit.primaryEmotions;
+      primaryEmotions = await moodCubit.GetPrimaryEmotions();
       await GetWeeklyToDo();
-      await ReportHistory();
+      //await chechMoodEnrty();
+      print("yasmmenn ashter katkot");
       emit(HomeLoaded(primaryEmotions ,WeeklyToDo));
     } 
     catch (e) {
       emit(HomeError('Failed to load data: $e'));
     }
   }
-  //ReportModel ReportDaty()
+
   Future<void>  MoodHistory() async
   {
     try {
@@ -90,6 +92,7 @@ void RemoveFromToDoList(int ActivityId ) async
 
 Future<bool> chechMoodEnrty() async 
 {
+  print("loloooy");
   Map<String,ReportModel> reportHistory= await ReportHistory();
   if(reportHistory.containsKey(DateFormat('y-MM-dd').format(DateTime.now())))
   {
@@ -97,17 +100,15 @@ Future<bool> chechMoodEnrty() async
   }
   else 
   { 
-    return false ;
+    return  false ;
   }
 }
-
 Future <bool>CheckActivity(int ActivityId) async
 {
      SharedPreferences prefs = await SharedPreferences.getInstance();
     String ?accessToken = prefs.getString('accessToken');
      Map<String, String> headers = {
       'Authorization': 'Bearer $accessToken'
-    
     };
     print(ActivityId);
     String baseUrl="${constants.BaseURL}/api/check-activity/";
@@ -115,13 +116,12 @@ Future <bool>CheckActivity(int ActivityId) async
     http.Response response= await http.patch(Uri.parse(Url),headers: headers );
     if(response.statusCode==200)
     {
-       print("activity done");
+      isEntry=true;
        return true;
     }
     else 
     {
-
-             print("activity not found");
+          isEntry=false;
              return false ;
     }
 
@@ -199,14 +199,38 @@ Future<void> GetWeeklyToDo() async
       return {};
     }
   }
+
+  Future<void>  DeleteEntryToday() async
+  {
+    try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+     Map<String, String> headers =
+      {
+      'Authorization':
+          'Bearer $accessToken'
+      };
+      print(accessToken);
+    final response = await http.delete(
+      Uri.parse("${constants.BaseURL}}/api/delete-user-input-today/"),
+      headers: headers,
+    );
+    if (response.statusCode == 200) 
+    {
+      isEntry=false;
+      print("Deleted Done");
+    } 
+    else 
+    {
+      print(response.statusCode); 
+    }
+  } 
+  catch (e) 
+  { 
+    print("error${e}");
+  }
 }
-
-
-
-   
-
-
-
+}
 
 class CheckboxCubit extends Cubit<bool> {
   CheckboxCubit() : super(false);

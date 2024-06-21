@@ -1,6 +1,7 @@
 
 
 import 'package:des/Models/MoodModel.dart';
+import 'package:des/Models/ReportModel.dart';
 
 import '../Models/ActivityModel.dart';
 import '../Models/ReasonModel.dart';
@@ -50,4 +51,7 @@ class Activities_ReasonsState extends SecondLayerCubitCubitState
   Activities_ReasonsState(this.Activities, this.Reasons);
 }
 class conclusionState extends SecondLayerCubitCubitState 
-{}
+{
+  ReportModel reportModel;
+  conclusionState(this.reportModel);
+}

@@ -1,7 +1,10 @@
 
 import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/ReportModel.dart';
+import 'package:des/Screens/Home.dart';
+import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../constants.dart' as constants;
@@ -13,16 +16,21 @@ class ReportScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) 
   {
-    return Scaffold
+    print(dailyreport.primarymood.ImagePath!);
+    return  WillPopScope(
+      onWillPop: () async
+      {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
+          return true;
+      },
+      child: Scaffold
     (
       backgroundColor: constants.pageColor,
-      body: 
-      Padding(
-        padding: const EdgeInsets.only(top:50 ,left: 11,right: 11),
-        child:
-         Column(
+      body:  Padding(
+        padding: const EdgeInsets.symmetric(vertical: 50,horizontal: 10),
+        child:Column(
            crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
+            children: [
             Column(
                             children: [
                               Text(
@@ -36,78 +44,95 @@ class ReportScreen extends StatelessWidget
                               ),
                             ],
                           ),
-
-         Padding(padding: EdgeInsets.only(top:25),
+         Padding(padding: EdgeInsets.only(top:25 ),
          child:
          Container(
            decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
            ),
-          child: Padding(padding: EdgeInsets.only(left: 10 ,right: 10 ),
+          child: Padding(padding: EdgeInsets.only(left: 10 ,right: 10 ,bottom: 10 ),
           child:
            Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-          children: 
+            children: 
           [
-            Padding(padding: EdgeInsets.only(bottom: 14,top: 10),
+            Padding(padding: EdgeInsets.symmetric(vertical: 12),
             child:
              Row(
               children: [
-               
                 Container(
                        width: 63,
                        height: 63,
                        decoration: BoxDecoration(                 
                            image: DecorationImage(
                            fit: BoxFit.cover,
-                           image: NetworkImage(dailyreport.primarymood.ImagePath ?? ''),
+                           image: NetworkImage(dailyreport.primarymood.ImagePath!),
                                                   ),
                                                   ),
                                                 ),
-
+                       
                    SizedBox(width: 7,),
                    Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: 
                     [
                       Text( dailyreport.primarymood.Text,style: GoogleFonts.abhayaLibre(fontSize:24, fontWeight: FontWeight.bold ),),
                       SizedBox(height: 2,),
                       Text(DateFormat('hh:mm ').format(DateTime.now())),
                     ],
-                   )
-                   
+                   )     
               ],
              ),
             ),
               
-              textline(first:"you felt",Second: dailyreport.Secondmood.Text,),
-              textline(first:"You made this Activities",Second: 
-              "walking,Reading",),
-              SizedBox(height: 14,),
+              TextLine(first:"you felt",second: dailyreport.Secondmood.Text,),
+              TextLine(first:"You made this Activities",second:dailyreport.activities),
               DescriptionTextWidget(text:dailyreport.journaling!),
-              SizedBox(height: 10,),
               Line(),
-              SizedBox(height: 14,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: 
                 [
-                   Text("StressTip" ,style: GoogleFonts.abhayaLibre(fontSize: 22,color: Colors.black ,fontWeight: FontWeight.bold),),
-                      Row(
+                   Text("Tip of the day" ,style: GoogleFonts.abhayaLibre(fontSize: 22,color: Colors.black ,fontWeight: FontWeight.bold),),
+                      Row
+                      (
                         children:
                          [
                              Image.asset("assets/images/Tip.png" , width: 22,),
                              SizedBox(width: 1,),
-                            //Icon(Icons.tips_and_updates_outlined ,color: constants.TipColor,),
-                            Text("Tip" ,style: GoogleFonts.abhayaLibre(color: constants.TipColor, fontSize: 20,fontWeight: FontWeight.bold),),
+                            Text("Tips" ,style: GoogleFonts.abhayaLibre(color: constants.TipColor, fontSize: 20,fontWeight: FontWeight.bold),),
                         ],
-                      )
-                  
+                      )   
                 ],
               ),
-               SizedBox(height: 7,),
-              Text("Spend time outdoors, surrounded by greenery and fresh air",style: GoogleFonts.abhayaLibre(color:constants.textGrey,fontSize: 20),)
-              ,SizedBox(height: 30,),
+              
+              Text(dailyreport.dayTip!,style: GoogleFonts.abhayaLibre(color:constants.textGrey,fontSize: 20),),
+              dailyreport.stressTip != "None"
+            ?  Padding(padding: EdgeInsets.only(top:6),child:
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                 
+                  Text(
+                    "Stress Tip",
+                    style: GoogleFonts.abhayaLibre(
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    dailyreport.stressTip!,
+                    style: GoogleFonts.abhayaLibre(
+                      color: constants.textGrey,
+                      fontSize: 20,
+                    ),
+                  ),
+                ],
+              ),
+            )
+            : SizedBox.shrink(),
           ],
         ), 
       
@@ -120,6 +145,7 @@ class ReportScreen extends StatelessWidget
     ),
       
       ),
+    ),
     );
   }
 }
@@ -156,7 +182,9 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return secondHalf.isEmpty
+    return Padding(padding: EdgeInsets.only(top:12 ,bottom: 10),
+    child:
+    secondHalf.isEmpty
           ? Text.rich(
           TextSpan(
             text: 'Note:',
@@ -215,7 +243,8 @@ class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
                   },
                 ),
               ],
-            );
+            ),
+    );
   }
 }
 class Line extends StatelessWidget {
@@ -223,71 +252,58 @@ class Line extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(padding:EdgeInsets.only(bottom:12),
+    child:
+    Container(
       height: 2,
       color:Color(0xff100F11).withOpacity(.16)
+    ),
     );
   }
 }
-
-class textline extends StatelessWidget
- {
-  String first;
-  String Second;
-  textline({required this.first ,required this.Second});
-
-  @override
-  Widget build(BuildContext context) {
-    return   RichText(
-      softWrap: true,
-      text:
-TextSpan(
-            text: first,
-            style: GoogleFonts.abhayaLibre(fontSize: 20,color: constants.textGrey),
-            children: [
-              TextSpan(
-                text: ' ', // Add a space here
-              ),
-              TextSpan(
-                text: Second,
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black
-                ),
-              ),
-            ],
-          ),
-        );
-        
-  }
-}
-
 class TextLine extends StatelessWidget {
   final String first;
-  final List<ActivityModel> second;
-
+  final dynamic second; 
   TextLine({required this.first, required this.second});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return RichText(
       softWrap: true,
       text: TextSpan(
         text: first,
         style: GoogleFonts.abhayaLibre(fontSize: 20, color: constants.textGrey),
-        children: [
-          TextSpan(text: ' '),
-          ...second.map((activity) => TextSpan(
-            text: activity.Text!,
-            style: GoogleFonts.abhayaLibre(
-              fontSize: 19,
-              color: Color(0xff100F11),
-              fontWeight: FontWeight.bold,
-            ),
-          )).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(),
-        ],
+        children: _buildChildren(),
       ),
     );
+  }
+  List<TextSpan> _buildChildren() {
+    if (second is String) {
+      return [
+        TextSpan(text: ' '),
+        TextSpan(
+          text: second,
+          style: GoogleFonts.abhayaLibre(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ];
+    } else if (second is List<ActivityModel>) {
+      return [
+        TextSpan(text: ' '),
+        ...second.map((activity) => TextSpan(
+          text: activity.Text!,
+          style: GoogleFonts.abhayaLibre(
+            fontSize: 19,
+            color: Color(0xff100F11),
+            fontWeight: FontWeight.bold,
+          ),
+        )).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(),
+      ];
+    } else {
+      throw ArgumentError('Invalid type for second parameter');
+    }
   }
 }

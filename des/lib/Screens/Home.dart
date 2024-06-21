@@ -2,9 +2,7 @@ import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
-import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
-import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,7 +15,6 @@ import '../constants.dart' as constants;
 import '../cubit/EmotionCubit.dart';
 import 'MoodTracker/SecondLayerMood.dart';
 import 'Test/TestScreen.dart';
-
 
 class Home extends StatelessWidget 
 {
@@ -33,6 +30,7 @@ class Home extends StatelessWidget
           } 
          else if (state is HomeLoaded) 
           {
+             print("home123");
             return  _Home(
               emotions:state.primaryEmotions , weeklyToDo:state.WeeklyToDo);       
           }
@@ -51,7 +49,6 @@ class _Home extends StatefulWidget {
   final List<MoodModel> emotions;
   final List<WeeklyToDoPlan> weeklyToDo;
    _Home({required this.emotions, required this.weeklyToDo});
-
   static const List<List<String>> emotionsIcons = [
     [
       'Loved',
@@ -87,11 +84,27 @@ class _Home extends StatefulWidget {
   State<_Home> createState() => _HomeState();
 }
 class _HomeState extends State<_Home> 
-{
+{ 
+  /*
+  bool isEntry=false ;
+   @override
+    void initState() {
+    super.initState();
+    checkMoodEntry(); // Call your async function here
+  }
+
+  Future<void> checkMoodEntry() async {
+    bool result = await BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty();
+    setState(() {
+      isEntry = result; // Update the state variable with the result
+    });
+  }
+  */
+
+ 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider =Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
     return Scaffold(
       backgroundColor: constants.pageColor,
@@ -115,7 +128,6 @@ class _HomeState extends State<_Home>
                             await prefs.remove('accessToken');
                             await prefs.remove('refreshToken');
                             googleLogout();
-                          //  _openDrawer();
                           },
                           child: Container(
                             margin: const EdgeInsets.only(top: 16),
@@ -168,7 +180,10 @@ class _HomeState extends State<_Home>
                       'Welcome Back, ${currentUser!.firstName}',
                       style: const TextStyle(fontSize: 22),
                     ),
-                    BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty() == false
+    
+                    
+                   
+    BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty()==false             
   ? 
   Column(
       children: [
@@ -239,7 +254,7 @@ class _HomeState extends State<_Home>
                             )
                           ]),
                     ),
-                
+                /*
                  BlocProvider.of<InsigthsCubit>(context).weeklyhistoy.history.isNotEmpty?
                  RectangleContainer(
                           constants.lilac30,
@@ -326,6 +341,7 @@ class _HomeState extends State<_Home>
                         ],
                       ),
                     ),
+                    */
     
 
 
@@ -347,7 +363,6 @@ class _HomeState extends State<_Home>
         GestureDetector(
           onTap: () => 
           {
-            //print(widget.emotions[i].Text),
             BlocProvider.of<SecondLayerCubit>(context).SavePrimaryEmotions( widget.emotions[i].Text),
             (
               widget.emotions[i].Text,
@@ -450,7 +465,12 @@ class MoodSelectedContainer extends StatelessWidget {
                     tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink wrap
                     visualDensity: VisualDensity.compact, // Make the button more compact
                   ),
-                  onPressed: () {},
+                  onPressed: () 
+                  
+                  {
+                     BlocProvider.of<HandleHomeCubit>(context).DeleteEntryToday();
+
+                  },
                   child: Text(
                     "delete",
                     style: GoogleFonts.abhayaLibre(

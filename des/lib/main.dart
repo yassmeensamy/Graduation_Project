@@ -3,9 +3,11 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Home.dart';
 import 'package:des/Screens/Learning/ContentsLearning.dart';
 import 'package:des/Screens/Learning/TotalLessons.dart';
 import 'package:des/Screens/MoodTracker/ReportScreen.dart';
+import 'package:des/Screens/MoodTracker/SecondLayerMood.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
@@ -193,11 +195,15 @@ class MainNavigatorState extends State<MainNavigator> {
       value: userProvider,
       child: OKToast(
         child: MaterialApp(
+           routes: {
+        '/home': (context) => Home(),
+      },
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
             body://ReportScreen();
             homeWidget,
+            //SecondViewMoodPage(),
             //ContentsLearning(),
             //TotalLessons(),
             //WeeklyGraph()

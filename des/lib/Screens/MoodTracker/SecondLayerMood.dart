@@ -49,7 +49,13 @@ class  SecondViewMoodPage extends StatelessWidget {
         }
         else if ( state is conclusionState)
         {
-             //Navigator.push(context, MaterialPageRoute(builder: (context)=>ReportScreen()));
+                         Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) =>ReportScreen(state.reportModel)),
+              ModalRoute.withName('/home'), 
+            );
+
+             
         }
         
       },
@@ -123,6 +129,7 @@ class SecondLayerView extends StatelessWidget {
             ),
             const SizedBox(height: 25),
             const HorizontalLineDrawingWidget(),
+           
             const SizedBox(height: 25),
             Text(
                EmotionType,
@@ -330,7 +337,9 @@ class HorizontalLinePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
   }
+  
 }
+
 
 
 
