@@ -4,6 +4,7 @@ import 'package:des/Models/CalenderModel.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
+import 'package:des/Screens/Homeloading.dart';
 import 'package:des/cubit/EmotionCubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import '/constants.dart' as constants;
@@ -24,7 +25,9 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
   bool isEntry=false;
   List<MoodModel> primaryEmotions=[];
   List<WeeklyToDoPlan>WeeklyToDo=[];
-  HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit}) : super(HandleHomeInitial())
+  ReportModel? dailyReport = null;
+
+  HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit }) : super(HandleHomeInitial())
   {
     initialize();
   }
@@ -40,8 +43,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     {
       primaryEmotions = await moodCubit.GetPrimaryEmotions();
       await GetWeeklyToDo();
-      //await chechMoodEnrty();
-      print("yasmmenn ashter katkot");
+      print("return homeloaded");
       emit(HomeLoaded(primaryEmotions ,WeeklyToDo));
     } 
     catch (e) {
@@ -92,14 +94,17 @@ void RemoveFromToDoList(int ActivityId ) async
 
 Future<bool> chechMoodEnrty() async 
 {
-  print("loloooy");
   Map<String,ReportModel> reportHistory= await ReportHistory();
   if(reportHistory.containsKey(DateFormat('y-MM-dd').format(DateTime.now())))
   {
-    return true;
+    dailyReport=reportHistory[DateFormat('y-MM-dd').format(DateTime.now())]!;
+    print("return true");
+    return  true;
+    //emit(HomeLoaded(primaryEmotions, WeeklyToDo))
   }
   else 
   { 
+    print("return false");
     return  false ;
   }
 }

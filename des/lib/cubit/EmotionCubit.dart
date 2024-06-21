@@ -72,12 +72,13 @@ Future<void> SavePrimaryEmotions(String SelectedMood) async
     Response response=await http.post(Uri.parse("${constants.BaseURL}/api/mood-primary-entry/"),
      body: json_data, 
      headers: headers);
-     if(response.statusCode==200)
+     if(response.statusCode==200 || response.statusCode == 201)
      {
           dynamic responseData = jsonDecode(response.body);     
      }
       else 
       {
+        print("error in submit");
           emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
       }
 }
@@ -140,7 +141,7 @@ Future<void> SaveSecondEmotions() async
     Response response=await http.post(Uri.parse("${constants.BaseURL}/api/mood-second-entry/"),
      body: json_data, 
      headers: headers);
-     if(response.statusCode==200)
+     if(response.statusCode==200 || response.statusCode == 201)
      {
           dynamic responseData = jsonDecode(response.body);
      }
@@ -198,39 +199,42 @@ Future<void> GetActivitiesandReason() async {
 
 
 }
+Future<void> SendJournaling(String note) async {
+  try {
+    print(note);
+    var data = {"notes": note};
+    var json_data = jsonEncode(data);
 
-Future<void>SendJournaling(String note)
-async {
-  print(note);
-  var data={"notes":note};
-  var json_data=jsonEncode(data);
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
 
-   Map<String, String> headers = {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' // You don't need this header for this request
+    Map<String, String> headers = {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
     };
-    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/journal-entry/"),
-     body: json_data, 
-     headers: headers);
-     if(response.statusCode==200)
-     {
-      
-         dynamic responseData = jsonDecode(response.body);
-         print("journaling done");
-         ReportModel? reportModel=await GetDailyReport();
-         emit(conclusionState(reportModel!));     
-     }
-      else 
-      { 
-          print(response.statusCode);
-          emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
-      }
 
+    Response response = await http.post(
+      Uri.parse("${constants.BaseURL}/api/journal-entry/"),
+      body: json_data,
+      headers: headers,
+    );
 
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      dynamic responseData = jsonDecode(response.body);
+      print("journaling done");
+      ReportModel? reportModel = await GetDailyReport();
+      emit(conclusionState(reportModel!));
+    } else 
+    {
+      print("Journaling failed with status code: ${response.statusCode}");
+      emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
+    }
+  } catch (e) {
+    print("Error sending journaling: $e");
+    emit(EmotionCubitStateFailur("Error sending journaling: $e"));
+  }
 }
+
 
 Future<void> SaveReason() async
 {

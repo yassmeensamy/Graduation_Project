@@ -1,6 +1,8 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Controllers/GoogleAuthController.dart';
+import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/MoodModel.dart';
+import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +34,7 @@ class Home extends StatelessWidget
           {
              print("home123");
             return  _Home(
-              emotions:state.primaryEmotions , weeklyToDo:state.WeeklyToDo);       
+              emotions:state.primaryEmotions! , weeklyToDo:state.WeeklyToDo!);       
           }
            else if (state is HomeError) 
           {
@@ -85,23 +87,26 @@ class _Home extends StatefulWidget {
 }
 class _HomeState extends State<_Home> 
 { 
-  /*
-  bool isEntry=false ;
+  
+
    @override
     void initState() {
     super.initState();
-    checkMoodEntry(); // Call your async function here
+    check(); // Call your async function here
   }
-
-  Future<void> checkMoodEntry() async {
-    bool result = await BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty();
-    setState(() {
-      isEntry = result; // Update the state variable with the result
-    });
-  }
-  */
 
  
+  bool myBoolVariable = true;
+  /*   العيب انه كل ما بيروح الhome بيرجع يبنيها من الاول خالص خالص   */
+  void check() async
+  {
+     bool moodEntry = await BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty();
+     myBoolVariable=moodEntry;
+      setState(() {
+     myBoolVariable=moodEntry;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider =Provider.of<UserProvider>(context, listen: false);
@@ -182,8 +187,8 @@ class _HomeState extends State<_Home>
                     ),
     
                     
-                   
-    BlocProvider.of<HandleHomeCubit>(context).chechMoodEnrty()==false             
+              
+    myBoolVariable==false             
   ? 
   Column(
       children: [
@@ -443,12 +448,15 @@ class TODo extends StatelessWidget {
 
 
 
-class MoodSelectedContainer extends StatelessWidget {
+class MoodSelectedContainer extends StatelessWidget 
+{
+  
    MoodSelectedContainer({Key? key}) : super(key: key);
-  List<String>Activities=["dancing","dancing","dancing"];
-   List<String>mood=["Happy"];
+ 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
+     ReportModel dailyreport=BlocProvider.of<HandleHomeCubit>(context).dailyReport!;
     return Padding(
       padding: EdgeInsets.only(bottom: 12), // Adjust bottom padding only
       child: 
@@ -505,23 +513,28 @@ class MoodSelectedContainer extends StatelessWidget {
             SizedBox(height: 4), // Adjust this height to control the space between the rows
             Row(
               children: [
-                Image.asset(
-                  "assets/images/Emotions/Loved.png",
-                  width: 70,
-                  height: 63,
-                ),
+               Container(
+                       width: 63,
+                       height: 63,
+                       decoration: BoxDecoration(                 
+                           image: DecorationImage(
+                           fit: BoxFit.cover,
+                           image: NetworkImage(dailyreport.primarymood.ImagePath!),
+                                                  ),
+                                                  ),
+                                                ),
                 SizedBox(width: 10),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      TextRich(
+                      TextLine(
                         first: "You are feeling",
-                        second: mood,
+                        second:dailyreport.primarymood.Text,
                       ),
-                      TextRich(
+                      TextLine(
                         first: "You made these Activities",
-                        second: Activities,
+                        second: dailyreport.activities,
                       ),
                     ],
                   ),
@@ -533,41 +546,52 @@ class MoodSelectedContainer extends StatelessWidget {
       );
   }
 }
-class TextRich extends StatelessWidget {
+class TextLine extends StatelessWidget {
   final String first;
-  final List<String> second;
-
-  TextRich({required this.first, required this.second});
-
+  final dynamic second; 
+  TextLine({required this.first, required this.second});
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return RichText(
       softWrap: true,
       text: TextSpan(
-        text: first + " ",
-        style: GoogleFonts.abhayaLibre(
-          fontSize: 19,
-          color: Color(0xff100F11).withOpacity(.74),
-          fontWeight: FontWeight.normal,
-        ),
-        children: List.generate(
-          second.length,
-          (index) => TextSpan(
-            text: second[index],
-            style: GoogleFonts.abhayaLibre(
-              fontSize: 19,
-              color: Color(0xff100F11),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(), 
+        text: first,
+        style: GoogleFonts.abhayaLibre(fontSize: 20, color: constants.textGrey),
+        children: _buildChildren(),
       ),
     );
   }
+  List<TextSpan> _buildChildren() {
+    if (second is String) {
+      return [
+        TextSpan(text: ' '),
+        TextSpan(
+          text: second,
+          style: GoogleFonts.abhayaLibre(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      ];
+    } else if (second is List<ActivityModel>) {
+      return [
+        TextSpan(text: ' '),
+        ...second.map((activity) => TextSpan(
+          text: activity.Text!,
+          style: GoogleFonts.abhayaLibre(
+            fontSize: 19,
+            color: Color(0xff100F11),
+            fontWeight: FontWeight.bold,
+          ),
+        )).expand((e) => [e, TextSpan(text: ", ")]).toList()..removeLast(),
+      ];
+    } else {
+      throw ArgumentError('Invalid type for second parameter');
+    }
+  }
 }
-
-
-
 
 
 

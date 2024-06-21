@@ -111,7 +111,7 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
-    //logout();
+  //logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
