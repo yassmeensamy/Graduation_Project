@@ -72,13 +72,13 @@ class WeeklyCubit extends Cubit<WeeklyState>
     );
     if(response.statusCode==201)
     {
-      print("done");
+    
 
     }
     else 
     {
       print(response.statusCode);
-      print("off");
+      
     }
     }
 

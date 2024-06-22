@@ -4,9 +4,12 @@ import 'package:des/Models/CalenderModel.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
+import 'package:des/Screens/Home.dart';
 import 'package:des/Screens/Homeloading.dart';
+import 'package:des/Screens/temp.dart';
 import 'package:des/cubit/EmotionCubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
+import 'package:flutter/material.dart';
 import '/constants.dart' as constants;
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -142,7 +145,6 @@ Future<void> GetWeeklyToDo() async
 {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ?accessToken = prefs.getString('accessToken');
-    
     Map<String, String> headers = 
     {
       'Authorization': 'Bearer $accessToken',
@@ -157,31 +159,28 @@ Future<void> GetWeeklyToDo() async
     {
        List<dynamic> responseData = jsonDecode(response.body);
        WeeklyToDo = (responseData).map((item) =>WeeklyToDoPlan.fromJson(item)).toList();
-       print("weekly done");
-
+       print("get weekly done we we we we");
     }
     else 
     {
       print(response.statusCode); 
     }
 }
-
-
-   void resetHomeAfterWeeklycheckin()  async
-   {
-      await GetWeeklyToDo();
-      if(isEntry==true)
-  {
-         emit(HomeLoaded(report: dailyReport,isEntry: true,WeeklyToDo: WeeklyToDo));
+  void resetHomeAfterWeeklycheckin(BuildContext context) async {
+  await GetWeeklyToDo();
+  if (isEntry == true) {
+    emit(HomeLoaded(report: dailyReport, isEntry: true, WeeklyToDo: WeeklyToDo));
+  } else {
+    emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: WeeklyToDo));
   }
-  else 
-  {
-           emit(HomeLoaded(primaryEmotions: primaryEmotions,isEntry: false,WeeklyToDo: WeeklyToDo));
-  }
-
-   }
+  
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) =>temp()),
+  );
+  
+}
    
-
    Future<Map<String,ReportModel>> ReportHistory() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();

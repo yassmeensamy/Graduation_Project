@@ -34,7 +34,6 @@ class Home extends StatelessWidget
           } 
          else if (state is HomeLoaded) 
           {
-            print("weekly ${state.WeeklyToDo}");
             return  _Home( emotions:state.primaryEmotions,weeklyToDo:state.WeeklyToDo,IsEntry: state.isEntry!,dailyReport: state.report,);       
           }
            else if (state is HomeError) 
@@ -93,10 +92,8 @@ class _HomeState extends State<_Home>
 { 
   @override
   Widget build(BuildContext context) {
-    print(widget.emotions);
     UserProvider userProvider =Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
-    print(widget.IsEntry);
     return Scaffold(
       backgroundColor: constants.pageColor,
       body: Column(
@@ -319,9 +316,6 @@ class _HomeState extends State<_Home>
         child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
           builder: (context, state) 
           { 
-            print("stateeeeeeee ${state.runtimeType}");
-            if( state is HomeLoaded )
-            {
               print("length${BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length}");
               return 
               BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length!=0 ?
@@ -336,11 +330,7 @@ class _HomeState extends State<_Home>
                                  },
                                    ):  Center(child:
                                    Text(" Weekly Tasks done, Celebrate this achievement and keep moving forward." ,style:TextStyle(fontSize: 20)));
-           }
-          else 
-          {
-            return Container();
-          }
+           
           
           }
         ),
@@ -456,7 +446,7 @@ class MoodSelectedContainer extends StatelessWidget
   @override
   Widget build(BuildContext context) 
   {
-    print(dailyreport.activities.length);
+   
      //ReportModel dailyreport=BlocProvider.of<HandleHomeCubit>(context).dailyReport!;
     return Padding(
       padding: EdgeInsets.only(bottom: 12), // Adjust bottom padding only

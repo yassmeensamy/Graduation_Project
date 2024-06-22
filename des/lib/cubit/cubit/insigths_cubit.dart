@@ -45,7 +45,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
       if(response.statusCode==200)
       {
        List<dynamic> data= jsonDecode(response.body);
-       print("moodhistory done");
         return data.map((e) => MoodModel.fromJson(e)).toList();
       }
       else 
@@ -234,7 +233,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
     }
    else 
    {
-    print("Category $Category not found.");
     return [];
    }
  }
