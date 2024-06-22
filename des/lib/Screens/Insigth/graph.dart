@@ -35,7 +35,6 @@ class _DepresionGraphState extends State<DepresionGraph> {
   @override
   Widget build(BuildContext context) 
   {
-         print(widget.depressionhistory.length);
          /*
      if (widget.depressionhistory.length == 1) 
      {
@@ -43,8 +42,6 @@ class _DepresionGraphState extends State<DepresionGraph> {
       widget.depressionhistory.add(TestResultModel(timestamp: singlePoint.timestamp, total_score: singlePoint.total_score,level_of_depression: singlePoint.level_of_depression)); // Add dummy second point
      }
      */
-     print(widget.depressionhistory);
-    widget.depressionhistory.forEach((element) => print(element.timestamp),);
     return Container(
       height: 400,
       decoration: BoxDecoration(

@@ -7,6 +7,7 @@ import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:oktoast/oktoast.dart';
@@ -50,6 +51,7 @@ Future<void> main() async
         BlocProvider(create: (context) => SecondLayerCubit()),
         BlocProvider(create: (context) => ActivitiesCubit()),
         BlocProvider(create: (context) => SliderCubit()),
+        BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
         BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
          BlocProvider<HandleHomeCubit>(

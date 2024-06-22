@@ -34,7 +34,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
   { 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
-    print(accessToken);
     try {
       Map<String, String> headers = 
       {
@@ -62,7 +61,7 @@ class InsigthsCubit extends Cubit<InsigthsState>
   { 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
-    print(accessToken);
+
     try {
       Map<String, String> headers = 
       {
@@ -93,7 +92,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
   { 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
-    print(accessToken);
     try {
       Map<String, String> headers = 
       {
@@ -105,7 +103,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
       if(response.statusCode==200)
       {
        List<dynamic> data= jsonDecode(response.body);
-       print("monthDone");
         return data.map((e) => ActivityModel.fromjson(e)).toList();
       
       }
@@ -208,7 +205,6 @@ class InsigthsCubit extends Cubit<InsigthsState>
         result.timestamp = extractDayAndMonth(result.timestamp!);
        });
        var  Weeklyhistory=await fetchWeeklyHistory();
-      
        var ActivitiesYearHistory=   await fetchActivitiesYearHistory();
        var ActivitiesMonthHistory=   await fetchActivitiesMonthHistory();
        var MoodHistory= await fetchMoodHistory();
@@ -225,7 +221,7 @@ class InsigthsCubit extends Cubit<InsigthsState>
 
   List<WeelklyModel> SearchAboutCategoty(String Category)
   {
-    print(weeklyhistoy.history.length);
+  
     if (weeklyhistoy.history.containsKey(Category)) 
     {
       List<WeelklyModel> results =weeklyhistoy.history[Category]!;

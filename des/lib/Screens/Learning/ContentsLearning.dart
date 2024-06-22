@@ -1,17 +1,189 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/Models/Learning/LearningModel.dart';
 import 'package:des/Screens/Learning/TotalLessons.dart';
+import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:palette_generator/palette_generator.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../constants.dart' as constants;
 
-class ContentsLearning extends StatelessWidget {
+class ContentsLearning extends StatelessWidget 
+{
   const ContentsLearning({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return  BlocBuilder<LearningCubit, LearningState>(
+        builder: (context, state) 
+        {
+           if(state is LearningLoaded)
+           {
+             return _ContentsLearning(BlocProvider.of<LearningCubit>(context).LearningTopics);
+           }
+           else 
+           {
+             return LearningLoading();
+           }
+             
+        }
+    );
+  }
+}
+
+class _ContentsLearning extends StatelessWidget {
+  List<LearningModel>mainTopics;
+  _ContentsLearning(this.mainTopics);
+
+  @override
+  Widget build(BuildContext context) {
     return  SafeArea(
-      child: Scaffold(
+      child: 
+       Scaffold(
         
+        backgroundColor:constants.pageColor ,
+        body: Padding(padding: EdgeInsets.only(left: 10,right: 10,top: 10),
+        child:
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+        Padding(
+          padding: const EdgeInsets.only(left:15,bottom: 15),
+          child: Text("Learning Path" ,style:GoogleFonts.inter(fontSize: 34,)),
+        ),
+        Expanded(child: 
+         GridView.builder(
+          scrollDirection: Axis.vertical,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Number of columns in the grid
+            crossAxisSpacing: 6.0, // Spacing between columns
+            mainAxisSpacing: 10.0,
+            childAspectRatio: .87, // Spacing between rows
+          ),
+          itemCount: mainTopics.length, // Number of items in the grid
+          itemBuilder: (BuildContext context, int index) 
+          {
+            return LearnCard(Topic: mainTopics[index]);
+          }
+        
+        ),
+        ),
+          ]
+        )
+        )
+    
+      ),
+    );
+  }
+}
+
+class LearnCard extends StatelessWidget 
+{
+   final LearningModel? Topic;
+   LearnCard({this.Topic}) ;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () 
+       {
+        //FetchSubTopic
+         BlocProvider.of<LearningCubit>(context).FetchSubTopic(Topic!.id);
+         Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TotalLessons()),
+              );
+      },
+      child:
+     Container(
+      decoration: BoxDecoration(
+         // Optionally set background color
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.black.withOpacity(.23), 
+          width: 1, 
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ImageContainer(imageUrl: Topic!.imagePath),
+          Padding(
+            padding: EdgeInsets.only(left: 10, top: 4),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Topic!.topicName,
+                  style: GoogleFonts.inter(fontSize: 16),
+                  softWrap: true,
+                ),
+                SizedBox(height: 10),
+                Container(
+                  width: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.red.withOpacity(.4),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 2, bottom: 2),
+                    child: Center(
+                      child: Text(
+                        "4 less",
+                        style: GoogleFonts.inter(fontSize: 13),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+    );
+  }
+}
+class ImageContainer extends StatelessWidget {
+  final String? imageUrl;
+
+  ImageContainer({required this.imageUrl});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(20.0),
+        topRight: Radius.circular(20.0),
+      ),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl!,
+        width: double.infinity,
+        height: 120,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: constants.mint.withOpacity(.5),
+          //Colors.grey[300],
+        ),
+        errorWidget: (context, url, error) => Center(
+          child: Icon(
+            Icons.error,
+            color: Colors.red,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LearningLoading extends StatelessWidget 
+{
+  const LearningLoading({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return  SafeArea(
+      child: 
+       Scaffold(
         backgroundColor:constants.pageColor ,
         body: Padding(padding: EdgeInsets.only(left: 10,right: 10,top: 10),
         child:
@@ -34,7 +206,27 @@ class ContentsLearning extends StatelessWidget {
           itemCount: 6, // Number of items in the grid
           itemBuilder: (BuildContext context, int index) 
           {
-            return LearnCard();
+            return  Container
+            (
+                decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: Colors.black.withOpacity(.23), 
+          width: 1, 
+        ),
+      ),
+               child:Shimmer.fromColors(
+              baseColor:constants.mint.withOpacity(.5),
+             
+     highlightColor: constants.mint,
+    child:  Container
+    (
+      color:Colors.black ,
+
+    )
+  ),
+
+            );
           }
         
         ),
@@ -47,89 +239,9 @@ class ContentsLearning extends StatelessWidget {
     );
   }
 }
+  
 
-class LearnCard extends StatelessWidget {
-  LearnCard({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () 
-       {
-         Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TotalLessons()),
-              );
-      },
-      child:
-     Container(
-      decoration: BoxDecoration(
-         // Optionally set background color
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: Colors.black.withOpacity(.23), 
-          width: 1, 
-        ),
-      ),
-      child: Column(
-        children: [
-          ImageContainer(imageUrl: "assets/images/gift.png"),
-          Padding(
-            padding: EdgeInsets.only(left: 10, top: 4),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "How to deal with bullying",
-                  style: GoogleFonts.inter(fontSize: 17),
-                  softWrap: true,
-                ),
-                SizedBox(height: 10),
-                Container(
-                  width: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: Colors.red.withOpacity(.4),
-                    //_backgroundColor?.withOpacity(.9),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 2, bottom: 2),
-                    child: Center(
-                      child: Text(
-                        "4 less",
-                        style: GoogleFonts.inter(fontSize: 13),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ),
-    );
-  }
-}
 
-class ImageContainer extends StatelessWidget {
-  final String? imageUrl;
 
-  ImageContainer({required this.imageUrl});
 
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20.0),
-        topRight: Radius.circular(20.0),
-      ),
-      child:  Image.asset(
-              imageUrl!,
-              width: double.infinity,
-              height: 120,
-              fit: BoxFit.cover,
-            ),
-    );
-  }
-}

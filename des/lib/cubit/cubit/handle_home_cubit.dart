@@ -159,7 +159,6 @@ Future<void> GetWeeklyToDo() async
     {
        List<dynamic> responseData = jsonDecode(response.body);
        WeeklyToDo = (responseData).map((item) =>WeeklyToDoPlan.fromJson(item)).toList();
-       print("get weekly done we we we we");
     }
     else 
     {
