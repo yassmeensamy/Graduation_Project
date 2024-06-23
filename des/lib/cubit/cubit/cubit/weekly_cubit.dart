@@ -51,7 +51,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
      }
     }
 
-    void CreateRecord() async
+    Future<void> CreateRecord() async
     {
     var data = {"scores": Rating};
     print(data);
@@ -59,11 +59,9 @@ class WeeklyCubit extends Cubit<WeeklyState>
     
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    
     Map<String, String> headers = {
       'Authorization': 'Bearer $accessToken',
       'Content-Type': 'application/json',
-      
     };
     Response response = await http.post(
       Uri.parse("${constants.BaseURL}/api/life-record/"),
@@ -73,7 +71,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
     if(response.statusCode==201)
     {
     
-
+         print("lolllllllllllllllllllllllllllllllllllllllllllllllllllllllly");
     }
     else 
     {

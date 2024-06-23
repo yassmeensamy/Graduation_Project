@@ -143,6 +143,7 @@ Future <bool>CheckActivity(int ActivityId) async
 
 Future<List<WeeklyToDoPlan>> GetWeeklyToDo() async
 {
+   emit(HomeLoading());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ?accessToken = prefs.getString('accessToken');
     Map<String, String> headers = 
@@ -169,7 +170,10 @@ Future<List<WeeklyToDoPlan>> GetWeeklyToDo() async
 }
 void resetHomeAfterWeeklycheckin() async 
 {
+ emit(HomeLoading());
+
   List<WeeklyToDoPlan> tasks= await GetWeeklyToDo();
+  print("tasks$tasks");
   if (isEntry == true) {
     emit(HomeLoaded(report: dailyReport, isEntry: true, WeeklyToDo:tasks));
   } else {

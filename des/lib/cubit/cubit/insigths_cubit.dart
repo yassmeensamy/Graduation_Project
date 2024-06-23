@@ -4,6 +4,7 @@ import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/WeeklyHistory.dart';
 import 'package:des/Models/WeeklyModel.dart';
+import 'package:des/cubit/cubit/handle_home_cubit.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -151,7 +152,9 @@ class InsigthsCubit extends Cubit<InsigthsState>
     }
   }
   
-  Future<WeeklyHistoryModel> fetchWeeklyHistory() async {
+  Future<WeeklyHistoryModel> fetchWeeklyHistory() async 
+  {
+     //emit(HomeLoading() as InsigthsState);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
     try {
