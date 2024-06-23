@@ -23,7 +23,9 @@ class ReportScreen extends StatelessWidget
       {
         
            BlocProvider.of<HandleHomeCubit>(context).FinishEntry(dailyreport);
+             BlocProvider.of<InsigthsCubit>(context).loadInsights();
            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          
           //Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
           return true;
       },

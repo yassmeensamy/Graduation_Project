@@ -1,42 +1,52 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Models/Learning/LearningModel.dart';
+import 'package:des/Screens/Learning/ContentLesson.dart';
 import 'package:des/Screens/Learning/TotalLessons.dart';
 import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../constants.dart' as constants;
 
-class ContentsLearning extends StatelessWidget 
-{
-  const ContentsLearning({super.key});
+class ContentsLearning extends StatelessWidget {
+  const ContentsLearning({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<LearningCubit, LearningState>(
-      listener: (context, state) 
-      {
-        if (state is LearningSubTopicsState)
-        {
+    return BlocConsumer<LearningCubit, LearningState>(
+      listener: (context, state) {
+        if (state is LearningSubTopicsState ) {
+         
           Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TotalLessons(state.Total,state.subtopics)),
-              );
+            context,
+            MaterialPageRoute(builder: (context) => TotalLessons(state.Total, state.subtopics)),
+          );    
+        }
+        if(state is LessonContentState)
+        {
+              Navigator.push(
+                                 context,
+                                MaterialPageRoute(builder: (context) => ContentLesson (state.subParagraphs),
+                                                  ),
+                                          );
         }
       },
-        builder: (context, state) 
+      builder: (context, state) 
+      {
+        if (state is LearningLoaded) 
         {
-           if(state is LearningLoaded)
-           {
-             return _ContentsLearning(BlocProvider.of<LearningCubit>(context).LearningTopics);
-           }
-           else 
-           {
-             return LearningLoading();
-           }
-             
+          return _ContentsLearning(state.MainTopics);
+        } 
+         
+         else 
+        {
+           print("lollllllllly");
+           return LearningLoading();
         }
+        
+      },
     );
   }
 }

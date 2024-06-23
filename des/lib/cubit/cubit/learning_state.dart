@@ -18,10 +18,19 @@ class LearningError extends LearningState
   LearningError(this.message);
 
 }
+class LearningSubTopicsLoadingState extends LearningState 
+{}
+
 class LearningSubTopicsState extends LearningState 
 {
    Map<int,List<Lessons>>Total={};
    LearningModel? subtopics;
    LearningSubTopicsState(this.Total,this.subtopics);
    
+}
+class LessonContentState extends LearningState
+{
+ List<String> subParagraphs=[];
+ LessonContentState(this.subParagraphs);
+
 }

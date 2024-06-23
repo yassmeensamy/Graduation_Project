@@ -141,7 +141,7 @@ Future <bool>CheckActivity(int ActivityId) async
 
 }
 
-Future<void> GetWeeklyToDo() async
+Future<List<WeeklyToDoPlan>> GetWeeklyToDo() async
 {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ?accessToken = prefs.getString('accessToken');
@@ -159,24 +159,24 @@ Future<void> GetWeeklyToDo() async
     {
        List<dynamic> responseData = jsonDecode(response.body);
        WeeklyToDo = (responseData).map((item) =>WeeklyToDoPlan.fromJson(item)).toList();
+       return WeeklyToDo;
     }
     else 
     {
       print(response.statusCode); 
+      return [];
     }
 }
-void resetHomeAfterWeeklycheckin(BuildContext context) async {
-  await GetWeeklyToDo();
+void resetHomeAfterWeeklycheckin() async 
+{
+  List<WeeklyToDoPlan> tasks= await GetWeeklyToDo();
   if (isEntry == true) {
-    emit(HomeLoaded(report: dailyReport, isEntry: true, WeeklyToDo: WeeklyToDo));
+    emit(HomeLoaded(report: dailyReport, isEntry: true, WeeklyToDo:tasks));
   } else {
-    emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: WeeklyToDo));
+    emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: tasks));
   }
   
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) =>temp()),
-  );
+  
   
 }
    

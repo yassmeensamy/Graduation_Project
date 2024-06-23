@@ -18,7 +18,11 @@ class InsightScreen extends StatelessWidget {
         قدامنا حالين ان ترن اول ما تفتح خالص  او لما اخلص كل حاجة نرن
 
     */
-    
+    /*
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<InsigthsCubit>(context).loadInsights();
+    });
+    */
   return 
    BlocConsumer<InsigthsCubit, InsigthsState>(
       listener: (context, state) {

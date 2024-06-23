@@ -14,8 +14,8 @@ class LearningCubit extends Cubit<LearningState>
 {
 
    List<LearningModel> LearningTopics=[];
- 
-  LearningCubit() : super(LearningInitial())
+     List<String> subParagraphs=[];
+      LearningCubit() : super(LearningInitial())
   {
      FetchMainTopics();
 
@@ -34,9 +34,16 @@ class LearningCubit extends Cubit<LearningState>
     SubTopicLessons[element.id] = lessons;
   });
   
- print(SubTopicLessons);
+   print(SubTopicLessons);
   emit(LearningSubTopicsState(SubTopicLessons,subtopics));
 }
+ void resetContent()
+ {
+     emit(LearningLoaded(LearningTopics));
+ }
+
+
+
 
     Future<List<Lessons>> FetchSubLessons(int subtopic_id) async
   {
@@ -102,6 +109,7 @@ class LearningCubit extends Cubit<LearningState>
 
   Future<LearningModel?> FetchSubTopic(int Topic_Id) async
   {
+    //emit(LearningSubTopicsLoadingState());
       var data={"topic_id":Topic_Id};
       var json_data=jsonEncode(data); 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -130,8 +138,9 @@ class LearningCubit extends Cubit<LearningState>
   }
   
  
- Future<String> FetchContent(int lesson_id) async
+ Future<List<String>> FetchContent(int lesson_id) async
   {
+    emit(LearingLoading());
      var data={"lesson_id":lesson_id};
     var json_data=jsonEncode(data); 
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -148,13 +157,16 @@ class LearningCubit extends Cubit<LearningState>
      if(response.statusCode==200)
      {
           dynamic responseData = jsonDecode(response.body);
-          String  LessonContent=responseData['content'];
-          return LessonContent;  
+           String LessonContent=responseData['content'];
+            subParagraphs = LessonContent.split(". ");
+          print(LessonContent);
+          emit(LessonContentState(this. subParagraphs));
+          return subParagraphs;
      }
     else 
     {
          print(response.statusCode);
-         return " ";
+         return [];
     }
   }
   

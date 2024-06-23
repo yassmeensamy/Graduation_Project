@@ -1,13 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Models/Learning/LearningModel.dart';
 import 'package:des/Models/Learning/Lesson.dart';
+import 'package:des/Screens/Learning/ContentLesson.dart';
+import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants.dart' as constants;
-class SelectedIndexCubit extends Cubit<int> {
+class SelectedIndexCubit extends Cubit<int> 
+{
   SelectedIndexCubit() : super(-1);
-
   void selectIndex(int index) {
     if (state == index) {
       emit(-1);
@@ -19,18 +21,28 @@ class SelectedIndexCubit extends Cubit<int> {
 class TotalLessons extends StatelessWidget 
 {
   Map<int,List<Lessons>>Total={};
-   LearningModel? subtopics;
+  LearningModel? subtopics;
  TotalLessons(this.Total,this.subtopics);
- 
+
   @override
-  Widget build(BuildContext context) {
-     print(subtopics!.imagePath!);
-     //print()
+  Widget build(BuildContext context) {;
+
     final screenHeight = MediaQuery.of(context).size.height;
-    return BlocProvider(
+    return 
+    
+    
+    
+    
+    
+    BlocProvider(
       create: (context) => SelectedIndexCubit(),
+      child: WillPopScope(
+      onWillPop: () async
+      {
+           BlocProvider.of<LearningCubit>(context).resetContent();
+          return true;
+      },
       child:
-      
       Scaffold(
         body: BlocBuilder<SelectedIndexCubit, int>(
           builder: (context, selectedIndex) {
@@ -41,19 +53,16 @@ class TotalLessons extends StatelessWidget
                   left: 0,
                   right: 0,
                   height: screenHeight * 0.4,
-                  child: Container(
-                    color: Color(0xffE3C3EA).withOpacity(.6),
+                  child: Container( 
                     child: 
-                   
                      CachedNetworkImage(
         imageUrl: constants.BaseURL+subtopics!.imagePath,
         width: double.infinity,
         height: 250,
-        //fit: BoxFit.cover,
+        fit: BoxFit.cover,
         placeholder: (context, url) => Container(
           color: constants.mint.withOpacity(.5),
-          //Colors.grey[300],
-        ),
+                   ),
         errorWidget: (context, url, error) => Center(
           child: Icon(
             Icons.error,
@@ -63,7 +72,6 @@ class TotalLessons extends StatelessWidget
       ),
                   ),
                 ),
-                
                 Positioned(
                   top: screenHeight * 0.416,
                   left: 7,
@@ -102,48 +110,62 @@ class TotalLessons extends StatelessWidget
                   right: 0,
                   bottom: 0, 
                   child: ListView.builder(
-                    physics: BouncingScrollPhysics(),
+                    physics:ClampingScrollPhysics(),
                     itemCount: subtopics!.subtopics!.length,
                     itemBuilder: (context, index) {
                       return Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        
                         children: [
                           GestureDetector(
                             onTap: () {
                               context.read<SelectedIndexCubit>().selectIndex(index);
                             },
                             child: Container(
-                              height: 54,
+                              height: 60,
                               decoration: BoxDecoration(
                                 border: Border(
                                   bottom: BorderSide(color: Colors.black.withOpacity(.2), width: 2),
                                 ),
                               ),
                               child:
+                             
                                Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                 Expanded(child: 
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Icon(Icons.search),
+                                      Expanded(child: 
                                       Text(
                                         subtopics!.subtopics![index].name,
-                                        style: GoogleFonts.nunitoSans(fontSize: 17, fontWeight: FontWeight.w700),
+                                        textAlign: TextAlign.left,
+                                        softWrap: true,
+                                     
+                                        
+                                        style: GoogleFonts.nunitoSans(fontSize: 16, fontWeight: FontWeight.w700),
+                                      ),
                                       ),
                                     ],
                                   ),
+                                 ),
+                               
+                                  
                                   Transform.rotate(
                                     angle: -180 * 3.1415926535 / 180,
                                     child: Icon(Icons.arrow_back_ios),
                                   ),
                                 ],
                               ),
-                            ),
+                              ),
+                            
                           ),
                           if (selectedIndex == index)
                            ListView.builder(
-                            physics: BouncingScrollPhysics(),
+                            physics: ClampingScrollPhysics(),
                             shrinkWrap: true,
                               itemCount: Total[subtopics!.subtopics![index].id]!.length,
                               itemBuilder: (context, ind) 
@@ -152,7 +174,47 @@ class TotalLessons extends StatelessWidget
                                         height: 60,      
                                     color: Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]?Color(0xffE8FFED) :Color(0xff6495ED).withOpacity(.3),
                                     padding: EdgeInsets.all(0),
-                                    child: Padding(padding: EdgeInsets.only(left:10),
+                                    child:Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]?
+                                     GestureDetector(
+                                      onTap: ()
+                                      {
+                                        print("you can read now");
+                                        BlocProvider.of<LearningCubit>(context).FetchContent(Total[subtopics!.subtopics![index].id]![ind].id!);
+                                      
+                                      },
+                                         child:SubLessonContainer(Total: Total,subtopics: subtopics,ind:ind,index: index,),
+                                        ):
+                                        SubLessonContainer(Total: Total,subtopics: subtopics,ind:ind,index: index,),
+                                        );        
+                                },
+                              ),
+                           
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+      ),
+   
+    ),
+    );
+  }
+}
+
+class SubLessonContainer extends StatelessWidget 
+{
+   Map<int,List<Lessons>>Total={};
+   LearningModel? subtopics;
+    int index;
+   int ind;
+  SubLessonContainer({required this.Total, required this.ind,required this.index ,this.subtopics});
+  @override
+  Widget build(BuildContext context) {
+    return  Padding(padding: EdgeInsets.only(left:10),
                                     child:
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
@@ -171,29 +233,11 @@ class TotalLessons extends StatelessWidget
                                                           ),
                                                           SizedBox(width: 5,),
                                                           Text(
-                                      Total[subtopics!.subtopics![index].id]![ind].name,
-                                      style: TextStyle(color: Colors.black),)
-          
-
+                                                              Total[subtopics!.subtopics![index].id]![ind].name,
+                                                            style: TextStyle(color: Colors.black),),
                                       ],
                                     )
-                                    ),
-                                        );
-                                  
-                                },
-                              ),
-                           
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
-      ),
-   
-    );
+                                    );
+  
   }
 }

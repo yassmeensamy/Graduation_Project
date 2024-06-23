@@ -3,6 +3,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Learning/ContentLesson.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
@@ -54,8 +55,9 @@ Future<void> main() async
         BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
         BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
-         BlocProvider<HandleHomeCubit>(
-          create: (context) => HandleHomeCubit(
+        BlocProvider<HandleHomeCubit>(
+          create: (context) => HandleHomeCubit
+          (
             moodCubit: BlocProvider.of<SecondLayerCubit>(context),
             weeklyCubit:BlocProvider.of<WeeklyCubit>(context),
             insigthsCubit: BlocProvider.of<InsigthsCubit>(context),
@@ -189,8 +191,9 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body://ReportScreen();
+            body://ContentLesson()
             homeWidget,
+            //ContentLesson()
             //SecondViewMoodPage(),
             //ContentsLearning(),
             //TotalLessons(),
