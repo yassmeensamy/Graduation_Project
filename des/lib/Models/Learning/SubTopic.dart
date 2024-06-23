@@ -1,17 +1,19 @@
-class LessonModel {
+class SubTopic {
   int id;
   String name;
   int topicId;
 
-  LessonModel({
+  SubTopic({
     required this.id,
     required this.name,
     required this.topicId,
   });
 
-  factory LessonModel.fromJson(Map<String, dynamic> json) {
-    return LessonModel(
-      id: json['id'],
+  factory SubTopic.fromJson(Map<String, dynamic> json) 
+  {
+   
+    return SubTopic(
+      id: json['id']  ,
       name: json['name'],
       topicId: json['topic'],
     );

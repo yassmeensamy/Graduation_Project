@@ -14,7 +14,17 @@ class ContentsLearning extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    return  BlocBuilder<LearningCubit, LearningState>(
+    return  BlocConsumer<LearningCubit, LearningState>(
+      listener: (context, state) 
+      {
+        if (state is LearningSubTopicsState)
+        {
+          Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => TotalLessons(state.Total,state.subtopics)),
+              );
+        }
+      },
         builder: (context, state) 
         {
            if(state is LearningLoaded)
@@ -87,17 +97,11 @@ class LearnCard extends StatelessWidget
     return InkWell(
       onTap: () 
        {
-        //FetchSubTopic
-         BlocProvider.of<LearningCubit>(context).FetchSubTopic(Topic!.id);
-         Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => TotalLessons()),
-              );
+         BlocProvider.of<LearningCubit>(context).GetTopicsandLessons(Topic!.id);
       },
       child:
      Container(
       decoration: BoxDecoration(
-         // Optionally set background color
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
           color: Colors.black.withOpacity(.23), 

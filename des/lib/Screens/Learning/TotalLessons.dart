@@ -1,7 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/Models/Learning/LearningModel.dart';
+import 'package:des/Models/Learning/Lesson.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../constants.dart' as constants;
 class SelectedIndexCubit extends Cubit<int> {
   SelectedIndexCubit() : super(-1);
 
@@ -13,15 +16,21 @@ class SelectedIndexCubit extends Cubit<int> {
     }
   }
 }
-class TotalLessons extends StatelessWidget {
-  const TotalLessons({Key? key}) : super(key: key);
-  
+class TotalLessons extends StatelessWidget 
+{
+  Map<int,List<Lessons>>Total={};
+   LearningModel? subtopics;
+ TotalLessons(this.Total,this.subtopics);
+ 
   @override
   Widget build(BuildContext context) {
+     print(subtopics!.imagePath!);
+     //print()
     final screenHeight = MediaQuery.of(context).size.height;
     return BlocProvider(
       create: (context) => SelectedIndexCubit(),
       child:
+      
       Scaffold(
         body: BlocBuilder<SelectedIndexCubit, int>(
           builder: (context, selectedIndex) {
@@ -34,15 +43,27 @@ class TotalLessons extends StatelessWidget {
                   height: screenHeight * 0.4,
                   child: Container(
                     color: Color(0xffE3C3EA).withOpacity(.6),
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/bulling.png', // Path to your image asset
-                        width: 250,
-                        height: 300,
-                      ),
-                    ),
+                    child: 
+                   
+                     CachedNetworkImage(
+        imageUrl: constants.BaseURL+subtopics!.imagePath,
+        width: double.infinity,
+        height: 250,
+        //fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: constants.mint.withOpacity(.5),
+          //Colors.grey[300],
+        ),
+        errorWidget: (context, url, error) => Center(
+          child: Icon(
+            Icons.error,
+            color: Colors.red,
+          ),
+        ),
+      ),
                   ),
                 ),
+                
                 Positioned(
                   top: screenHeight * 0.416,
                   left: 7,
@@ -77,12 +98,12 @@ class TotalLessons extends StatelessWidget {
                 ),
                 Positioned(
                   top: screenHeight * 0.5,
-                  left: 7,
-                  right: 7,
+                  left: 0,
+                  right: 0,
                   bottom: 0, 
                   child: ListView.builder(
                     physics: BouncingScrollPhysics(),
-                    itemCount: 3,
+                    itemCount: subtopics!.subtopics!.length,
                     itemBuilder: (context, index) {
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -98,7 +119,8 @@ class TotalLessons extends StatelessWidget {
                                   bottom: BorderSide(color: Colors.black.withOpacity(.2), width: 2),
                                 ),
                               ),
-                              child: Row(
+                              child:
+                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
@@ -106,7 +128,7 @@ class TotalLessons extends StatelessWidget {
                                     children: [
                                       Icon(Icons.search),
                                       Text(
-                                        "Understanding your belief system",
+                                        subtopics!.subtopics![index].name,
                                         style: GoogleFonts.nunitoSans(fontSize: 17, fontWeight: FontWeight.w700),
                                       ),
                                     ],
@@ -120,21 +142,47 @@ class TotalLessons extends StatelessWidget {
                             ),
                           ),
                           if (selectedIndex == index)
-                            Column(
-                                               children: List.generate(8, (innerIndex) {
-                                      return Container( 
-                                        height: 80,      
-                                    color: Colors.blue,
-                                    padding: EdgeInsets.all(16),
-                                    child: Text(
-                                      'Container for item $innerIndex',
-                                      style: TextStyle(color: Colors.white),
+                           ListView.builder(
+                            physics: BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                              itemCount: Total[subtopics!.subtopics![index].id]!.length,
+                              itemBuilder: (context, ind) 
+                              {
+                                        return Container( 
+                                        height: 60,      
+                                    color: Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]?Color(0xffE8FFED) :Color(0xff6495ED).withOpacity(.3),
+                                    padding: EdgeInsets.all(0),
+                                    child: Padding(padding: EdgeInsets.only(left:10),
+                                    child:
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children:
+                                       [
+                                              Container(
+                                                width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                     shape: BoxShape.circle,
+                                                      color:Color(0xff6495ED).withOpacity(.3)
+                                                                        ),
+                                                   child: Center(
+                                                        child:Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]? Icon(Icons.playlist_play_outlined) : Icon(Icons.key_off),
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 5,),
+                                                          Text(
+                                      Total[subtopics!.subtopics![index].id]![ind].name,
+                                      style: TextStyle(color: Colors.black),)
+          
+
+                                      ],
+                                    )
                                     ),
-                                  );
+                                        );
+                                  
                                 },
                               ),
-                                )
-                            
+                           
                         ],
                       );
                     },

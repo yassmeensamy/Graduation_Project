@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'dart:core';
 import 'package:bloc/bloc.dart';
 import 'package:des/Models/Learning/LearningModel.dart';
+import 'package:des/Models/Learning/Lesson.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,28 +12,60 @@ part 'learning_state.dart';
 
 class LearningCubit extends Cubit<LearningState> 
 {
-   List<LearningModel> LearningTopics=[];
 
+   List<LearningModel> LearningTopics=[];
+ 
   LearningCubit() : super(LearningInitial())
   {
-     //LoadLearningData();
      FetchMainTopics();
 
   }
   
-
-   void LoadLearningData()
-   {
-    if(LearningTopics.isEmpty)
+   void GetTopicsandLessons(int Topic_Id) async
     {
-      print("yalhaaaaaaaawy");
-      FetchMainTopics();
-    }
+  LearningModel? subtopics = await FetchSubTopic(Topic_Id);
+  print(subtopics);
+  Map<int, List<Lessons>> SubTopicLessons = {};
+  print(subtopics!.subtopics!.length);
+  List<Lessons> lessons = [];
+  await Future.forEach(subtopics.subtopics!, (element) async 
+  {
+    lessons = await FetchSubLessons(element.id);
+    SubTopicLessons[element.id] = lessons;
+  });
+  
+ print(SubTopicLessons);
+  emit(LearningSubTopicsState(SubTopicLessons,subtopics));
+}
+
+    Future<List<Lessons>> FetchSubLessons(int subtopic_id) async
+  {
+     var data={"subtopic_id":subtopic_id};
+    var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+   Map<String, String> headers = 
+   {
+      'Authorization':
+          'Bearer $accessToken'
+      ,'Content-Type': 'application/json' // You don't need this header for this request
+    };
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/subtopics/lessons/"),
+     body: json_data, 
+     headers: headers);
+     if(response.statusCode==200)
+     {
+          List<dynamic> responseData = jsonDecode(response.body);
+         List<Lessons> SubTopicLessons=responseData.map((e) {return Lessons.fromJson(e);},).toList();
+          return SubTopicLessons;
+     }
     else 
     {
-      print ("we we we we");
+         print(response.statusCode);
+         return [];
     }
-   }
+  }
+
    Future<void>FetchMainTopics() async {
     emit(LearingLoading());
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -67,7 +100,7 @@ class LearningCubit extends Cubit<LearningState>
     }
   }
 
-  Future<void> FetchSubTopic(int Topic_Id) async
+  Future<LearningModel?> FetchSubTopic(int Topic_Id) async
   {
       var data={"topic_id":Topic_Id};
       var json_data=jsonEncode(data); 
@@ -82,15 +115,46 @@ class LearningCubit extends Cubit<LearningState>
     Response response=await http.post(Uri.parse("${constants.BaseURL}/api/topics/subtopics/"),
      body: json_data, 
      headers: headers);
-     
      if(response.statusCode==200)
      {
           dynamic responseData = jsonDecode(response.body);
-          print(responseData.runtimeType);
+           LearningModel SubTopicTotal =LearningModel.fromJson(responseData);
+           return SubTopicTotal;
+          
      }
     else 
     {
          print(response.statusCode);
+         return null;
+    }
+  }
+  
+ 
+ Future<String> FetchContent(int lesson_id) async
+  {
+     var data={"lesson_id":lesson_id};
+    var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+   Map<String, String> headers = 
+   {
+      'Authorization':
+          'Bearer $accessToken'
+      ,'Content-Type': 'application/json' 
+    };
+    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/lessons/"),
+     body: json_data, 
+     headers: headers);
+     if(response.statusCode==200)
+     {
+          dynamic responseData = jsonDecode(response.body);
+          String  LessonContent=responseData['content'];
+          return LessonContent;  
+     }
+    else 
+    {
+         print(response.statusCode);
+         return " ";
     }
   }
   

@@ -12,9 +12,16 @@ class LearningLoaded extends LearningState
   LearningLoaded(this.MainTopics);
 }
 
-class InsightError extends LearningState
+class LearningError extends LearningState
 {
   final String message;
-  InsightError(this.message);
+  LearningError(this.message);
 
+}
+class LearningSubTopicsState extends LearningState 
+{
+   Map<int,List<Lessons>>Total={};
+   LearningModel? subtopics;
+   LearningSubTopicsState(this.Total,this.subtopics);
+   
 }

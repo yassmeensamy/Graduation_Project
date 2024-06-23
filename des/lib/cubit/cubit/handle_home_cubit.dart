@@ -165,7 +165,7 @@ Future<void> GetWeeklyToDo() async
       print(response.statusCode); 
     }
 }
-  void resetHomeAfterWeeklycheckin(BuildContext context) async {
+void resetHomeAfterWeeklycheckin(BuildContext context) async {
   await GetWeeklyToDo();
   if (isEntry == true) {
     emit(HomeLoaded(report: dailyReport, isEntry: true, WeeklyToDo: WeeklyToDo));
@@ -229,7 +229,7 @@ Future<void> GetWeeklyToDo() async
       };
       print(accessToken);
     final response = await http.delete(
-      Uri.parse("${constants.BaseURL}}/api/delete-user-input-today/"),
+      Uri.parse("${constants.BaseURL}/api/delete-user-input-today/"),
       headers: headers,
     );
     if (response.statusCode == 200) 
