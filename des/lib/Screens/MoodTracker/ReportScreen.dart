@@ -22,8 +22,8 @@ class ReportScreen extends StatelessWidget
       onWillPop: () async
       {
         
-           BlocProvider.of<HandleHomeCubit>(context).FinishEntry(dailyreport);
-             BlocProvider.of<InsigthsCubit>(context).loadInsights();
+           BlocProvider.of<HandleHomeCubit>(context).FinishEntry(dailyreport,context);
+             //BlocProvider.of<InsigthsCubit>(context).loadInsights();
            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
           
           //Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));

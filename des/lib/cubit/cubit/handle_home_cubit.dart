@@ -241,8 +241,9 @@ void resetHomeAfterWeeklycheckin() async
     {
       isEntry=false;
       print("Deleted Done");
+      moodCubit.EmptyData();
        emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: WeeklyToDo));
-    } 
+    }  
     else 
     {
       print(response.statusCode); 
@@ -254,7 +255,7 @@ void resetHomeAfterWeeklycheckin() async
   }
 }
 
-void FinishEntry(ReportModel report)
+void FinishEntry(ReportModel report ,BuildContext context)
 {
     emit(HomeLoaded(WeeklyToDo: WeeklyToDo,isEntry: true,report: report));
 }

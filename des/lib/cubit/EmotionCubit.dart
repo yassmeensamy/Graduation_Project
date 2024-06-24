@@ -24,7 +24,7 @@ class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
     String EmotionType=" " ;
     String ImagePath=" ";
 
-
+   
 Future<List<MoodModel>> GetPrimaryEmotions() async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -183,7 +183,6 @@ Future<void> GetActivitiesandReason() async {
     Uri.parse("${constants.BaseURL}/api/reasons/"),
     headers: headers,
   );
-
   if (response2.statusCode == 200)
    {
     List<dynamic> responseData2 = jsonDecode(response2.body);
@@ -374,5 +373,14 @@ Future<ReportModel?> GetDailyReport() async
     return null;
    
   }
+}
+//ده عك بس ده حل مشكله لحد ما نعمل refactor 
+void EmptyData()
+{
+    SelectedMood=" ";
+    EmotionType=" " ;
+    ImagePath=" ";
+    ActivitiesSelected=[];
+    ReasonSelected=[];
 }
 }
