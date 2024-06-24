@@ -202,3 +202,36 @@ class MainNavigatorState extends State<MainNavigator> {
     );
   }
 }
+
+
+
+class MyHomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Shared Preferences Example'),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () async {
+            await printAllSharedPreferences();
+          },
+          child: Text('Print Shared Preferences'),
+        ),
+      ),
+    );
+  }
+
+  Future<void> printAllSharedPreferences() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Map<String, Object> allEntries = prefs.getKeys().fold({}, (map, key) {
+      map[key] = prefs.get(key)!;
+      return map;
+    });
+
+    allEntries.forEach((key, value) {
+      print('$key: $value');
+    });
+  }
+}

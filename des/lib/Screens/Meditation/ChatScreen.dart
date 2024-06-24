@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'ChallengeYourThoughtsPage.dart';
 import 'ChatBubble.dart';
 
@@ -48,20 +49,24 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Future<void> fetchQuestions(int thoughtTypeId) async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+   
+      Map<String, String> headers = 
+      {
+        'Authorization':
+            'Bearer $accessToken',
+             'Content-Type': 'application/json',
+      };     
     final response = await http
         .post(Uri.parse('http://16.24.83.230/api/cbt-questions-by-type/'),
             body: json.encode({
-              "type_ids": [thoughtTypeId]
-            }),
-            headers: {
-          'Content-Type': 'application/json',
-          'Authorization':
-              'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQ2ODcwMTgxLCJpYXQiOjE3MTA4NzAxODEsImp0aSI6IjZmNTJiMmU1OWY3ZjQzNDlhYzcxZDYyYmFkNDM4MjdkIiwidXNlcl9pZCI6M30.hItIspiYs5kdVomrf-R70hn-v03lG-gaKFcy1MDnV1E'
-        });
+              "type_ids": [thoughtTypeId],
+            }), headers:headers,);
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-
       questionsAndTips = data
           .map((item) => {
                 "question": item['question_text'] as String,
@@ -76,7 +81,8 @@ class ChatScreenState extends State<ChatScreen> {
           });
         });
       }
-    } else {
+    } 
+    else {
       print(response.statusCode);
       print(response.body);
     }

@@ -108,8 +108,8 @@ class TotalLessons extends StatelessWidget
                 ),
                 Positioned(
                   top: screenHeight * 0.53,
-                  left: 0,
-                  right: 0,
+                  left:10,
+                  right: 20,
                   bottom: 0, 
                   child: ListView.builder(
                     physics:  ClampingScrollPhysics() ,//BouncingScrollPhysics(),
@@ -122,7 +122,8 @@ class TotalLessons extends StatelessWidget
                             onTap: () {
                               context.read<SelectedIndexCubit>().selectIndex(index);
                             },
-                            child: Container(
+                            child: 
+                            Container(
                               height: 60,
                               decoration: BoxDecoration(
                                 border: Border(
@@ -141,13 +142,13 @@ class TotalLessons extends StatelessWidget
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Icon(Icons.search),
+                                      SizedBox(width: 4,),
                                       Expanded(child: 
                                       Text(
                                         subtopics!.subtopics![index].name,
                                         textAlign: TextAlign.left,
                                         softWrap: true,
-                                     
-                                        
+
                                         style: GoogleFonts.nunitoSans(fontSize: 16, fontWeight: FontWeight.w700),
                                       ),
                                       ),

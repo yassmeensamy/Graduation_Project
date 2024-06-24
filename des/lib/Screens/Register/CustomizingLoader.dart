@@ -34,8 +34,10 @@ class _CustomizingLoaderState extends State<CustomizingLoader> {
     Timer.periodic(const Duration(seconds: 10), (timer) {
       t.cancel();
       timer.cancel();
+      
       Navigator.of(context)
           .push(MaterialPageRoute(builder: (context) => const MainNavigator()));
+          
     });
     super.initState();
   }

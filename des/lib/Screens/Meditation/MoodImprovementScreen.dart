@@ -7,6 +7,7 @@ class MoodImprovementScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("improvement");
     return Scaffold(
       appBar: AppBar(
         title: const Text('Mood Improvement'),
