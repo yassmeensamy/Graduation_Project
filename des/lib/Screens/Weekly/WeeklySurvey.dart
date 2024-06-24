@@ -73,11 +73,11 @@ class WeeklySurvey extends StatelessWidget {
                   ontap: () async {
                     await  context.read<WeeklyCubit>().CreateRecord();
                     BlocProvider.of<InsigthsCubit>(context).loadInsights();
+                         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                     BlocProvider.of<HandleHomeCubit>(context).resetHomeAfterWeeklycheckin() ;
-                     Navigator.push(
-                                            context,
-                                     MaterialPageRoute(builder: (context) =>temp()),
-                                    );
+                    
+                    
+                                    
                      
                                  
                     

@@ -48,7 +48,7 @@ class Home extends StatelessWidget
   }
 }
 
-class _Home extends StatefulWidget {
+class _Home extends StatelessWidget {
   final List<MoodModel>? emotions;
   final List<WeeklyToDoPlan>? weeklyToDo;
   final bool IsEntry;
@@ -85,11 +85,6 @@ class _Home extends StatefulWidget {
     ],
   ];
 
-  @override
-  State<_Home> createState() => _HomeState();
-}
-class _HomeState extends State<_Home> 
-{ 
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider =Provider.of<UserProvider>(context, listen: false);
@@ -171,7 +166,7 @@ class _HomeState extends State<_Home>
     
                     
            
-  widget.IsEntry==false    
+  IsEntry==false    
   ? 
   Column(
       children: [
@@ -190,7 +185,7 @@ class _HomeState extends State<_Home>
         ),
       ],
     )
-  : MoodSelectedContainer(dailyreport: widget.dailyReport!,),
+  : MoodSelectedContainer(dailyreport: dailyReport!,),
 
                     RectangleContainer(
                       constants.mint,
@@ -316,7 +311,7 @@ class _HomeState extends State<_Home>
         child:BlocBuilder<HandleHomeCubit, HandleHomeState>(
           builder: (context, state) 
           { 
-              print("length${BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length}");
+              print("howww");
               return 
               BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length!=0 ?
                  ListView.builder(
@@ -325,7 +320,7 @@ class _HomeState extends State<_Home>
                   itemCount: BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length >3 ?3 : BlocProvider.of<HandleHomeCubit>(context).WeeklyToDo.length,
                   itemBuilder: (BuildContext context, int index) {
                    return BlocProvider<CheckboxCubit>(create: (context) => CheckboxCubit(),
-                              child: TODo(todo:widget.weeklyToDo![index]),
+                              child: TODo(todo:weeklyToDo![index]),
                                    );
                                  },
                                    ):  Center(child:
@@ -353,19 +348,19 @@ SizedBox.shrink(),
   }
   getEmotions(BuildContext context) {
     List<Widget> result = [];
-    for (int i = 0; i < widget.emotions!.length; i++) {
+    for (int i = 0; i < emotions!.length; i++) {
       result.add(
         GestureDetector(
           onTap: () => 
           {
-            BlocProvider.of<SecondLayerCubit>(context).SavePrimaryEmotions( widget.emotions![i].Text),
+            BlocProvider.of<SecondLayerCubit>(context).SavePrimaryEmotions( emotions![i].Text),
             (
-              widget.emotions![i].Text,
+              emotions![i].Text,
               _Home.emotionsIcons[i][1],
             ),
             BlocProvider.of<SecondLayerCubit>(context).getSecondEmotions
             (
-              widget.emotions![i].Text,
+              emotions![i].Text,
               _Home.emotionsIcons[i][1],
             ),
             Navigator.push(context,MaterialPageRoute(  builder: (context) => SecondViewMoodPage(),),
@@ -380,7 +375,7 @@ SizedBox.shrink(),
                   _Home.emotionsIcons[i][1],
                   width: 63,
                 ),
-                Text(widget.emotions![i].Text),
+                Text(emotions![i].Text),
               ],
             ),
           ),

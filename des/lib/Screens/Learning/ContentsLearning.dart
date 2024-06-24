@@ -42,7 +42,6 @@ class ContentsLearning extends StatelessWidget {
          
          else 
         {
-           print("lollllllllly");
            return LearningLoading();
         }
         

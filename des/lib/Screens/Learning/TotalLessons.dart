@@ -99,22 +99,24 @@ class TotalLessons extends StatelessWidget
                   top: screenHeight * 0.48,
                   left: 7,
                   right: 7,
+                  //bottom: 50,
+                  height: 40,
                   child: Text(
                     "Content",
                     style: GoogleFonts.nunitoSans(fontSize: 30),
                   ),
                 ),
                 Positioned(
-                  top: screenHeight * 0.5,
+                  top: screenHeight * 0.53,
                   left: 0,
                   right: 0,
                   bottom: 0, 
                   child: ListView.builder(
-                    physics:ClampingScrollPhysics(),
+                    physics:  ClampingScrollPhysics() ,//BouncingScrollPhysics(),
                     itemCount: subtopics!.subtopics!.length,
+                    shrinkWrap: true,
                     itemBuilder: (context, index) {
                       return Column(
-                        
                         children: [
                           GestureDetector(
                             onTap: () {

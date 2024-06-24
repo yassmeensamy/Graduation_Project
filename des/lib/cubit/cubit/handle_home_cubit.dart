@@ -47,7 +47,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     {
       primaryEmotions = await moodCubit.GetPrimaryEmotions(); 
       await GetWeeklyToDo();
-       chechMoodEnrty();
+        await chechMoodEnrty();
     } 
     catch (e) 
     {
@@ -168,6 +168,7 @@ Future<List<WeeklyToDoPlan>> GetWeeklyToDo() async
       return [];
     }
 }
+
 void resetHomeAfterWeeklycheckin() async 
 {
  emit(HomeLoading());
@@ -236,10 +237,11 @@ void resetHomeAfterWeeklycheckin() async
       Uri.parse("${constants.BaseURL}/api/delete-user-input-today/"),
       headers: headers,
     );
-    if (response.statusCode == 200) 
+    if (response.statusCode == 204) 
     {
       isEntry=false;
       print("Deleted Done");
+       emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: WeeklyToDo));
     } 
     else 
     {
