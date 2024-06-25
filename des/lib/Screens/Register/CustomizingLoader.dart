@@ -35,8 +35,11 @@ class _CustomizingLoaderState extends State<CustomizingLoader> {
       t.cancel();
       timer.cancel();
       
-      Navigator.of(context)
-          .push(MaterialPageRoute(builder: (context) => const MainNavigator()));
+     Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
           
     });
     super.initState();

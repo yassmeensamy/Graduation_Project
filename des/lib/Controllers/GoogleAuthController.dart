@@ -48,16 +48,22 @@ void googleAuthApi(String token, BuildContext context, String? img) async {
       saveTokensToSharedPreferences(tokens);
       successToast('Logged In Successfully');
       Timer(const Duration(seconds: 2), () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const MainNavigator()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
       });
     } else if (response.statusCode == 201) {
       Tokens tokens = parseTokens(response.body);
       saveTokensToSharedPreferences(tokens);
       successToast('Registered Successfully');
       Timer(const Duration(seconds: 2), () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const MainNavigator()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
       });
     } else {
       print(response.body);

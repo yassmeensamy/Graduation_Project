@@ -21,8 +21,11 @@ Future<int> callLoginApi(
       saveTokensToSharedPreferences(tokens);
       successToast('Logged In Successfully');
       Timer(const Duration(seconds: 2), () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const MainNavigator()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
       });
     } else if (response.statusCode == 401) {
       errorToast('Invalid Credentials');
@@ -38,22 +41,24 @@ Future<int> callLoginApi(
 Future<int> callRegisterApi(
     BuildContext context, String name, String email, String password) async {
   try {
-    Response response = await post(
-        Uri.parse('${constants.BaseURL}/api/auth/register/'),
-        body: {
-          "first_name": name.split(' ')[0],
-          "last_name": name.split(' ')[1],
-          "email": email,
-          "password": password,
-        });
+    Response response =
+        await post(Uri.parse('${constants.BaseURL}/api/auth/register/'), body: {
+      "first_name": name.split(' ')[0],
+      "last_name": name.split(' ')[1],
+      "email": email,
+      "password": password,
+    });
 
     if (response.statusCode == 201) {
       Tokens tokens = parseTokens(response.body);
       saveTokensToSharedPreferences(tokens);
       successToast('Registered Successfully');
       Timer(const Duration(seconds: 2), () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const MainNavigator()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
       });
     } else if (response.statusCode == 400) {
       print(response.body);
@@ -85,8 +90,11 @@ Future<int> callVerifyOTPApi(BuildContext context, String otp) async {
     if (response.statusCode == 200) {
       successToast('Verified Successfully');
       Timer(const Duration(seconds: 2), () {
-        Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => const MainNavigator()));
+       Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
       });
     } else if (response.statusCode == 400) {
       errorToast('Invalid or expired OTP');
