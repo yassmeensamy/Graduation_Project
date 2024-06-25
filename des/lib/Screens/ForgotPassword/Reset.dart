@@ -54,8 +54,11 @@ class LoginFrom extends StatefulWidget {
 
 class _LoginFromState extends State<LoginFrom> {
   updatePassword() {
-    Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => const MainNavigator()));
+   Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
   }
 
   TextEditingController passwordController = TextEditingController();

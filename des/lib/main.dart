@@ -98,7 +98,6 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
-    //logout();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
@@ -188,14 +187,8 @@ class MainNavigatorState extends State<MainNavigator> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             backgroundColor: constants.pageColor,
-            body://ContentLesson()
+            body:
             homeWidget,
-            //ContentLesson()
-            //SecondViewMoodPage(),
-            //ContentsLearning(),
-            //TotalLessons(),
-            //WeeklyGraph()
-            //WeeklySurvey(),
           ),
         ),
       ),
