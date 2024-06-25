@@ -3,7 +3,9 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Plans/PlansContent.dart';
 import 'package:des/Screens/Temp.dart';
+import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/handle_home_cubit.dart';
 import 'package:des/cubit/cubit/learning_cubit.dart';
@@ -45,6 +47,7 @@ Future<void> main() async
         create: (context) => WeeklyCubit(),
          ),
         BlocProvider(create: (context)=>InsigthsCubit()),
+        BlocProvider(create: (context)=>TopicsPlanCubit()),
         BlocProvider(create: (context) => SecondLayerCubit()),
         BlocProvider(create: (context) => ActivitiesCubit()),
         BlocProvider(create: (context) => SliderCubit()),
@@ -179,6 +182,7 @@ class MainNavigatorState extends State<MainNavigator> {
             backgroundColor: constants.pageColor,
             body:
             homeWidget,
+
           ),
         ),
       ),
@@ -187,34 +191,3 @@ class MainNavigatorState extends State<MainNavigator> {
 }
 
 
-
-class MyHomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Shared Preferences Example'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () async {
-            await printAllSharedPreferences();
-          },
-          child: Text('Print Shared Preferences'),
-        ),
-      ),
-    );
-  }
-
-  Future<void> printAllSharedPreferences() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final Map<String, Object> allEntries = prefs.getKeys().fold({}, (map, key) {
-      map[key] = prefs.get(key)!;
-      return map;
-    });
-
-    allEntries.forEach((key, value) {
-      print('$key: $value');
-    });
-  }
-}

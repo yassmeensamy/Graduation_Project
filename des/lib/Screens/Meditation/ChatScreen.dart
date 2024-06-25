@@ -65,7 +65,8 @@ class ChatScreenState extends State<ChatScreen> {
               "type_ids": [thoughtTypeId],
             }), headers:headers,);
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200)
+     {
       final List<dynamic> data = json.decode(response.body);
       questionsAndTips = data
           .map((item) => {
