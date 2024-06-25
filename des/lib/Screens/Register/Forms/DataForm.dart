@@ -127,10 +127,10 @@ class GenderSelection extends StatefulWidget {
   const GenderSelection({super.key, required this.onGenderSelected});
 
   @override
-  State<GenderSelection> createState() => _GenderSelectionState();
+  State<GenderSelection> createState() => GenderSelectionState();
 }
 
-class _GenderSelectionState extends State<GenderSelection> {
+class GenderSelectionState extends State<GenderSelection> {
   String value = '';
 
   Widget radio(String i, String txt, String img) {

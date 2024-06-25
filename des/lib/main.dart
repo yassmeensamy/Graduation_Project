@@ -3,7 +3,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Plans/PlansContent.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
@@ -97,7 +96,7 @@ class MainNavigatorState extends State<MainNavigator> {
       refreshToken = prefs.getString('refreshToken');
     });
     if (accessToken != null && refreshToken != null) {
-      await _fetchUserProfile();
+      await fetchUserProfile();
     }
   }
 
@@ -111,7 +110,7 @@ class MainNavigatorState extends State<MainNavigator> {
     return userData;
   }
 
-  _fetchUserProfile() async {
+  fetchUserProfile() async {
     Map<String, dynamic>? userData = await getProfile();
 
     userProvider = UserProvider();
