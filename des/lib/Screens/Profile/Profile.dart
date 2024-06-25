@@ -85,7 +85,9 @@ class _ProfileState extends State<Profile> {
                   children: [
                     SizedBox(height: 40),
                     CircleAvatar(
-                        radius: 50, backgroundImage: getProfilePhoto(context)),
+                      radius: 50,
+                      backgroundImage: getProfilePhoto(context),
+                    ),
                     SizedBox(height: 16),
                     Text(
                       capitalizeEachWord(
@@ -103,6 +105,20 @@ class _ProfileState extends State<Profile> {
                         color: Colors.grey,
                       ),
                     ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Gender: ${currentUser?.gender  == 'M'? 'Male' : 'Female'}',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Birthdate: ${currentUser?.dob ?? 'Not specified'}',
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
                     Spacer(),
                     ElevatedButton(
                       onPressed: () {
@@ -110,7 +126,8 @@ class _ProfileState extends State<Profile> {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
-                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -133,11 +150,13 @@ class _ProfileState extends State<Profile> {
     String? accessToken = prefs.getString('accessToken');
 
     Response response = await get(
-        Uri.parse('${constants.BaseURL}/api/auth/user/'),
-        headers: {'Authorization': 'Bearer $accessToken'});
+      Uri.parse('${constants.BaseURL}/api/auth/user/'),
+      headers: {'Authorization': 'Bearer $accessToken'},
+    );
     Map userData = jsonDecode(response.body);
 
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     User? user = userProvider.user;
 
     user!.firstName = userData['first_name'];

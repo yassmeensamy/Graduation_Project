@@ -240,7 +240,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                     );
                   },
                   context: context,
-                  initialDate: DateTime(2000),
+                  initialDate: DateTime.tryParse(currentUser!.dob ?? '')?? DateTime(2000),
                   firstDate: DateTime(1900),
                   lastDate:
                       DateTime.now().subtract(const Duration(days: 18 * 365)),
