@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../constants.dart' as constants;
 
-class PlanScreen extends StatelessWidget {
+class PlanScreen extends StatelessWidget 
+{
   const PlanScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-
+    
     return Scaffold(
       body: Stack(
         children: [

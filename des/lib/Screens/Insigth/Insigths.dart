@@ -43,14 +43,14 @@ class InsightScreen extends StatelessWidget {
         {
           return  Scaffold(
                body: SingleChildScrollView(
-    child: Padding(padding: EdgeInsets.only(left:7,right: 7 ,bottom: 5),
+    child: Padding(padding: EdgeInsets.only(left:10,right: 10 ,bottom: 5 ,top:30),
     child:
      Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
        Padding(padding: EdgeInsets.only(left:20),
        child: 
-        Text("Insigths",style: GoogleFonts.roboto(fontSize: 40),),
+        Text("Insights",style: GoogleFonts.roboto(fontSize: 40),),
        ),
         MoodGraph(state.MoodHistory),
         SizedBox(height: 7,),

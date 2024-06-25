@@ -6,7 +6,6 @@ import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:percent_indicator/percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../constants.dart' as constants;
 
