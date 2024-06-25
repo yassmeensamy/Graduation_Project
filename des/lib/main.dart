@@ -13,7 +13,6 @@ import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'Controllers/GoogleAuthController.dart';
 import 'Providers/UserProvider.dart';
 import 'Screens/Register/Data.dart';
 import 'Screens/Register/VerifyEmail.dart';
@@ -74,15 +73,6 @@ class MainNavigator extends StatefulWidget {
   @override
   MainNavigatorState createState() => MainNavigatorState();
 }
-
-logout() async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove('accessToken');
-  //tgghkjf  ycgb
-  await prefs.remove('refreshToken');
-  googleLogout();
-}
-
  
 
 class MainNavigatorState extends State<MainNavigator> {

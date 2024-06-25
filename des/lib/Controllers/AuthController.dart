@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart' as constants;
+import 'GoogleAuthController.dart';
 
 Future<int> callLoginApi(
     BuildContext context, String email, String password) async {
@@ -129,3 +130,16 @@ Future<int> callResendOTPApi() async {
 
   return 100;
 }
+
+logout(BuildContext context) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove('accessToken');
+  await prefs.remove('refreshToken');
+  googleLogout();
+  Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MainNavigator()),
+          (Route<dynamic> route) => false,
+        );
+}
+
