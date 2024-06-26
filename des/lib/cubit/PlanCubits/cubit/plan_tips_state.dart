@@ -15,3 +15,8 @@ final class PlanTipsError extends PlanTipsState
   PlanTipsError(this.errormessge);
 
 }
+final class PlanRestart extends PlanTipsState 
+{
+  List<ActivityplanModel> Activities;
+  PlanRestart(this.Activities);
+}

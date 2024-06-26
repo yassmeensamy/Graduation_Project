@@ -58,6 +58,7 @@ class PlanTipsCubit extends Cubit<PlanTipsState>
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
 }
+
 Future<void>RestartPlan(String topic_name) async 
    {
     emit(PlanTipsLoading());
@@ -85,9 +86,9 @@ Future<void>RestartPlan(String topic_name) async
          /*
          for(int i=0 ;i< PlansTopicTips.Activities.length; i++)
          {
-               FetchActivitiesContent(PlansTopicTips.name,i+1);
+            await   FetchActivitiesContent(PlansTopicTips.name,i+1);
          }
-         */ 
+         */
          emit(PlanTipsLoaded(PlansTopicTips));
        } 
       else 

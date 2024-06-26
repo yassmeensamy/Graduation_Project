@@ -454,8 +454,7 @@ class TODo extends StatelessWidget {
             value: isChecked,
             onChanged: (newValue) {
               context.read<CheckboxCubit>().toggleCheckbox(newValue!);
-              BlocProvider.of<HandleHomeCubit>(context)
-                  .RemoveFromToDoList(todo.id);
+              BlocProvider.of<HandleHomeCubit>(context).RemoveFromToDoList(todo.id);
               context.read<CheckboxCubit>().toggleCheckbox(!newValue);
             },
           );

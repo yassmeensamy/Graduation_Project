@@ -259,6 +259,11 @@ void FinishEntry(ReportModel report ,BuildContext context)
 {
     emit(HomeLoaded(WeeklyToDo: WeeklyToDo,isEntry: true,report: report));
 }
+
+
+
+
+
 }
 
 class CheckboxCubit extends Cubit<bool> {
