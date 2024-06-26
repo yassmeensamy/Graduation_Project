@@ -181,7 +181,6 @@ class MainNavigatorState extends State<MainNavigator> {
             backgroundColor: constants.pageColor,
             body:
             homeWidget,
-
           ),
         ),
       ),

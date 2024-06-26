@@ -5,6 +5,7 @@ import 'package:des/cubit/PlanCubits/cubit/plan_tips_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../constants.dart' as constants;
 
 class PlanScreen extends StatelessWidget 
@@ -25,17 +26,19 @@ class PlanScreen extends StatelessWidget
           {
             return _PlanScreen(state.PlansTopicTips);
           } 
-          else if (state is PlanTipsLoading) 
+          else if (state is PlanTipsError) 
           {
-            return Container(color: Colors.red);
+            return 
+            Container(color: Colors.red);
           }
            else 
           {
             print(state.runtimeType);
-            return Container(color: Colors.brown);
-          }
-        },
+            return PlanTipsLoading();
+         }
+         }
       ),
+  
     );
   }
 }
@@ -47,10 +50,8 @@ class _PlanScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //print(PlansTopicTips.colorTheme.replaceFirst(from, to));
+    print(PlansTopicTips.Activities.length);
     final screenHeight = MediaQuery.of(context).size.height;
-    String m=constants.BaseURL+PlansTopicTips.image;
-    print(m);
     return Scaffold(
       body: Stack(
         children: [
@@ -110,19 +111,23 @@ class _PlanScreen extends StatelessWidget {
                 itemCount: PlansTopicTips.Activities.length,
                 itemBuilder: (context, index) {
                   return GridTile(
-                    child: PlansTopicTips.Activities[index].flag
-                        ? GestureDetector(
-                            onTap: () {
+                   
+                    child: PlansTopicTips.Activities[index].flag!
+                        ?
+                       
+                         GestureDetector(
+                            onTap: () 
+                            {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        DayTipScreen(index)),
+                                        DayTipScreen(index,PlansTopicTips.Activities[index].content!)),
                               );
                             },
-                            child: DayCard(index+1, PlansTopicTips),
-                          )
-                        : DayCard(index, PlansTopicTips),
+                            child: DayCard(index, PlansTopicTips),
+                          ): DayCard(index, PlansTopicTips)
+                        
                   );
                 },
               ),
@@ -136,8 +141,8 @@ class _PlanScreen extends StatelessWidget {
               onPressed: () {
                 /*
                 BlocProvider.of<PlanTipsCubit>(context)
-                    .restartPlan(PlansTopicTips.name);
-                    */
+                    .RestartPlan(PlansTopicTips.name);
+                */  
               },
               child: Text(
                 "Restart",
@@ -167,15 +172,17 @@ class DayCard extends StatelessWidget
   Widget build(BuildContext context) {
     return 
   
+
      Container(
                 width: 10,
                 height: 10,
-                color: PlansTopicTips.Activities[index].flag?constants.mint : Colors.white,
+                color: PlansTopicTips.Activities[index].flag! ?constants.mint : Colors.white,
                 child:Center(child:
                 Text((index+1).toString(),style: GoogleFonts.abhayaLibre(textStyle: TextStyle(fontWeight: FontWeight.bold),fontSize: 20),)
                  )
-                );
-    
+     );
+                
+   
   }
 }
 
@@ -293,3 +300,76 @@ class DayCard extends StatelessWidget
 
 
 */
+
+class PlanTipsLoading extends StatelessWidget {
+  const PlanTipsLoading({super.key});
+
+  @override
+  Widget build(BuildContext context) 
+  {
+      final screenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body: Stack(
+        children: [
+          Positioned.fill(
+            top: 0,
+            left: 0,
+            right: 0,
+           bottom:screenHeight * 0.48 ,
+            child:
+            Shimmer.fromColors(
+                     baseColor:constants.mint.withOpacity(.5),   
+                     highlightColor: constants.mint,
+                     child:
+                      Container(
+                           color:  constants.mint 
+                       ),
+          ),
+          ),
+          Positioned(
+            top: screenHeight * 0.32, // Start below the first container
+            left: 0,
+            right: 0,
+            height: screenHeight * 0.7, // Take up the remaining visible area
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                color: constants.pageColor,
+              ),
+            ),
+          ),
+          Positioned(
+            top: screenHeight * 0.3, 
+            left: 0,
+            right: 0,
+            bottom: 0, 
+            child: Padding(
+              padding: const EdgeInsets.only(top: 20, right: 50, left: 50),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4, // Number of columns
+                  mainAxisSpacing: 30, // Spacing between rows
+                  crossAxisSpacing: 30, // Spacing between columns
+                  childAspectRatio: 1, // Aspect ratio of each grid item
+                ),
+                itemCount:21,
+                itemBuilder: (context, index) {
+                  return GridTile(
+                    child:Shimmer.fromColors(
+                     baseColor:constants.mint.withOpacity(.5),   
+                     highlightColor: constants.mint,
+                   child:  Container(
+                          width: 10,
+                            height: 10,)
+  ), 
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  
+  }
+}

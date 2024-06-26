@@ -25,7 +25,6 @@ class PlanTipsCubit extends Cubit<PlanTipsState>
      try 
      {
       Map<String, String> headers = {'Authorization':'Bearer $accessToken', 'Content-Type': 'application/json', };
-      print(accessToken);
       var response = await http.post(Uri.parse("${constants.BaseURL}/api/plan/topic-activities/",),
         headers: headers,
         body: json_data,
@@ -33,20 +32,16 @@ class PlanTipsCubit extends Cubit<PlanTipsState>
       if (response.statusCode == 200) 
       {
 
-        dynamic  data= jsonDecode(response.body);
+         dynamic  data= jsonDecode(response.body);
          PlansTopicTips=TopicModel.fromJson(data);
-        //print(PlansTopicTips);
-
-        
+    
        for(int i=0 ;i<PlansTopicTips.Activities.length;i++)
        {
         if(PlansTopicTips.Activities[i].flag==true)
         {
-               var Content=FetchActivitiesContent(PlansTopicTips.name,PlansTopicTips.Activities[i].id!);
-               PlansTopicTips.Activities[i].content=Content as String?;
+           await FetchActivitiesContent(PlansTopicTips.name,i);       
         }   
        }
-       
         emit(PlanTipsLoaded(PlansTopicTips));
        } 
       else 
@@ -58,7 +53,7 @@ class PlanTipsCubit extends Cubit<PlanTipsState>
     } 
     catch (e) 
     {
-       print("yoouhhhhhhhhhhhhhhhhhhhhhh");
+       print(e);
       emit(PlanTipsError('Failed to load lessons'));
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
@@ -75,6 +70,7 @@ Future<void>RestartPlan(String topic_name) async
       Map<String, String> headers = {
         'Authorization':
             'Bearer $accessToken',
+            'Content-Type': 'application/json',
                                     };
       var response = await http.post(
         Uri.parse("${constants.BaseURL}/api/plan/restart-topic/",),
@@ -86,11 +82,12 @@ Future<void>RestartPlan(String topic_name) async
          dynamic  data= jsonDecode(response.body);
          TopicModel PlansTopicTips=TopicModel.fromJson(data);
          print(PlansTopicTips);
+         /*
          for(int i=0 ;i< PlansTopicTips.Activities.length; i++)
          {
                FetchActivitiesContent(PlansTopicTips.name,i+1);
          }
-         
+         */ 
          emit(PlanTipsLoaded(PlansTopicTips));
        } 
       else 
@@ -108,10 +105,10 @@ Future<void>RestartPlan(String topic_name) async
     }
 }
 
-  Future<String >FetchActivitiesContent(String topic_name ,int num_Act) async 
+  Future<void>FetchActivitiesContent(String topic_name ,int num_Act) async 
    {
 
-    var data={"topic_name":topic_name,"number":num_Act};
+    var data={"topic_name":topic_name,"number":PlansTopicTips.Activities[num_Act].id!};
     var json_data=jsonEncode(data); 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String ? accessToken = prefs.getString('accessToken');
@@ -119,10 +116,12 @@ Future<void>RestartPlan(String topic_name) async
      {
       Map<String, String> headers = {
         'Authorization':
-            'Bearer $accessToken',};
+            'Bearer $accessToken',
+             'Content-Type': 'application/json',
+             };
       var response = await http.post(
         Uri.parse(
-          "${constants.BaseURL}/api/plan/topics/",
+          "${constants.BaseURL}/api/plan/activity-text/",
         ),
         headers: headers,
         body: json_data,
@@ -131,21 +130,23 @@ Future<void>RestartPlan(String topic_name) async
       {
 
         dynamic  data= jsonDecode(response.body);
+        ActivityplanModel activity=ActivityplanModel.fromJson(data);
+        PlansTopicTips.Activities[num_Act].content=activity.content!;
+         print(PlansTopicTips.Activities[num_Act].content);
         
-        ActivityplanModel  activity=ActivityplanModel.fromJson(data);
-        return activity.content!;
         
        } 
       else 
        {
-          print(response.statusCode);
-          //emit(PlanTipsError('Failed to load lessons'));
+          emit(PlanTipsError('Failed to load lessons'));
           throw Exception('Failed to load lessons');
        }
     } 
     catch (e) 
     {
+
       emit(PlanTipsError('Failed to load lessons'));
+   
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
 }

@@ -1,6 +1,6 @@
 class ActivityplanModel {
   int? id;
-  bool flag;
+  bool ? flag;
   String ? content;
 
   ActivityplanModel({
@@ -12,9 +12,9 @@ class ActivityplanModel {
   factory ActivityplanModel.fromJson(Map<String, dynamic> json) 
   {
     return ActivityplanModel(
-      id: json['id'] ,
+      id: json['id'] ??json['number'] ,
       flag: json['flag'] ,
-      content: json['content'] ,
+      content: json['text'] ,
     );
   }
 }
