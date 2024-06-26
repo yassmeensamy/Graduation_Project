@@ -23,13 +23,19 @@ class TopicModel {
     List<ActivityplanModel>activitiesList=[];
     if(maintopic!=null)
     {
-         List<dynamic> Activities= json["activities"] ?? [];;
+         List<dynamic> Activities= json["activities"] ?? [];
           if(Activities.isNotEmpty)
           {
-               activitiesList=Activities.map((e) {return ActivityplanModel.fromJson(e) ;
-               }).toList();
-          }
-            
+               activitiesList=Activities.map((e) {return ActivityplanModel.fromJson(e) ; }).toList();
+          } 
+          else 
+          {
+
+            dynamic acivity=json ["activity"];
+            print(acivity);
+            activitiesList.add(ActivityplanModel.fromJson(acivity));
+
+          } 
           
     }
     return TopicModel

@@ -19,15 +19,69 @@ import '../cubit/EmotionCubit.dart';
 import 'MoodTracker/SecondLayerMood.dart';
 import 'Test/TestScreen.dart';
 
+/*
+class Home extends StatelessWidget {
+  const Home({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: BlocConsumer<HandleHomeCubit, HandleHomeState>(
+        builder: (context, state) 
+        {
+          if (state is HomeLoading) {
+            return Center(child: CircularProgressIndicator());
+          } 
+          else if (state is HomeError)
+           {
+            return Center(child: Text('Error: ${state.errormessge}'));
+          }
+          else 
+          {
+            List<MoodModel>? emotions;
+            List<WeeklyToDoPlan>? weeklyToDo;
+            bool IsEntry=false;
+            ReportModel? dailyReport;
+            GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+            return _Home
+            (
+              emotions: emotions,
+              weeklyToDo: weeklyToDo,
+              IsEntry: IsEntry,
+              dailyReport: dailyReport,
+            );
+          } 
+          
+        },
+        listener: (context, state) 
+        {
+          if(state is )
+
+        },
+      ),
+    );
+  }
+}
+
+
+
+*/
+
+
+
+
+
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<HandleHomeCubit, HandleHomeState>(
-        builder: (context, state) {
+        builder: (context, state) 
+        {
           if (state is HomeLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (state is HomeLoaded) {
+          } 
+          else if (state is HomeLoaded) {
             return _Home(
               emotions: state.primaryEmotions,
               weeklyToDo: state.WeeklyToDo,

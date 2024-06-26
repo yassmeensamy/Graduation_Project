@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:des/Models/CalenderModel.dart';
 import 'package:des/Models/MoodModel.dart';
+import 'package:des/Models/PlanTodoModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
-import 'package:des/Screens/Home.dart';
-import 'package:des/Screens/Homeloading.dart';
-import 'package:des/Screens/temp.dart';
 import 'package:des/cubit/EmotionCubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,6 @@ import '/constants.dart' as constants;
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 part 'handle_home_state.dart';
@@ -33,7 +30,8 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
 
   HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit }) : super(HandleHomeInitial())
   {
-    initialize();
+    //initialize();
+    FetchPlanToDoList();
   }
   void initialize()
   {
@@ -260,10 +258,37 @@ void FinishEntry(ReportModel report ,BuildContext context)
     emit(HomeLoaded(WeeklyToDo: WeeklyToDo,isEntry: true,report: report));
 }
 
-
-
-
-
+Future<void>FetchPlanToDoList() async
+{
+ try
+ {
+ SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+     Map<String, String> headers =
+      {
+      'Authorization':
+          'Bearer $accessToken'
+      };
+      print(accessToken);
+    final response = await http.get(
+      Uri.parse("${constants.BaseURL}/api/first-false-user-activity/"),
+      headers: headers,
+    );
+    if(response.statusCode==200)
+    {
+      dynamic responseData = jsonDecode(response.body);
+      PlanTodoModel does=PlanTodoModel.fromJson(responseData);
+      //print(does);
+    }
+    else 
+    {
+      print(response.statusCode);
+    }
+ } catch(e)
+ {
+  print(e);
+ }
+}
 }
 
 class CheckboxCubit extends Cubit<bool> {
