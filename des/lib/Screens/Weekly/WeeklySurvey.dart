@@ -138,7 +138,7 @@ class SliderButton extends StatelessWidget {
                 context.read<WeeklyCubit>().UpdateAspects(Aspect_id, newValue.toInt());
                 print(context.read<WeeklyCubit>().Rating);
               },
-              min: 1,
+              min: 0,
               max: 10,
               divisions: 9,
               label: "${state.toInt()}",

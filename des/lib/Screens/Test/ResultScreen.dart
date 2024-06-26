@@ -8,7 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../Models/TestResultModel.dart';
 import '../Home.dart';
 
-class ResultScreen extends StatelessWidget {
+class ResultScreen extends StatelessWidget 
+{
    TestResultModel testResult;
   ResultScreen({super.key, required this.testResult});
   @override
@@ -44,7 +45,7 @@ class ResultScreen extends StatelessWidget {
             ],
           ),
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 40),
           Center(
           child :
           Container(
@@ -88,8 +89,8 @@ class ResultScreen extends StatelessWidget {
           Padding(padding: const EdgeInsets.symmetric(horizontal: 28),
             child:
             Center(child:
-            Text("Lorem ipsum dolor sit amet consectetur, adipisicing elit. Mollitia aut ipsa.",
-      style: TextStyle(fontSize: 24.0,
+            Text(testResult.description!,
+         style: TextStyle(fontSize: 24.0,
             ),textAlign: TextAlign.center,),
           ),
       ), 

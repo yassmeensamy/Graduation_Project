@@ -16,7 +16,9 @@ class WeeklyCubit extends Cubit<WeeklyState>
   {
       GetAspects();
   }
- void UpdateAspects(int id, int value) {
+ void UpdateAspects(int id, int value)
+ 
+ {
   int existingIndex = Rating.indexWhere((map) => map['aspect_type_id'] == id);
   if (existingIndex != -1) 
   {
@@ -43,6 +45,10 @@ class WeeklyCubit extends Cubit<WeeklyState>
     {
       List<dynamic> responseData = jsonDecode(response.body);
       Aspects= responseData.map((json) =>WeelklyModel.fromJson(json)).toList();
+       Rating = List.generate(
+      Aspects.length, 
+      (index) => {'aspect_type_id': index+1, 'value': 0}
+    );
     }
      else 
      {
