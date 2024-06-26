@@ -19,22 +19,25 @@ class TopicModel {
 
   factory TopicModel.fromJson(Map<String, dynamic> json)
    {
-    Map<String, dynamic>? maintopic =json["activities"];
+    Map<String,dynamic> ? maintopic =json['topic'];
     List<ActivityplanModel>activitiesList=[];
     if(maintopic!=null)
     {
-         List<dynamic>Topics= json['subtopics'] ??[];
-          if(Topics.isNotEmpty)
+         List<dynamic> Activities= json["activities"] ?? [];;
+          if(Activities.isNotEmpty)
           {
-               activitiesList=Topics.map((e) {return ActivityplanModel.fromJson(e);},).toList();
+               activitiesList=Activities.map((e) {return ActivityplanModel.fromJson(e) ;
+               }).toList();
           }
+            
+          
     }
     return TopicModel
     (
-      id: json['id'] ,
-      name: json['name'],
-      colorTheme: json['color'] ,
-      image: json['image'] ,
+      id: json['id'] ?? maintopic!["id"],
+      name: json['name'] ?? maintopic!["name"],
+      colorTheme: json['color']??maintopic!["color"] ,
+      image: json['image'] ?? maintopic!["image"],
       Activities: activitiesList,
     ); 
   }

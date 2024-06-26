@@ -340,13 +340,12 @@ class _Home extends StatelessWidget {
                                                         3
                                                     ? 3
                                                     : BlocProvider.of<
-                                                                HandleHomeCubit>(
-                                                            context)
+                                                                HandleHomeCubit>( context)
                                                         .WeeklyToDo
                                                         .length,
                                                 itemBuilder:
                                                     (BuildContext context,
-                                                        int index) {
+ int index) {
                                                   return BlocProvider<
                                                       CheckboxCubit>(
                                                     create: (context) =>

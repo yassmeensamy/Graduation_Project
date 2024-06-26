@@ -36,10 +36,9 @@ class TopicsPlanCubit extends Cubit<TopicsPlanState>
       {
 
         List<dynamic> data= jsonDecode(response.body);
-      
         List<TopicModel>PlansTopics= data.map((e) => TopicModel.fromJson(e)).toList();
         print(PlansTopics);
-         emit(TopicsPlanLoadedState(PlansTopics));
+        emit(TopicsPlanLoadedState(PlansTopics));
        } 
       else 
        {

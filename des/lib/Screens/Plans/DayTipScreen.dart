@@ -1,11 +1,15 @@
+import 'package:des/cubit/PlanCubits/cubit/plan_tips_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DayTipScreen extends StatelessWidget {
-  const DayTipScreen({Key? key}) : super(key: key);
-
+  int Index ;
+   DayTipScreen(this.Index) ;
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: 50,left: 30,right: 30),
@@ -14,7 +18,7 @@ class DayTipScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Day3" ,style: GoogleFonts.abhayaLibre(fontSize: 24,fontWeight: FontWeight.bold)),
+                Text("Day ${Index.toString()}" ,style: GoogleFonts.abhayaLibre(fontSize: 24,fontWeight: FontWeight.bold)),
                 IconButton(
                   onPressed: () {},
                   icon: Icon(Icons.close),
@@ -31,7 +35,7 @@ class DayTipScreen extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  "Break down larger objectives into smaller, manageable tasks with deadlines. This structured approach helps to stay focused and organized.",
+                 context.read<PlanTipsCubit>().PlansTopicTips.Activities[Index].content!,
                   style: GoogleFonts.abhayaLibre(fontSize: 24,fontWeight: FontWeight.bold), // Add your text style here
                   softWrap: true,
                   textAlign: TextAlign.center,

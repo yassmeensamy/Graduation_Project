@@ -4,11 +4,14 @@ class NextButton extends StatelessWidget {
   final void Function() ontap;
   Color groundColor;
   String text;
+  Color ?TextColor;
   NextButton(
       {super.key,
       required this.ontap,
       required this.groundColor,
-      required this.text});
+      required this.text,
+      this.TextColor,
+      });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,7 +27,7 @@ class NextButton extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-                color: Colors.black.withOpacity(.6),
+                color:TextColor== null? Colors.black.withOpacity(.6) :TextColor,
                 fontSize: 18,
                 /*fontFamily: GoogleFonts.openSans().fontFamily,*/ fontWeight:
                     FontWeight.w400),

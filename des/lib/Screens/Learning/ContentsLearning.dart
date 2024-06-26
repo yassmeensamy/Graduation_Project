@@ -132,16 +132,16 @@ class LearnCard extends StatelessWidget
                 ),
                 SizedBox(height: 10),
                 Container(
-                  width: 50,
+                  width: 75,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.red.withOpacity(.4),
+                    color: constants.mint
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(top: 2, bottom: 2),
                     child: Center(
                       child: Text(
-                        "4 less",
+                        "3 lessons",
                         style: GoogleFonts.inter(fontSize: 13),
                       ),
                     ),

@@ -83,6 +83,7 @@ class WeeklySurvey extends StatelessWidget {
                     
                   },
                   groundColor: constants.purpledark,
+                  TextColor: Colors.white,
                   text: "Submit",
                 ),
               ],
@@ -140,7 +141,7 @@ class SliderButton extends StatelessWidget {
               min: 1,
               max: 10,
               divisions: 9,
-              label: "Rating",
+              label: "${state.toInt()}",
             );
           })),
     );

@@ -1,10 +1,10 @@
 class ActivityplanModel {
-  int id;
+  int? id;
   bool flag;
   String ? content;
 
   ActivityplanModel({
-    required this.id,
+     this.id,
     required this.flag,
      this.content,
   });

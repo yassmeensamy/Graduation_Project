@@ -1,0 +1,152 @@
+import 'dart:convert';
+
+import 'package:bloc/bloc.dart';
+import 'package:des/Models/Plans/AcivityModel.dart';
+import 'package:des/Models/Plans/TopicModel.dart';
+import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import '/constants.dart' as constants;
+part 'plan_tips_state.dart';
+
+class PlanTipsCubit extends Cubit<PlanTipsState> 
+{
+  late TopicModel PlansTopicTips;
+  PlanTipsCubit() : super(PlanTipsLoading());
+
+   
+   Future<void>FetchPlanActivities(String topic_name) async 
+   {
+    emit(PlanTipsLoading());
+    var data={"topic_name":topic_name};
+    var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+     try 
+     {
+      Map<String, String> headers = {'Authorization':'Bearer $accessToken', 'Content-Type': 'application/json', };
+      print(accessToken);
+      var response = await http.post(Uri.parse("${constants.BaseURL}/api/plan/topic-activities/",),
+        headers: headers,
+        body: json_data,
+        );
+      if (response.statusCode == 200) 
+      {
+
+        dynamic  data= jsonDecode(response.body);
+         PlansTopicTips=TopicModel.fromJson(data);
+        //print(PlansTopicTips);
+
+        
+       for(int i=0 ;i<PlansTopicTips.Activities.length;i++)
+       {
+        if(PlansTopicTips.Activities[i].flag==true)
+        {
+               var Content=FetchActivitiesContent(PlansTopicTips.name,PlansTopicTips.Activities[i].id!);
+               PlansTopicTips.Activities[i].content=Content as String?;
+        }   
+       }
+       
+        emit(PlanTipsLoaded(PlansTopicTips));
+       } 
+      else 
+       {
+          print("error  ${response.statusCode}");
+          emit(PlanTipsError('Failed to load lessons'));
+          throw Exception('Failed to load lessons');
+       }
+    } 
+    catch (e) 
+    {
+       print("yoouhhhhhhhhhhhhhhhhhhhhhh");
+      emit(PlanTipsError('Failed to load lessons'));
+      throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+}
+Future<void>RestartPlan(String topic_name) async 
+   {
+    emit(PlanTipsLoading());
+    var data={"topic_name":topic_name};
+     var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+     try 
+     {
+      Map<String, String> headers = {
+        'Authorization':
+            'Bearer $accessToken',
+                                    };
+      var response = await http.post(
+        Uri.parse("${constants.BaseURL}/api/plan/restart-topic/",),
+        headers: headers,
+        body: json_data,
+        );
+      if (response.statusCode == 200) 
+      {
+         dynamic  data= jsonDecode(response.body);
+         TopicModel PlansTopicTips=TopicModel.fromJson(data);
+         print(PlansTopicTips);
+         for(int i=0 ;i< PlansTopicTips.Activities.length; i++)
+         {
+               FetchActivitiesContent(PlansTopicTips.name,i+1);
+         }
+         
+         emit(PlanTipsLoaded(PlansTopicTips));
+       } 
+      else 
+       {
+          print(response.statusCode);
+          emit(PlanTipsError('Failed to load lessons'));
+          throw Exception('Failed to load lessons');
+       }
+    } 
+    catch (e) 
+    {
+      print(e);
+      emit(PlanTipsError('Failed to load lessons'));
+      throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+}
+
+  Future<String >FetchActivitiesContent(String topic_name ,int num_Act) async 
+   {
+
+    var data={"topic_name":topic_name,"number":num_Act};
+    var json_data=jsonEncode(data); 
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String ? accessToken = prefs.getString('accessToken');
+     try 
+     {
+      Map<String, String> headers = {
+        'Authorization':
+            'Bearer $accessToken',};
+      var response = await http.post(
+        Uri.parse(
+          "${constants.BaseURL}/api/plan/topics/",
+        ),
+        headers: headers,
+        body: json_data,
+        );
+      if (response.statusCode == 200) 
+      {
+
+        dynamic  data= jsonDecode(response.body);
+        
+        ActivityplanModel  activity=ActivityplanModel.fromJson(data);
+        return activity.content!;
+        
+       } 
+      else 
+       {
+          print(response.statusCode);
+          //emit(PlanTipsError('Failed to load lessons'));
+          throw Exception('Failed to load lessons');
+       }
+    } 
+    catch (e) 
+    {
+      emit(PlanTipsError('Failed to load lessons'));
+      throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+}
+}
