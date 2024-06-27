@@ -1,11 +1,11 @@
 import 'package:des/Components/NextButton.dart';
 import 'package:des/Models/WeeklyModel.dart';
-import 'package:des/Screens/Home.dart';
 import 'package:des/Screens/temp.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
-import 'package:des/cubit/cubit/handle_home_cubit.dart';
+
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:des/cubit/cubit/slider_cubit.dart';
+import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -73,8 +73,8 @@ class WeeklySurvey extends StatelessWidget {
                   ontap: () async {
                     await  context.read<WeeklyCubit>().CreateRecord();
                     await  BlocProvider.of<InsigthsCubit>(context).fetchWeeklyHistory();
-                    BlocProvider.of<HandleHomeCubit>(context).resetHomeAfterWeeklycheckin() ;
-                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                    await    BlocProvider.of<WeeklyTasksCubit>(context).GetWeeklyToDo();
+                     Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                     
                     
                     

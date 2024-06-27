@@ -1,14 +1,14 @@
 
 import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/ReportModel.dart';
-import 'package:des/Screens/Home.dart';
-import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../constants.dart' as constants;
+
 class ReportScreen extends StatelessWidget 
 {
   ReportModel dailyreport;
@@ -21,14 +21,15 @@ class ReportScreen extends StatelessWidget
     return  WillPopScope(
       onWillPop: () async
       {
-        
-           BlocProvider.of<HandleHomeCubit>(context).FinishEntry(dailyreport,context);
-            await  BlocProvider.of<InsigthsCubit>(context).loadInsights();
+           /*
+           awaitt  ممكن وممكن 
+           */
+           await  BlocProvider.of<InsigthsCubit>(context).ResetInsigth();
+           BlocProvider.of<HandleEmojyDailyCubit>(context).FinishEntry(dailyreport,context);
            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-          
-          //Navigator.push(context, MaterialPageRoute(builder: (context)=>Home()));
-          return true;
-      },
+           return true;
+     },
+
       child: Scaffold
     (
       backgroundColor: constants.pageColor,

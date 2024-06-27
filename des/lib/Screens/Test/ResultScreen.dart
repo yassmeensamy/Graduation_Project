@@ -6,7 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../Models/TestResultModel.dart';
-import '../Home.dart';
 
 class ResultScreen extends StatelessWidget 
 {
@@ -27,12 +26,11 @@ class ResultScreen extends StatelessWidget
             mainAxisAlignment: MainAxisAlignment.start,
             children: 
             [
-              
               //const SizedBox(width: 190),
               IconButton(
                 onPressed: () 
                 {
-                    BlocProvider.of<InsigthsCubit>(context).loadInsights();
+                    BlocProvider.of<InsigthsCubit>(context).fetchDepressionTestHistory();
                     Navigator.push(context,MaterialPageRoute(builder: (context) => temp()));
                 },
                 

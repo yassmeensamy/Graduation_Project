@@ -4,8 +4,6 @@ import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/WeeklyHistory.dart';
 import 'package:des/Models/WeeklyModel.dart';
-import 'package:des/cubit/cubit/handle_home_cubit.dart';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http; // Use http from package:http/http.dart
@@ -15,124 +13,100 @@ import '../../Models/TestResultModel.dart';
 
 part 'insigths_state.dart';
 
-class InsigthsCubit extends Cubit<InsigthsState> 
+class InsigthsCubit extends Cubit<InsigthsState> {
+  WeeklyHistoryModel? weeklyHistoy = null;
+  List<MoodModel> MoodHistory = [];
+  List<ActivityModel> AcivityMonthHistory = [];
+  List<ActivityModel> AcivityYearHistory = [];
+  List<TestResultModel> DepressionHistoy = [];
+  InsigthsCubit() : super(InsightLoading()) ;
 
-{
- 
-  late WeeklyHistoryModel weeklyhistoy;
-  List<MoodModel>MoodHistory=[];
-  List<ActivityModel>AcivityMonthHistory=[];
-  List<ActivityModel>AcivityYearHistory=[];
-  List<TestResultModel>DepressionHistoy=[];
-  InsigthsCubit() : super(InsigthsInitial()) 
-  {
-    loadInsights();
-  }
 
-  String extractDayAndMonth(String timestampString) 
-  { 
+
+
+  String extractDayAndMonth(String timestampString) {
     DateTime timestamp = DateTime.parse(timestampString).toLocal();
     String monthName = DateFormat('MMM').format(timestamp);
     String day = timestamp.day.toString();
     return "$day $monthName";
   }
-  Future<List<MoodModel>> fetchMoodHistory() async 
-  { 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-    try {
-      Map<String, String> headers = 
-      {
-        'Authorization':
-            'Bearer $accessToken',
-      };
-      var response= await http.get(Uri.parse("${constants.BaseURL}/api/emotion-count/"),headers:headers);
-      if(response.statusCode==200)
-      {
-       List<dynamic> data= jsonDecode(response.body);
-       MoodHistory= data.map((e) => MoodModel.fromJson(e)).toList();
-        return MoodHistory;
-      }
-      else 
-      {
-        return [];
-      }
-    }
-    catch(e)
-    {
-       throw Exception('Failed to fetch data: ${e.toString()}');
-    }
-              
-  }
-  Future<List<ActivityModel>> fetchActivitiesYearHistory() async 
-  { 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
 
-    try {
-      Map<String, String> headers = 
-      {
-        'Authorization':
-            'Bearer $accessToken',
-      };
-
-      var response= await http.get(Uri.parse("${constants.BaseURL}/api/activity-count/"),headers:headers);
-      if(response.statusCode==200)
-      {
-       List<dynamic> data= jsonDecode(response.body);
-        AcivityYearHistory=data.map((e) => ActivityModel.fromjson(e)).toList();
-        return AcivityYearHistory;
-       
-      }
-      else 
-      {
-        return [];
-      }
-    }
-    catch(e)
-    {
-       throw Exception('Failed to fetch data: ${e.toString()}');
-    }
-              
-  }
-  
-  Future<List<ActivityModel>> fetchActivitiesMonthHistory() async 
-  { 
+  Future<List<MoodModel>> fetchMoodHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-    try {
-      Map<String, String> headers = 
-      {
-        'Authorization':
-            'Bearer $accessToken',
-      };
-
-      var response= await http.get(Uri.parse("${constants.BaseURL}/api/activity-count-this-month/"),headers:headers);
-      if(response.statusCode==200)
-      {
-       List<dynamic> data= jsonDecode(response.body);
-         AcivityMonthHistory=data.map((e) => ActivityModel.fromjson(e)).toList();
-             return AcivityMonthHistory;
-      }
-      else 
-      {
-        return [];
-      }
-    }
-    catch(e)
-    {
-       throw Exception('Failed to fetch data: ${e.toString()}');
-    }
-              
-  }
-
-  Future<List<TestResultModel>> fetchDepressionTestHistory() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
+    String? accessToken = prefs.getString('accessToken');
     try {
       Map<String, String> headers = {
-        'Authorization':
-            'Bearer $accessToken',
+        'Authorization': 'Bearer $accessToken',
+      };
+      var response = await http.get(
+          Uri.parse("${constants.BaseURL}/api/emotion-count/"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        MoodHistory = data.map((e) => MoodModel.fromJson(e)).toList();
+        return MoodHistory;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+  }
+
+  Future<List<ActivityModel>> fetchActivitiesYearHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+
+    try {
+      Map<String, String> headers = {
+        'Authorization': 'Bearer $accessToken',
+      };
+
+      var response = await http.get(
+          Uri.parse("${constants.BaseURL}/api/activity-count/"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        AcivityYearHistory =
+            data.map((e) => ActivityModel.fromjson(e)).toList();
+        return AcivityYearHistory;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+  }
+
+  Future<List<ActivityModel>> fetchActivitiesMonthHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      Map<String, String> headers = {
+        'Authorization': 'Bearer $accessToken',
+      };
+      var response = await http.get(
+          Uri.parse("${constants.BaseURL}/api/activity-count-this-month/"),
+          headers: headers);
+      if (response.statusCode == 200) {
+        List<dynamic> data = jsonDecode(response.body);
+        AcivityMonthHistory =
+            data.map((e) => ActivityModel.fromjson(e)).toList();
+        return AcivityMonthHistory;
+      } else {
+        return [];
+      }
+    } 
+    catch (e) {
+      throw Exception('Failed to fetch data: ${e.toString()}');
+    }
+  }
+  Future<List<TestResultModel>> fetchDepressionTestHistory() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    try {
+      Map<String, String> headers = {
+        'Authorization': 'Bearer $accessToken',
         // Add any other headers if needed
       };
       var response = await http.get(
@@ -142,36 +116,35 @@ class InsigthsCubit extends Cubit<InsigthsState>
         headers: headers,
       );
 
-      if (response.statusCode == 200) 
-      {
+      if (response.statusCode == 200) {
         List<dynamic> data = jsonDecode(response.body);
-        DepressionHistoy= data
+        DepressionHistoy = data
             .map((item) => TestResultModel.fromJson(item))
             .toList()
             .reversed
             .toList();
+              DepressionHistoy.forEach((result) 
+              {
+                     result.timestamp = extractDayAndMonth(result.timestamp!);
+        });
         return DepressionHistoy;
-      }
-      else {
+      } else {
         throw Exception('Failed to load test history');
       }
     } catch (e) {
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
   }
-  
-  Future<WeeklyHistoryModel> fetchWeeklyHistory() async 
-  {
-     //emit(HomeLoading() as InsigthsState);
+
+  Future<WeeklyHistoryModel> fetchWeeklyHistory() async {
+    //emit(HomeLoading() as InsigthsState);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
+    String? accessToken = prefs.getString('accessToken');
     try {
-      
       Map<String, String> headers = {
-        'Authorization':
-            'Bearer $accessToken',
+        'Authorization': 'Bearer $accessToken',
       };
-      
+
       var response = await http.get(
         Uri.parse(
           "${constants.BaseURL}/api/life-record-history/",
@@ -180,74 +153,56 @@ class InsigthsCubit extends Cubit<InsigthsState>
       );
 
       if (response.statusCode == 200) {
-
-         Map<String, dynamic> data = jsonDecode(response.body);
-         weeklyhistoy= WeeklyHistoryModel.fromJson(data); 
-        Map<String, List<WeelklyModel>> results =weeklyhistoy.history;
-      // خلي بالك من الحته دي  ان ممكن نحتاجها قدام انا خدت ممنها الشهر واليوم بس
-         results.forEach((key, value)
-          {
-            value.forEach((item) 
-            {
-                item.timestamp = extractDayAndMonth(item.timestamp!);
-             });
-          
-         });
-         weeklyhistoy=weeklyhistoy;
-            return  weeklyhistoy;
-      } 
-      else 
-      {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        weeklyHistoy = WeeklyHistoryModel.fromJson(data);
+        Map<String, List<WeelklyModel>> results = weeklyHistoy!.history;
+        // خلي بالك من الحته دي  ان ممكن نحتاجها قدام انا خدت ممنها الشهر واليوم بس
+        results.forEach((key, value) 
+        {
+          value.forEach((item) {
+            item.timestamp = extractDayAndMonth(item.timestamp!);
+          });
+        });
+        
+        print("weekly:${weeklyHistoy!.history.length}");
+        return weeklyHistoy!;
+      } else {
         throw Exception('Failed to load test history');
       }
-    } catch (e) 
-    {
+    } catch (e) {
       print(e);
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
   }
 
-
-  Future<void> loadInsights() async 
-  {
-    emit(InsightLoading());
-      print("insigth rebuild");
-      try {
+  Future<void> loadInsights() async {
+   
+    try {
+      weeklyHistoy = await fetchWeeklyHistory();
       DepressionHistoy = await fetchDepressionTestHistory();
-      DepressionHistoy.forEach((result) 
-      {
-        result.timestamp = extractDayAndMonth(result.timestamp!);
-       });
-        weeklyhistoy=await fetchWeeklyHistory();
-         AcivityYearHistory=   await fetchActivitiesYearHistory();
-        AcivityMonthHistory=   await fetchActivitiesMonthHistory();
-        MoodHistory= await fetchMoodHistory();
-       emit(InsightLoaded(DepressionHistoy , weeklyhistoy,AcivityYearHistory,AcivityMonthHistory,MoodHistory));
-
-    } 
-    catch (e) {
+      AcivityYearHistory = await fetchActivitiesYearHistory();
+      AcivityMonthHistory = await fetchActivitiesMonthHistory();
+      MoodHistory = await fetchMoodHistory();
+      emit(InsightLoaded(DepressionHistoy, weeklyHistoy!, AcivityYearHistory,
+          AcivityMonthHistory, MoodHistory));
+    } catch (e) {
       emit(InsightError('Failed to fetch data: ${e.toString()}'));
     }
   }
 
-
-
-
-
-  List<WeelklyModel> SearchAboutCategoty(String Category)
-  {
-  
-    if (weeklyhistoy.history.containsKey(Category)) 
-    {
-      List<WeelklyModel> results =weeklyhistoy.history[Category]!;
-      return  results;
+  List<WeelklyModel> SearchAboutCategoty(String Category) {
+    if (weeklyHistoy!.history.containsKey(Category)) {
+      List<WeelklyModel> results = weeklyHistoy!.history[Category]!;
+      return results;
+    } else {
+      return [];
     }
-   else 
-   {
-    return [];
-   }
- }
-
-
   }
 
+  Future<void> ResetInsigth() async
+  {
+         fetchActivitiesMonthHistory();
+         fetchActivitiesYearHistory();
+         fetchMoodHistory();
+  }
+}

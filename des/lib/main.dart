@@ -3,11 +3,14 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
-import 'package:des/cubit/cubit/handle_home_cubit.dart';
+import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
+
 import 'package:des/cubit/cubit/learning_cubit.dart';
+import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:oktoast/oktoast.dart';
@@ -26,15 +29,15 @@ import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
 
-Future<void> main() async
-{
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //done
-  await AwesomeNotifications().isNotificationAllowed().then   //يطلب الاذن انه يعمل 
-  (
-    (isAllowed) 
-    {
+  await AwesomeNotifications()
+      .isNotificationAllowed()
+      .then //يطلب الاذن انه يعمل
+      (
+    (isAllowed) {
       if (!isAllowed) {
-        AwesomeNotifications().requestPermissionToSendNotifications();          
+        AwesomeNotifications().requestPermissionToSendNotifications();
       }
     },
   );
@@ -42,27 +45,22 @@ Future<void> main() async
   runApp(
     MultiBlocProvider(
       providers: [
-         BlocProvider(
-        create: (context) => WeeklyCubit(),
-         ),
-        BlocProvider(create: (context)=>InsigthsCubit()),
-        BlocProvider(create: (context)=>TopicsPlanCubit()),
+        BlocProvider(create: (context) => WeeklyCubit()..GetAspects()),
+        BlocProvider(create: (context) => InsigthsCubit()..loadInsights()),
+        BlocProvider(create: (context) => TopicsPlanCubit()),
         BlocProvider(create: (context) => SecondLayerCubit()),
         BlocProvider(create: (context) => ActivitiesCubit()),
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
-        BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
-        BlocProvider<HandleHomeCubit>(
-          create: (context) => HandleHomeCubit
-          (
-            moodCubit: BlocProvider.of<SecondLayerCubit>(context),
-            weeklyCubit:BlocProvider.of<WeeklyCubit>(context),
-            insigthsCubit: BlocProvider.of<InsigthsCubit>(context),
-          )
-        ),
-       
-      
+        BlocProvider(
+            create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
+        BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
+        BlocProvider(create: (context) => WeeklytabsCubit()),
+        BlocProvider(
+            create: (context) => HandleEmojyDailyCubit(
+                  moodCubit: BlocProvider.of<SecondLayerCubit>(context),
+                )..loadData())
       ],
       child: const MainNavigator(),
     ),
@@ -75,8 +73,6 @@ class MainNavigator extends StatefulWidget {
   @override
   MainNavigatorState createState() => MainNavigatorState();
 }
- 
-
 class MainNavigatorState extends State<MainNavigator> {
   String? accessToken;
   String? refreshToken;
@@ -101,7 +97,6 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   getProfile() async {
-    
     Response response = await get(
         Uri.parse('${constants.BaseURL}/api/auth/user/'),
         headers: {'Authorization': 'Bearer $accessToken'});
@@ -155,9 +150,9 @@ class MainNavigatorState extends State<MainNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoggedInVerifiedAndProfileComplete()) 
-    {
-      return _buildMaterialApp( const temp());
+    if (_isLoggedInVerifiedAndProfileComplete())
+     {
+      return _buildMaterialApp(const temp());
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
       return _buildMaterialApp(const Data());
     } else if (_isLoggedInAndNotVerified()) {
@@ -168,24 +163,28 @@ class MainNavigatorState extends State<MainNavigator> {
       return _buildMaterialApp(const Loader());
     }
   }
-  Widget _buildMaterialApp(Widget homeWidget) {
-    return ChangeNotifierProvider.value(
-      value: userProvider,
-      child: OKToast(
-        child: MaterialApp(
-           routes: {
-        '/home': (context) => temp(),
-      },
-          debugShowCheckedModeBanner: false,
-          home: Scaffold(
-            backgroundColor: constants.pageColor,
-            body:
-            homeWidget,
-          ),
-        ),
+Widget _buildMaterialApp(Widget homeWidget) {
+  return ChangeNotifierProvider.value(
+    value: userProvider, 
+    child: OKToast(
+      child: Builder(
+        builder: (context) {
+          context.watch<InsigthsCubit>().state; 
+          context.watch<WeeklyCubit>().state;   
+          return MaterialApp(
+            routes: 
+            {
+              '/home': (context) => temp(), 
+            },
+            debugShowCheckedModeBanner: false,
+            home: Scaffold(
+              backgroundColor: constants.pageColor, 
+              body: homeWidget,
+            ),
+          );
+        },
       ),
-    );
-  }
+    ),
+  );
 }
-
-
+}

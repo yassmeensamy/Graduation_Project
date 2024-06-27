@@ -12,12 +12,8 @@ class WeeklyCubit extends Cubit<WeeklyState>
 {
     List<WeelklyModel>Aspects=[];
     List<Map<String,int>>Rating=[];
-  WeeklyCubit() : super(WeeklyInitial())
-  {
-      GetAspects();
-  }
+  WeeklyCubit() : super(WeeklyInitial());
  void UpdateAspects(int id, int value)
- 
  {
   int existingIndex = Rating.indexWhere((map) => map['aspect_type_id'] == id);
   if (existingIndex != -1) 
@@ -30,6 +26,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
 }
    Future<void> GetAspects() async
   {
+    print("enter get aspects");
        SharedPreferences prefs = await SharedPreferences.getInstance();
        String ? accessToken = prefs.getString('accessToken'); 
       Map<String, String> headers = {
@@ -85,7 +82,6 @@ class WeeklyCubit extends Cubit<WeeklyState>
       
     }
     }
-
   }
 
 
