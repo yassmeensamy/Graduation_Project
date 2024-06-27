@@ -52,13 +52,13 @@ class InsightScreen extends StatelessWidget {
        child: 
         Text("Insights",style: GoogleFonts.roboto(fontSize: 40),),
        ),
-        MoodGraph(state.MoodHistory),
+        MoodGraph(BlocProvider.of<InsigthsCubit>(context).MoodHistory),
         SizedBox(height: 7,),
-        DepresionGraph(depressionhistory: state.depressionhistory,),
+        DepresionGraph(depressionhistory: BlocProvider.of<InsigthsCubit>(context).DepressionHistoy),
          SizedBox(height: 7,),
-        Bargraph(monthlyData: state.ActivitiesMonth,annuallyData: state.ActivitiesYear,),
+        Bargraph(monthlyData: BlocProvider.of<InsigthsCubit>(context).AcivityMonthHistory,annuallyData: BlocProvider.of<InsigthsCubit>(context).AcivityYearHistory),
         SizedBox(height: 7,),
-        WeeklyGraph(weeklyHistory: state.weeklyHistory),
+        WeeklyGraph(weeklyHistory: BlocProvider.of<InsigthsCubit>(context).weeklyhistoy)
       ],
     ),
   ),

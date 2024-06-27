@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:bloc/bloc.dart';
 import 'package:des/Models/CalenderModel.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/PlanTodoModel.dart';
@@ -28,10 +27,10 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
   ReportModel? dailyReport = null;
   Map<String,ReportModel> reportHistory={};
 
-  HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit }) : super(HandleHomeInitial())
+  HandleHomeCubit({ required this.moodCubit , required this.insigthsCubit ,required this.weeklyCubit }) : super(HomeLoading())
   {
-    //initialize();
-    FetchPlanToDoList();
+    initialize();
+    //FetchPlanToDoList();
   }
   void initialize()
   {
@@ -45,7 +44,7 @@ class HandleHomeCubit extends Cubit<HandleHomeState>
     {
       primaryEmotions = await moodCubit.GetPrimaryEmotions(); 
       await GetWeeklyToDo();
-        await chechMoodEnrty();
+      await chechMoodEnrty();
     } 
     catch (e) 
     {
@@ -86,15 +85,15 @@ void RemoveFromToDoList(int ActivityId ) async
 {
   if (await CheckActivity(ActivityId)==true)
   {
-  WeeklyToDo.removeWhere((item) => item.id == ActivityId); 
-  }
+    WeeklyToDo.removeWhere((item) => item.id == ActivityId); 
+   }
   if(isEntry==true)
   {
-         emit(HomeLoaded(report: dailyReport,isEntry: true,WeeklyToDo: WeeklyToDo));
+     emit(HomeLoaded(report: dailyReport,isEntry: true,WeeklyToDo: WeeklyToDo));
   }
   else 
   {
-           emit(HomeLoaded(primaryEmotions: primaryEmotions,isEntry: true,WeeklyToDo: WeeklyToDo));
+   emit(HomeLoaded(primaryEmotions: primaryEmotions,isEntry: false,WeeklyToDo: WeeklyToDo));
   }
 
 }
@@ -133,7 +132,7 @@ Future <bool>CheckActivity(int ActivityId) async
     else 
     {
           
-             return false ;
+    return false ;
     }
 
 
@@ -220,7 +219,7 @@ void resetHomeAfterWeeklycheckin() async
     }
   }
 
-  Future<void>  DeleteEntryToday() async
+  Future<void>  DeleteEntryToday(BuildContext context) async
   {
     try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -240,7 +239,8 @@ void resetHomeAfterWeeklycheckin() async
       isEntry=false;
       print("Deleted Done");
       moodCubit.EmptyData();
-       emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: WeeklyToDo));
+       await  BlocProvider.of<InsigthsCubit>(context).loadInsights();
+      emit(HomeLoaded(primaryEmotions: primaryEmotions, isEntry: false, WeeklyToDo: WeeklyToDo));
     }  
     else 
     {

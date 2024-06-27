@@ -72,15 +72,15 @@ class WeeklySurvey extends StatelessWidget {
                 NextButton(
                   ontap: () async {
                     await  context.read<WeeklyCubit>().CreateRecord();
-                    BlocProvider.of<InsigthsCubit>(context).loadInsights();
-                         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                    await  BlocProvider.of<InsigthsCubit>(context).fetchWeeklyHistory();
                     BlocProvider.of<HandleHomeCubit>(context).resetHomeAfterWeeklycheckin() ;
+                    Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+                    
                     
                     
                                     
                      
-                                 
-                    
+                        
                   },
                   groundColor: constants.purpledark,
                   TextColor: Colors.white,

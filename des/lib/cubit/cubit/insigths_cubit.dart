@@ -20,7 +20,12 @@ class InsigthsCubit extends Cubit<InsigthsState>
 {
  
   late WeeklyHistoryModel weeklyhistoy;
-  InsigthsCubit() : super(InsigthsInitial()) {
+  List<MoodModel>MoodHistory=[];
+  List<ActivityModel>AcivityMonthHistory=[];
+  List<ActivityModel>AcivityYearHistory=[];
+  List<TestResultModel>DepressionHistoy=[];
+  InsigthsCubit() : super(InsigthsInitial()) 
+  {
     loadInsights();
   }
 
@@ -45,7 +50,8 @@ class InsigthsCubit extends Cubit<InsigthsState>
       if(response.statusCode==200)
       {
        List<dynamic> data= jsonDecode(response.body);
-        return data.map((e) => MoodModel.fromJson(e)).toList();
+       MoodHistory= data.map((e) => MoodModel.fromJson(e)).toList();
+        return MoodHistory;
       }
       else 
       {
@@ -74,8 +80,9 @@ class InsigthsCubit extends Cubit<InsigthsState>
       if(response.statusCode==200)
       {
        List<dynamic> data= jsonDecode(response.body);
-        return data.map((e) => ActivityModel.fromjson(e)).toList();
-      
+        AcivityYearHistory=data.map((e) => ActivityModel.fromjson(e)).toList();
+        return AcivityYearHistory;
+       
       }
       else 
       {
@@ -104,8 +111,8 @@ class InsigthsCubit extends Cubit<InsigthsState>
       if(response.statusCode==200)
       {
        List<dynamic> data= jsonDecode(response.body);
-        return data.map((e) => ActivityModel.fromjson(e)).toList();
-      
+         AcivityMonthHistory=data.map((e) => ActivityModel.fromjson(e)).toList();
+             return AcivityMonthHistory;
       }
       else 
       {
@@ -138,12 +145,13 @@ class InsigthsCubit extends Cubit<InsigthsState>
       if (response.statusCode == 200) 
       {
         List<dynamic> data = jsonDecode(response.body);
-        return data
+        DepressionHistoy= data
             .map((item) => TestResultModel.fromJson(item))
             .toList()
             .reversed
             .toList();
-      } 
+        return DepressionHistoy;
+      }
       else {
         throw Exception('Failed to load test history');
       }
@@ -185,6 +193,7 @@ class InsigthsCubit extends Cubit<InsigthsState>
              });
           
          });
+         weeklyhistoy=weeklyhistoy;
             return  weeklyhistoy;
       } 
       else 
@@ -199,20 +208,23 @@ class InsigthsCubit extends Cubit<InsigthsState>
   }
 
 
-  Future<void> loadInsights() async {
+  Future<void> loadInsights() async 
+  {
     emit(InsightLoading());
-    try {
-      var testHistory = await fetchDepressionTestHistory();
-      testHistory.forEach((result) 
+      print("insigth rebuild");
+      try {
+      DepressionHistoy = await fetchDepressionTestHistory();
+      DepressionHistoy.forEach((result) 
       {
         result.timestamp = extractDayAndMonth(result.timestamp!);
        });
-       var  Weeklyhistory=await fetchWeeklyHistory();
-       var ActivitiesYearHistory=   await fetchActivitiesYearHistory();
-       var ActivitiesMonthHistory=   await fetchActivitiesMonthHistory();
-       var MoodHistory= await fetchMoodHistory();
-       emit(InsightLoaded(testHistory ,Weeklyhistory,ActivitiesYearHistory,ActivitiesMonthHistory,MoodHistory));
-    }  
+        weeklyhistoy=await fetchWeeklyHistory();
+         AcivityYearHistory=   await fetchActivitiesYearHistory();
+        AcivityMonthHistory=   await fetchActivitiesMonthHistory();
+        MoodHistory= await fetchMoodHistory();
+       emit(InsightLoaded(DepressionHistoy , weeklyhistoy,AcivityYearHistory,AcivityMonthHistory,MoodHistory));
+
+    } 
     catch (e) {
       emit(InsightError('Failed to fetch data: ${e.toString()}'));
     }

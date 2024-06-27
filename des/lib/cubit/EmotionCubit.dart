@@ -382,5 +382,6 @@ void EmptyData()
     ImagePath=" ";
     ActivitiesSelected=[];
     ReasonSelected=[];
+  
 }
 }

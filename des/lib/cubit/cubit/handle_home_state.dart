@@ -9,12 +9,10 @@ final class HomeLoaded extends  HandleHomeState
 {
   List<MoodModel> ? primaryEmotions=[];
   List<WeeklyToDoPlan> ? WeeklyToDo=[];
-  bool? isEntry;
+  bool ? isEntry;
   ReportModel? report;
   HomeLoaded( {this.WeeklyToDo ,this.isEntry ,this.report ,this.primaryEmotions});
 }
-
-
 
 final class ToDoDoneClass extends HandleHomeState
 {
@@ -25,3 +23,9 @@ final class  HomeError extends  HandleHomeState {
   String errormessge;
   HomeError(this.errormessge);
 }
+final class deleteHomeState extends HandleHomeState
+  {
+    List<MoodModel> ? primaryEmotions=[];
+    deleteHomeState(this.primaryEmotions);
+
+ }
