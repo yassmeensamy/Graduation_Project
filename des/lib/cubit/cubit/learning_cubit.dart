@@ -20,8 +20,11 @@ class LearningCubit extends Cubit<LearningState>
      FetchMainTopics();
 
   }
-   void GetTopicsandLessons(int Topic_Id) async
+
+   Future<void> GetTopicsandLessons(int Topic_Id) async
   {
+    
+    //emit(SupTopicsLoading());
   LearningModel? subtopics = await FetchSubTopic(Topic_Id);
   Map<int, List<Lessons>> SubTopicLessons = {};
   List<Lessons> lessons = [];
@@ -30,12 +33,19 @@ class LearningCubit extends Cubit<LearningState>
     lessons = await FetchSubLessons(element.id);
     SubTopicLessons[element.id] = lessons;
   });
-  emit(LearningSubTopicsState(SubTopicLessons,subtopics));
+
+
+  
+     emit(LearningSubTopicsState(SubTopicLessons,subtopics));
 }
+
+
  void resetContent()
  {
      emit(LearningLoaded(LearningTopics));
  }
+
+
     Future<List<Lessons>> FetchSubLessons(int subtopic_id) async
   {
      var data={"subtopic_id":subtopic_id};
@@ -122,43 +132,13 @@ class LearningCubit extends Cubit<LearningState>
           
      }
     else 
-    {
-         print(response.statusCode);
+    { 
+        
+         print("error${response.statusCode}");
          return null;
     }
   }
   
  
- Future<List<String>> FetchContent(int lesson_id) async
-  {
-    emit(LearingLoading());
-     var data={"lesson_id":lesson_id};
-    var json_data=jsonEncode(data); 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-   Map<String, String> headers = 
-   {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' 
-    };
-    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/lessons/"),
-     body: json_data, 
-     headers: headers);
-     if(response.statusCode==200)
-     {
-          dynamic responseData = jsonDecode(response.body);
-           String LessonContent=responseData['content'];
-            subParagraphs = LessonContent.split(". ");
-          print(LessonContent);
-          emit(LessonContentState(this. subParagraphs));
-          return subParagraphs;
-     }
-    else 
-    {
-         print(response.statusCode);
-         return [];
-    }
-  }
   
 }

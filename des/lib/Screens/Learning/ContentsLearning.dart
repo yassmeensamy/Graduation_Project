@@ -31,11 +31,16 @@ class ContentsLearning extends StatelessWidget {
         {
           return _ContentsLearning(state.MainTopics);
         } 
-         
-         else 
-        {
-           return LearningLoading();
-        }
+         else if (state is LearningError)
+         {
+            
+            return Container(color: Colors.red,);
+         }
+        
+        else 
+            {
+                return LearningLoading();
+            }
         
       },
     );
@@ -98,6 +103,7 @@ class LearnCard extends StatelessWidget
     return InkWell(
       onTap: () 
        {
+
          BlocProvider.of<LearningCubit>(context).GetTopicsandLessons(Topic!.id);
       },
       child:

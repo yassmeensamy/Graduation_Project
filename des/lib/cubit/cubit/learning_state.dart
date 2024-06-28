@@ -20,6 +20,9 @@ class LearningError extends LearningState
 }
 class LearningSubTopicsLoadingState extends LearningState 
 {}
+class SupTopicsLoading extends LearningState 
+{}
+
 
 class LearningSubTopicsState extends LearningState 
 {
@@ -28,9 +31,11 @@ class LearningSubTopicsState extends LearningState
    LearningSubTopicsState(this.Total,this.subtopics);
    
 }
+/*
 class LessonContentState extends LearningState
 {
  List<String> subParagraphs=[];
  LessonContentState(this.subParagraphs);
 
 }
+*/

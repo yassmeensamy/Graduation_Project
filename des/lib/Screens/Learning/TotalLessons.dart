@@ -6,6 +6,7 @@ import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../constants.dart' as constants;
 class SelectedIndexCubit extends Cubit<int> 
 {
@@ -29,11 +30,6 @@ class TotalLessons extends StatelessWidget
 
     final screenHeight = MediaQuery.of(context).size.height;
     return 
-    
-    
-    
-    
-    
     BlocProvider(
       create: (context) => SelectedIndexCubit(),
       child: WillPopScope(
@@ -182,11 +178,12 @@ class TotalLessons extends StatelessWidget
                                       onTap: ()
                                       async {
                                         print("you can read now");
-                                        await BlocProvider.of<LearningCubit>(context).FetchContent(Total[subtopics!.subtopics![index].id]![ind].id!);
-                                         Navigator.push
+                                        
+                                         Navigator.pushReplacement
                                          (
- context, MaterialPageRoute(builder: (context) => ContentLesson (BlocProvider.of<LearningCubit>(context).subParagraphs,
-                                                              subtopics!.id)));
+                                              context, MaterialPageRoute(builder: (context) => ContentLesson ( lesson_id:  Total[subtopics!.subtopics![  index] .id]![ind]  .id!,Topic_Id: subtopics!.id),
+                                              
+                                                          ));
                                       },
                                          child:SubLessonContainer(Total: Total,subtopics: subtopics,ind:ind,index: index,),
                                         ):
