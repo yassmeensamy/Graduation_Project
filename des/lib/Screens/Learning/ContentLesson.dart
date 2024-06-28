@@ -2,17 +2,31 @@ import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../../constants.dart' as constants;
 
 
-class ContentLesson extends StatelessWidget {
+class ContentLesson extends StatelessWidget 
+ {
+  int Topic_id;
   List<String> subParagraphs=[];
-  ContentLesson(this.subParagraphs, {Key? key}) : super(key: key);
-         
+  ContentLesson(this.subParagraphs,this.Topic_id ,{Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) 
   {
-    return Scaffold(
-      backgroundColor: Color(0xff6495ED).withOpacity(.5),
+    return 
+    
+    WillPopScope(
+      onWillPop: () async
+      {
+          //BlocProvider.of<LearningCubit>(context).GetTopicsandLessons(Topic_id);
+          return false;
+      },
+      
+    
+      child:
+      
+       Scaffold(
+      backgroundColor: constants.mint,
       body: Column(
         children: [
           Padding(
@@ -50,8 +64,10 @@ class ContentLesson extends StatelessWidget {
                       color: Colors.black.withOpacity(.8),
                       size: 34,
                     ),
-                    onPressed: () {
-                      // Add your close button functionality
+                    onPressed: () 
+                    {
+                       
+                      BlocProvider.of<LearningCubit>(context).GetTopicsandLessons(Topic_id);
                     },
                   ),
                 ],
@@ -63,7 +79,7 @@ class ContentLesson extends StatelessWidget {
             child: ListView.builder(
               itemCount:
                 subParagraphs.length,
-             // physics: ظظClampingScrollPhysics(), // Prevents bouncing/stretching
+             // physics: ClampingScrollPhysics(), // Prevents bouncing/stretching
               itemBuilder: (context, index) {
                 return Padding(
                   padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -78,6 +94,7 @@ class ContentLesson extends StatelessWidget {
           
         ],
       ),
+    ),
     );
   }
 }

@@ -12,9 +12,11 @@ class ActivityplanModel {
   factory ActivityplanModel.fromJson(Map<String, dynamic> json) 
   {
     return ActivityplanModel(
-      id: json['id'] ??json['number'] ,
+      id: json['id'] ?? json['number'] ,
       flag: json['flag'] ,
       content: json['text'] ,
     );
   }
+
+  
 }

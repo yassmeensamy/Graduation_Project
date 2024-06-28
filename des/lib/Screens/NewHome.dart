@@ -1,71 +1,96 @@
 import 'package:des/Components/Drawer.dart';
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Models/ActivityModel.dart';
-
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
+import 'package:des/Screens/DepressionNotification.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Rectangle.dart';
 import 'package:des/Screens/HomeScreen/Widgets/ToDo.dart';
 import 'package:des/Screens/MoodTracker/SecondLayerMood.dart';
 import 'package:des/Screens/Test/TestScreen.dart';
 import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/EmotionCubit.dart';
+import 'package:des/cubit/cubit/cubit/depression_cubit.dart';
+import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
-
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
 import 'package:provider/provider.dart';
 import '../constants.dart' as constants;
 
 
-
 class NewHome extends StatelessWidget {
-  const NewHome({super.key});
+  NewHome({super.key});
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final ValueNotifier<bool> shouldShowDialog =
+      ValueNotifier<bool>(true); // Changed to true initially
+
+  void showCustomDialog(BuildContext context) {
+    CustomAlertDialog(
+      context: context,
+      title: 'Depression Notification',
+      message:
+          "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
+    ).show();
+  }
 
   @override
   Widget build(BuildContext context) {
-   
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    return Builder(builder: (context) {
-      context.watch<InsigthsCubit>().state;
-      context.watch<WeeklyCubit>().state;
-      return Scaffold(
-        key: _scaffoldKey,
-        backgroundColor: constants.pageColor,
-        drawer: myDrawer(),
-        body: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 32.0, horizontal: 16),
-                  child: Column(
-                    children: [
-                      HeaderHomeSCreen(_scaffoldKey),
-                      EmotionsContainer(),
-                      DepressionTestContainer(),
-                      WeeklySurveyContainer(),
-                      DisplayWeeklyTasks(),
-                    ],
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: constants.pageColor,
+      drawer: myDrawer(),
+      body: Builder(
+        builder: (context) 
+        {
+          context.watch<DepressionCubit>().state;
+          context.watch<InsigthsCubit>().state;
+          context.watch<WeeklyCubit>().state;
+          context.watch<PlanTasksCubit>().state;
+          /*
+          WidgetsBinding.instance.addPostFrameCallback((_) 
+          {
+            if (shouldShowDialog.value &&context.read<DepressionCubit>().checkDepression) {
+              showCustomDialog(context);
+              shouldShowDialog.value = false;
+            }
+          });
+          */
+        
+          return Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 32.0, horizontal: 16),
+                    child: Column(
+                      children: [
+                        HeaderHomeSCreen(_scaffoldKey),
+                        EmotionsContainer(),
+                        DepressionTestContainer(),
+                        WeeklySurveyContainer(),
+                        DisplayWeeklyTasks(),
+                        PlanToDoTasks(),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
-        ),
-      );
-    });
+            ],
+          );
+        },
+      ),
+    );
   }
 }
-
 class DepressionTestContainer extends StatelessWidget {
   const DepressionTestContainer({super.key});
 
@@ -464,6 +489,61 @@ class MoodSelectedContainer extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class PlanToDoTasks extends StatelessWidget 
+{
+  const PlanToDoTasks({super.key});
+
+  @override
+  Widget build(BuildContext context) 
+  {
+    return RectangleContainer(constants.mint,
+    Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            child: BlocBuilder<PlanTasksCubit, PlanTasksState>(
+                builder: (context, state) 
+                {
+                   if (state is PlanTasksloading) 
+                   {
+                              return Center(child: CircularProgressIndicator());
+                   }
+                   else if (state is PlanTasksError)
+                   {
+                    return Container(color: Colors.black,);
+                   }
+                   return  
+                     BlocProvider.of<PlanTasksCubit >(context).planTasks!.plansToDo.length!=0 ?
+                      ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: BlocProvider.of<PlanTasksCubit >(context).planTasks!.plansToDo.length, 
+                      itemBuilder: (BuildContext context, int index)
+                       {
+                        
+                        return BlocProvider<CheckboxCubit>(
+                          create: (context) => CheckboxCubit(),
+                          child: TODo(
+                              todo: BlocProvider.of<PlanTasksCubit >(context).planTasks!.plansToDo[index]),
+                        );
+                      },
+                   
+                    )
+                  : Center(
+                      child: Text(
+                          " Daily Tasks done, Celebrate this achievement and keep moving forward.",
+                          style: TextStyle(fontSize: 20)));
+            }),
+          ),
+        ],
+      ),
+    
+    
     );
   }
 }

@@ -131,7 +131,7 @@ class TotalLessons extends StatelessWidget
                                 ),
                               ),
                               child:
-                             
+                              
                                Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -180,10 +180,13 @@ class TotalLessons extends StatelessWidget
                                     child:Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]?
                                      GestureDetector(
                                       onTap: ()
-                                      {
+                                      async {
                                         print("you can read now");
-                                        BlocProvider.of<LearningCubit>(context).FetchContent(Total[subtopics!.subtopics![index].id]![ind].id!);
-                                      
+                                        await BlocProvider.of<LearningCubit>(context).FetchContent(Total[subtopics!.subtopics![index].id]![ind].id!);
+                                         Navigator.push
+                                         (
+ context, MaterialPageRoute(builder: (context) => ContentLesson (BlocProvider.of<LearningCubit>(context).subParagraphs,
+                                                              subtopics!.id)));
                                       },
                                          child:SubLessonContainer(Total: Total,subtopics: subtopics,ind:ind,index: index,),
                                         ):
@@ -219,6 +222,7 @@ class SubLessonContainer extends StatelessWidget
   Widget build(BuildContext context) {
     return  Padding(padding: EdgeInsets.only(left:10),
                                     child:
+                                    
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.start,
                                       children:
@@ -235,12 +239,18 @@ class SubLessonContainer extends StatelessWidget
                                                             ),
                                                           ),
                                                           SizedBox(width: 5,),
+                                                          Expanded(child:
                                                           Text(
-                                                              Total[subtopics!.subtopics![index].id]![ind].name,
+                                                           
+                                                            Total[subtopics!.subtopics![index].id]![ind].name,
+                                                            softWrap: true,
+                                                            maxLines: 2,
                                                             style: TextStyle(color: Colors.black),),
+                                                          )
                                       ],
-                                    )
+                                    ),
                                     );
+                                    
   
   }
 }

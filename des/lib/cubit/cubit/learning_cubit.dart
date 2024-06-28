@@ -20,31 +20,22 @@ class LearningCubit extends Cubit<LearningState>
      FetchMainTopics();
 
   }
-  
    void GetTopicsandLessons(int Topic_Id) async
-    {
+  {
   LearningModel? subtopics = await FetchSubTopic(Topic_Id);
-  print(subtopics);
   Map<int, List<Lessons>> SubTopicLessons = {};
-  print(subtopics!.subtopics!.length);
   List<Lessons> lessons = [];
-  await Future.forEach(subtopics.subtopics!, (element) async 
+  await Future.forEach(subtopics!.subtopics!, (element) async 
   {
     lessons = await FetchSubLessons(element.id);
     SubTopicLessons[element.id] = lessons;
   });
-  
-   print(SubTopicLessons);
   emit(LearningSubTopicsState(SubTopicLessons,subtopics));
 }
  void resetContent()
  {
      emit(LearningLoaded(LearningTopics));
  }
-
-
-
-
     Future<List<Lessons>> FetchSubLessons(int subtopic_id) async
   {
      var data={"subtopic_id":subtopic_id};

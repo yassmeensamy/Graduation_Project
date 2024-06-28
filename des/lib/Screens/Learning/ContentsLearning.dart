@@ -16,20 +16,13 @@ class ContentsLearning extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<LearningCubit, LearningState>(
       listener: (context, state) {
-        if (state is LearningSubTopicsState ) {
+        if (state is LearningSubTopicsState ) 
+        {
          
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TotalLessons(state.Total, state.subtopics)),
           );    
-        }
-        if(state is LessonContentState)
-        {
-              Navigator.push(
-                                 context,
-                                MaterialPageRoute(builder: (context) => ContentLesson (state.subParagraphs),
-                                                  ),
-                                          );
         }
       },
       builder: (context, state) 

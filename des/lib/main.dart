@@ -6,9 +6,10 @@ import 'package:des/NotificationServices.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
+import 'package:des/cubit/cubit/cubit/depression_cubit.dart';
+import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
 import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
-
 import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,9 @@ import 'cubit/cubit/insigths_cubit.dart';
 import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
+
+
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //done
@@ -53,14 +57,17 @@ Future<void> main() async {
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
-        BlocProvider(
-            create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
+        BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
+         BlocProvider(create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
         BlocProvider(
             create: (context) => HandleEmojyDailyCubit(
                   moodCubit: BlocProvider.of<SecondLayerCubit>(context),
-                )..loadData())
+                )..loadData()),
+      BlocProvider(
+      create: (context) => DepressionCubit()..CheckDepression(), 
+      )
       ],
       child: const MainNavigator(),
     ),

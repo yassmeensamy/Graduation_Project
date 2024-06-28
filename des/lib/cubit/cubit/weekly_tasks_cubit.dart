@@ -81,6 +81,7 @@ void RemoveFromToDoList(int ActivityId ) async
 
 }
 }
+
 class CheckboxCubit extends Cubit<bool> {
   CheckboxCubit() : super(false);
 

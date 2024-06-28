@@ -30,9 +30,8 @@ class TopicModel {
           } 
           else 
           {
-
+             
             dynamic acivity=json ["activity"];
-            print(acivity);
             activitiesList.add(ActivityplanModel.fromJson(acivity));
 
           } 

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:des/Screens/Plans/Plan.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
+import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -101,6 +102,7 @@ class PlansContent extends StatelessWidget
           child: InkWell(
             onTap:()
              {
+              BlocProvider.of<PlanTasksCubit >(context).FetchPlanToDoList();
               Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(topic!.name),)
           ); 
             },

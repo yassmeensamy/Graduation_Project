@@ -17,7 +17,7 @@ class PlanScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) 
   {
-     print( "lololooooy");
+  
     return BlocProvider(
       create: (context) => PlanTipsCubit()..FetchPlanActivities(topic_name),
       child: BlocConsumer<PlanTipsCubit, PlanTipsState>(
