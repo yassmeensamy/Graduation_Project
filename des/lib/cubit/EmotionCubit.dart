@@ -1,9 +1,8 @@
 import 'dart:convert';
-
+import 'package:des/Api/Api.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 import 'package:http/http.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Models/ActivityModel.dart';
@@ -13,31 +12,18 @@ import '../Models/MoodModel.dart';
 import 'EmotionCubitState.dart';
 
 class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
-  SecondLayerCubit() : super(EmotionCubitStateIntial ())
-  {  
-  }
-  List<MoodModel> secondEmotions = [];
+  SecondLayerCubit() : super(EmotionCubitStateIntial ());
+   List<MoodModel> secondEmotions = [];
    List<MoodModel> primaryEmotions=[];
-  List<Map<String, String>> ActivitiesSelected=[];
-  List<Map<String, String>> ReasonSelected=[];
-    String SelectedMood=" ";
-    String EmotionType=" " ;
-    String ImagePath=" ";
-
-   
+   List<Map<String, String>> ActivitiesSelected=[];
+   List<Map<String, String>> ReasonSelected=[];
+   String SelectedMood=" ";
+   String EmotionType=" " ;
+   String ImagePath=" ";
 Future<List<MoodModel>> GetPrimaryEmotions() async {
   try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-     Map<String, String> headers = {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' // You don't need this header for this request
-    };
-    final response = await http.get(
-      Uri.parse("${constants.BaseURL}/api/primary-emotions/"),
-      headers: headers,
-    );
+   
+     Response response = await Api().get(url:"${constants.BaseURL}/api/primary-emotions/");
     if (response.statusCode == 200) 
     {
       List<dynamic> responseData = jsonDecode(response.body);
@@ -55,30 +41,17 @@ Future<List<MoodModel>> GetPrimaryEmotions() async {
    return [];
   }
 }
-
 Future<void> SavePrimaryEmotions(String SelectedMood) async
 {
     var data={"mood":SelectedMood};
     var json_data=jsonEncode(data); 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-    print(accessToken);
-   Map<String, String> headers = 
-   {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' 
-    };
-    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/mood-primary-entry/"),
-     body: json_data, 
-     headers: headers);
+    Response response = await Api().post(url: "${constants.BaseURL}/api/mood-primary-entry/", body: json_data);
      if(response.statusCode==200 || response.statusCode == 201)
      {
           dynamic responseData = jsonDecode(response.body);     
      }
-      else 
+    else 
       {
-        print("error in submit");
           emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
       }
 }
@@ -95,11 +68,7 @@ Future<void> getSecondEmotions(String type,String imagePath) async
     try {
       var data = {'type': type};
       var jsonData = jsonEncode(data); 
-      var response = await http.post(
-        Uri.parse("${constants.BaseURL}/api/emotions/"), 
-        body: jsonData,
-        headers: headers,
-        );
+      Response response = await Api().post( url: "${constants.BaseURL}/api/emotions/", body: jsonData);
       if (response.statusCode == 200) 
       {
          List<dynamic> responseData = jsonDecode(response.body);
@@ -108,7 +77,6 @@ Future<void> getSecondEmotions(String type,String imagePath) async
         { 
            EmotionType=type;
            ImagePath=imagePath;
-
           emit(EmotionCubitStateSucess(secondEmotions,imagePath,type));
         } 
         else 
@@ -125,22 +93,11 @@ Future<void> getSecondEmotions(String type,String imagePath) async
       emit(EmotionCubitStateFailur(e.toString()));
     }
   }
-
 Future<void> SaveSecondEmotions() async
 {
     var data={"mood":SelectedMood};
     var json_data=jsonEncode(data); 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-   Map<String, String> headers = 
-   {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' // You don't need this header for this request
-    };
-    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/mood-second-entry/"),
-     body: json_data, 
-     headers: headers);
+    Response response = await Api() .post(url: "${constants.BaseURL}/api/mood-second-entry/", body: json_data);
      if(response.statusCode==200 || response.statusCode == 201)
      {
           dynamic responseData = jsonDecode(response.body);
@@ -151,23 +108,10 @@ Future<void> SaveSecondEmotions() async
       }
 
 }
-
-
 Future<void> GetActivitiesandReason() async {
   List<ActivityModel> activities = [];
   List<ReasonModel> Reasons = [];
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-  Map<String, String> headers = 
-       {
-      'Authorization':
-      'Bearer $accessToken'
-     ,'Content-Type': 'application/json' // You don't need this header for this request
-       };
-  Response response1 = await http.get(
-    Uri.parse("${constants.BaseURL}/api/activities/"),
-    headers: headers,
-  );
+  Response response1 =await Api().get(url: "${constants.BaseURL}/api/activities/");
   if (response1.statusCode == 200) 
   {
     List<dynamic> responseData1 = jsonDecode(response1.body);
@@ -178,11 +122,7 @@ Future<void> GetActivitiesandReason() async {
     emit(EmotionCubitStateFailur("Request failed with status: ${response1.statusCode}"));
     return;
   }
-
-  Response response2 = await http.get(
-    Uri.parse("${constants.BaseURL}/api/reasons/"),
-    headers: headers,
-  );
+   Response response2 =await Api().get(url: "${constants.BaseURL}/api/reasons/");
   if (response2.statusCode == 200)
    {
     List<dynamic> responseData2 = jsonDecode(response2.body);
@@ -200,32 +140,17 @@ Future<void> GetActivitiesandReason() async {
 }
 Future<void> SendJournaling(String note) async {
   try {
-    print(note);
     var data = {"notes": note};
     var json_data = jsonEncode(data);
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
-
-    Map<String, String> headers = {
-      'Authorization': 'Bearer $accessToken',
-      'Content-Type': 'application/json',
-    };
-
-    Response response = await http.post(
-      Uri.parse("${constants.BaseURL}/api/journal-entry/"),
-      body: json_data,
-      headers: headers,
-    );
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
+   Response response = await Api().post(url: "${constants.BaseURL}/api/journal-entry/", body: json_data);
+    if (response.statusCode == 200 || response.statusCode == 201) 
+    {
       dynamic responseData = jsonDecode(response.body);
-      print("journaling done");
       ReportModel? reportModel = await GetDailyReport();
       emit(conclusionState(reportModel!));
-    } else 
+    } 
+    else 
     {
-      print("Journaling failed with status code: ${response.statusCode}");
       emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
     }
   } catch (e) {
@@ -233,23 +158,11 @@ Future<void> SendJournaling(String note) async {
     emit(EmotionCubitStateFailur("Error sending journaling: $e"));
   }
 }
-
-
 Future<void> SaveReason() async
 {
     var data={"reasons":ReasonSelected};
     var json_data=jsonEncode(data); 
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-   Map<String, String> headers = 
-   {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' // You don't need this header for this request
-    };
-    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/reason-entries/"),
-     body: json_data, 
-     headers: headers);
+    Response response = await Api() .post(url: "${constants.BaseURL}/api/reason-entries/", body: json_data);
      if(response.statusCode==201)
      {
           dynamic responseData = jsonDecode(response.body);
@@ -260,22 +173,11 @@ Future<void> SaveReason() async
       }
 
 }
-
 Future<void> SaveActivity() async
 {
     var data={"activities":ActivitiesSelected};
     var json_data=jsonEncode(data);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-   Map<String, String> headers = 
-   {
-      'Authorization':
-          'Bearer $accessToken'
-      ,'Content-Type': 'application/json' // You don't need this header for this request
-    };
-    Response response=await http.post(Uri.parse("${constants.BaseURL}/api/activity-entries/"),
-     body: json_data, 
-     headers: headers);
+    Response response = await Api().post(url: "${constants.BaseURL}/api/activity-entries/", body: json_data);
      if(response.statusCode==201)
      {
           dynamic responseData = jsonDecode(response.body);
@@ -284,24 +186,19 @@ Future<void> SaveActivity() async
       { 
           emit(EmotionCubitStateFailur("Request failed with status: ${response.statusCode}"));
       }
-
 }
-
-
-
- 
 void StoreActivity(String activity)
 {
   Map<String, String> newActivity = {"activity": activity};
   ActivitiesSelected.add(newActivity);
 }
-
 void StoreReason(String Reason)
 {
   Map<String, String> newReason = {"reason": Reason};
   ReasonSelected.add(newReason);
 }
- void displaySnackBar(BuildContext context) {
+ void displaySnackBar(BuildContext context) 
+ {
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       content: Text("You should Select Icons"),
@@ -337,41 +234,25 @@ void saveansNavigateJournaling(BuildContext context)
       
   }
 }
-
-
-
 Future<ReportModel?> GetDailyReport() async   
 {
-  try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ? accessToken = prefs.getString('accessToken');
-     Map<String, String> headers = 
-     {
-        'Authorization':'Bearer $accessToken',
-     };
-    final response = await http.get(
-      Uri.parse("${constants.BaseURL}/api/report/"),
-      headers: headers);
+  try 
+  {
+     Response response =await Api().get(url: "${constants.BaseURL}/api/report/");
     if (response.statusCode == 200) 
     {
        dynamic responseData = jsonDecode(response.body);
-       
-       print(responseData);
-       return  ReportModel.fromJson(responseData);
-    
-       
+       return  ReportModel.fromJson(responseData); 
     } 
     else 
     { 
       print("error ${response.statusCode}");
       return null;
-     
     }
   } catch (e) 
   { 
     print("error ${e}");
     return null;
-   
   }
 }
 //ده عك بس ده حل مشكله لحد ما نعمل refactor 

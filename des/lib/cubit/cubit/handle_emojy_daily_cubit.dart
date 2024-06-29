@@ -1,11 +1,13 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:des/Api/Api.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/cubit/EmotionCubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http; 
@@ -29,15 +31,7 @@ class HandleEmojyDailyCubit extends Cubit<HandleEmojyDailyState>
 Future<Map<String,ReportModel>> ReportHistory() async 
    {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? accessToken = prefs.getString('accessToken');
-      Map<String, String> headers = {
-        'Authorization': 'Bearer $accessToken'
-      };
-      final response = await http.get(
-        Uri.parse("${constants.BaseURL}/api/report-month/"),
-        headers: headers,
-      );
+       Response response = await Api().get(url: "${constants.BaseURL}/api/report-month/",);
       if (response.statusCode == 200) 
       {
         Map<String, ReportModel> reportHistory = {};
@@ -45,7 +39,6 @@ Future<Map<String,ReportModel>> ReportHistory() async
         responseData.forEach((key, value) 
         {
           reportHistory[key] = ReportModel.fromJson(value); 
-
         });
         return reportHistory;
       } 

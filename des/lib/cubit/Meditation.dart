@@ -11,7 +11,6 @@ class GetMeditation {
     Response response = await http.get(
       Uri.parse("${constants.BaseURL}/api/meditations/"),
     );
-    
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
       List<MeditationModel> Meditations =

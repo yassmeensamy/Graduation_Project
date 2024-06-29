@@ -15,7 +15,8 @@ class _PreferencesFormState extends State<PreferencesForm> {
   bool? isYesSelected;
 
   void selectAnswer(bool answer) {
-    setState(() {
+    setState(() 
+    {
       isYesSelected = answer;
     });
     widget.onAnswerSelected(widget.tag!, answer);

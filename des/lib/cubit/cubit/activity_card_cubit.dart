@@ -12,7 +12,8 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
     newSelectedActivities.add(index); 
     emit(state.copyWith(selectedActivities: newSelectedActivities));
   }
-  void deselectActivity(int index) {
+  void deselectActivity(int index) 
+  {
     final newSelectedActivities = Set.of(state.selectedActivities);
     newSelectedActivities.remove(index); 
     emit(state.copyWith(selectedActivities: newSelectedActivities));
@@ -25,7 +26,7 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
 
   void deselectReason(int index) {
     final newSelectedReasons = Set.of(state.selectedReasons);
-    newSelectedReasons.remove(index); // Remove the index from selected reasons
+    newSelectedReasons.remove(index); 
     emit(state.copyWith(selectedReasons: newSelectedReasons));
   }
 }

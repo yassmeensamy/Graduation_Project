@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +8,6 @@ class Api
   {
      SharedPreferences prefs = await SharedPreferences.getInstance();
      String? accessToken = prefs.getString('accessToken');
-     print(accessToken);
      Map<String, String> headers =
       {
          'Authorization': 'Bearer $accessToken',
@@ -37,10 +35,12 @@ class Api
            body: body,
           headers: headers, );
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
     } 
-    else {
+    else
+     {
+      print("error in post ${response.statusCode}");
        throw Exception("Request failed");
     }
   }

@@ -29,6 +29,7 @@ class NewHome extends StatelessWidget {
   NewHome({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  
   final ValueNotifier<bool> shouldShowDialog =
       ValueNotifier<bool>(true); // Changed to true initially
 
@@ -43,6 +44,10 @@ class NewHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
+    User? currentUser = userProvider.user;
+
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: constants.pageColor,
@@ -73,7 +78,67 @@ class NewHome extends StatelessWidget {
                         vertical: 32.0, horizontal: 16),
                     child: Column(
                       children: [
-                        HeaderHomeSCreen(_scaffoldKey),
+                        //HeaderHomeSCreen(_scaffoldKey),
+                        Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  _scaffoldKey.currentState?.openDrawer();
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  width: 50,
+                  height: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      image: DecorationImage(image: getProfilePhoto(context))),
+                ),
+              ),
+              const Spacer(),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    DateFormat('EEEE').format(DateTime.now()),
+                    style:
+                        const TextStyle(color: constants.txtGrey, fontSize: 16),
+                  ),
+                  Text(
+                    DateFormat.MMMMd().format(DateTime.now()),
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Padding(
+                  padding: EdgeInsets.only(top: 16.0),
+                  child: IconButton(
+                    onPressed: () {
+                      print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
+                      print(DateFormat('d').format(DateTime.now()));
+                    },
+                    icon: Icon(
+                      Icons.calendar_month_outlined,
+                      color: constants.darkGrey,
+                    ),
+                  ))
+            ],
+          ),
+          const SizedBox(
+            height: 16,
+          ),
+          Text(
+            'Welcome Back, ${currentUser!.firstName}',
+            style: const TextStyle(fontSize: 22),
+          ),
+        ]),
                         EmotionsContainer(),
                         DepressionTestContainer(),
                         WeeklySurveyContainer(),
@@ -142,7 +207,7 @@ class DepressionTestContainer extends StatelessWidget {
     );
   }
 }
-
+/*
 class HeaderHomeSCreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> _scaffoldKey;
   HeaderHomeSCreen(this._scaffoldKey);
@@ -215,6 +280,8 @@ class HeaderHomeSCreen extends StatelessWidget {
         ]);
   }
 }
+
+*/
 
 class DisplayWeeklyTasks extends StatelessWidget {
   DisplayWeeklyTasks({super.key});

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:des/Api/Api.dart';
 import 'package:des/Models/WeeklyToDoModel.dart';
+import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -17,19 +19,7 @@ class WeeklyTasksCubit extends Cubit<WeeklyTasksState>
 Future<void> GetWeeklyToDo() async
 {
     emit(WeeklyTasksLoading());
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String ?accessToken = prefs.getString('accessToken');
-    Map<String, String> headers = 
-    {
-      'Authorization': 'Bearer $accessToken',
-    };
-    print(accessToken);
-    http.Response response = await http.get(
-      Uri.parse(
-        "${constants.BaseURL}/api/unchecked-activities/",
-      ),
-      headers: headers,
-    );
+    Response response =await Api().get(url: "${constants.BaseURL}/api/unchecked-activities/");
     if(response.statusCode==200)
     {
        List<dynamic> responseData = jsonDecode(response.body);

@@ -189,12 +189,14 @@ class _DataState extends State<Data> {
   }
 }
 
-void updateProfile() async {
+void updateProfile() async 
+{
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   var request = http.MultipartRequest(
       'PATCH', Uri.parse('${constants.BaseURL}/api/auth/user/'));
-  if (imgPath != null) {
+  if (imgPath != null)
+   {
     request.files.add(await http.MultipartFile.fromPath('image', imgPath!));
   }
   request.headers['Authorization'] = 'Bearer $accessToken';
