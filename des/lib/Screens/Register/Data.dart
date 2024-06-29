@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:des/Screens/Register/Forms/MeditationForm.dart';
-import 'package:des/Screens/Register/Forms/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -12,13 +10,15 @@ import '../../constants.dart' as constants;
 import 'CustomizingLoader.dart';
 import 'Forms/DataForm.dart';
 import 'Forms/imageForm.dart';
+import 'Forms/MeditationForm.dart';
+import 'Forms/Preferences.dart';
 
-int i = 0;
-List<Widget> arr = getScreens();
 Map<String, String> body = {};
 String? imgPath;
 Map<String, String> preferencesAnswers = {};
 List<Widget> preferencesWidgets = [];
+String? meditationDay;
+DateTime? meditationTime;
 
 Future<List<Widget>> fetchPreferencesWidgets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -49,7 +49,7 @@ Future<List<Widget>> fetchPreferencesWidgets() async {
   return preferencesWidgets;
 }
 
-List<Widget> getScreens() {
+List<Widget> getScreens(BuildContext context) {
   List<Widget> screens = [
     DataForm(
       onBirthdaySelected: (selectedBirthday) {
@@ -67,10 +67,15 @@ List<Widget> getScreens() {
     imgPath = imagePath;
   }));
   screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) {
-    setMeditaionTime(weekday, time);
+    setMeditationTime(weekday, time);
   }));
 
   return screens;
+}
+
+void setMeditationTime(String weekday, DateTime time) {
+  meditationDay = weekday;
+  meditationTime = time;
 }
 
 class Data extends StatefulWidget {
@@ -81,23 +86,16 @@ class Data extends StatefulWidget {
 }
 
 class _DataState extends State<Data> {
-  String? meditationDay;
-  DateTime? meditationTime;
+  List<Widget> arr = [];
+  int i = 0;
 
   @override
   void initState() {
     super.initState();
     fetchPreferencesWidgets().then((widgets) {
       setState(() {
-        arr = getScreens();
+        arr = getScreens(context);
       });
-    });
-  }
-
-  void setMeditationTime(String day, DateTime time) {
-    setState(() {
-      meditationDay = day;
-      meditationTime = time;
     });
   }
 
@@ -145,6 +143,8 @@ class _DataState extends State<Data> {
                                     i = i + 1;
                                   });
                                 } else {
+                                  setNotification();
+
                                   sendPreferences();
                                   updateProfile();
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -189,7 +189,7 @@ class _DataState extends State<Data> {
                           'Tell us more about you! ',
                           style: TextStyle(fontSize: 24),
                         ),
-                        arr[i],
+                        arr.isNotEmpty ? arr[i] : Container(),
                       ],
                     ),
                   ),
@@ -203,14 +203,17 @@ class _DataState extends State<Data> {
   }
 }
 
-void updateProfile() async 
-{
+void setNotification() {
+  print(meditationDay);
+  print(meditationTime);
+}
+
+void updateProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   var request = http.MultipartRequest(
       'PATCH', Uri.parse('${constants.BaseURL}/api/auth/user/'));
-  if (imgPath != null)
-   {
+  if (imgPath != null) {
     request.files.add(await http.MultipartFile.fromPath('image', imgPath!));
   }
   request.headers['Authorization'] = 'Bearer $accessToken';
@@ -238,13 +241,5 @@ void sendPreferences() async {
   if (response.statusCode != 200) {
     print(response.statusCode);
     print('Failed to update preferences');
-  }
-}
-
-void setMeditaionTime(meditationDay, meditationTime) {
-  if (meditationDay != null && meditationTime != null) {
-    print('Meditation Day: $meditationDay, Time: $meditationTime');
-  } else {
-    print('Meditation time not set');
   }
 }
