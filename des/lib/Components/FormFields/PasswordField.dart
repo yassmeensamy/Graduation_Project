@@ -12,9 +12,9 @@ class PasswordField extends StatelessWidget {
       child: TextFormField(
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter a name';
-            } else if (value.length < 3) {
-              return 'Name must be at least 3 characters';
+              return 'Please enter a Password';
+            } else if (value.length < 8) {
+              return 'Password must be at least 8 characters';
             }
             return null;
           },
