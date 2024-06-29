@@ -518,18 +518,18 @@ class PlanToDoTasks extends StatelessWidget
                     return Container(color: Colors.black,);
                    }
                    return  
-                     BlocProvider.of<PlanTasksCubit >(context).planTasks!.plansToDo.length!=0 ?
+                     BlocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo.length!=0 ?
                       ListView.builder(
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: BlocProvider.of<PlanTasksCubit >(context).planTasks!.plansToDo.length, 
+                      itemCount: BlocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo.length, 
                       itemBuilder: (BuildContext context, int index)
                        {
                         
                         return BlocProvider<CheckboxCubit>(
                           create: (context) => CheckboxCubit(),
                           child: TODo(
-                              todo: BlocProvider.of<PlanTasksCubit >(context).planTasks!.plansToDo[index]),
+                              todo: BlocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo[index]),
                         );
                       },
                    

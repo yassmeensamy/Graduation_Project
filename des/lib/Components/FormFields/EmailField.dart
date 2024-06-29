@@ -14,7 +14,7 @@ class EmailField extends StatelessWidget {
             if (value == null || value.isEmpty) {
               return 'Please enter an email';
             } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                .hasMatch(value)) {
+                .hasMatch(value.trim())) {
               return 'Please enter a valid email';
             }
             return null;

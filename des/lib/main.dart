@@ -31,9 +31,6 @@ import 'cubit/cubit/slider_cubit.dart';
 import 'cubit/mood_card_cubit.dart';
 import 'screens/Onboarding.dart';
 
-
-
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //done
   await AwesomeNotifications()
@@ -58,17 +55,19 @@ Future<void> main() async {
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
-        BlocProvider(create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
+        BlocProvider(
+            create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
-         BlocProvider(create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
+        BlocProvider(
+            create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
         BlocProvider(
             create: (context) => HandleEmojyDailyCubit(
                   moodCubit: BlocProvider.of<SecondLayerCubit>(context),
                 )..loadData()),
-      BlocProvider(
-      create: (context) => DepressionCubit()..CheckDepression(), 
-      )
+        BlocProvider(
+          create: (context) => DepressionCubit()..CheckDepression(),
+        )
       ],
       child: const MainNavigator(),
     ),
@@ -81,6 +80,7 @@ class MainNavigator extends StatefulWidget {
   @override
   MainNavigatorState createState() => MainNavigatorState();
 }
+
 class MainNavigatorState extends State<MainNavigator> {
   String? accessToken;
   String? refreshToken;
@@ -94,11 +94,11 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
-    //logout(context);
+    // logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      accessToken = prefs.getString('accessToken');
       refreshToken = prefs.getString('refreshToken');
+      accessToken = prefs.getString('accessToken');
     });
     if (accessToken != null && refreshToken != null) {
       await fetchUserProfile();
@@ -159,41 +159,40 @@ class MainNavigatorState extends State<MainNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoggedInVerifiedAndProfileComplete())
-     {
+    if (_isLoggedInVerifiedAndProfileComplete()) {
       return _buildMaterialApp(const temp());
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
       return _buildMaterialApp(const Data());
     } else if (_isLoggedInAndNotVerified()) {
-      return _buildMaterialApp(const VerifyEmail());
+      return _buildMaterialApp(const Data());
     } else if (_isnotLoggedIn()) {
       return _buildMaterialApp(const OnBoarding());
     } else {
       return _buildMaterialApp(const Loader());
     }
   }
-Widget _buildMaterialApp(Widget homeWidget) {
-  return ChangeNotifierProvider.value(
-    value: userProvider, 
-    child: OKToast(
-      child: Builder(
-        builder: (context) {
-          context.watch<InsigthsCubit>().state; 
-          context.watch<WeeklyCubit>().state;   
-          return MaterialApp(
-            routes: 
-            {
-              '/home': (context) => temp(), 
-            },
-            debugShowCheckedModeBanner: false,
-            home: Scaffold(
-              backgroundColor: constants.pageColor, 
-              body: homeWidget,
-            ),
-          );
-        },
+
+  Widget _buildMaterialApp(Widget homeWidget) {
+    return ChangeNotifierProvider.value(
+      value: userProvider,
+      child: OKToast(
+        child: Builder(
+          builder: (context) {
+            context.watch<InsigthsCubit>().state;
+            context.watch<WeeklyCubit>().state;
+            return MaterialApp(
+              routes: {
+                '/home': (context) => temp(),
+              },
+              debugShowCheckedModeBanner: false,
+              home: Scaffold(
+                backgroundColor: constants.pageColor,
+                body: homeWidget,
+              ),
+            );
+          },
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

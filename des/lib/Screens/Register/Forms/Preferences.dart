@@ -1,27 +1,82 @@
 import 'package:flutter/material.dart';
 
-class PreferencesForm extends StatelessWidget {
+class PreferencesForm extends StatefulWidget {
   final String? question;
-  const PreferencesForm(this.question,{super.key});
+
+  const PreferencesForm(this.question, {Key? key}) : super(key: key);
+
+  @override
+  _PreferencesFormState createState() => _PreferencesFormState();
+}
+
+class _PreferencesFormState extends State<PreferencesForm> {
+  bool isYesSelected = false;
+  bool isNoSelected = false;
+
   @override
   Widget build(BuildContext context) {
-    return  Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(
-          height: 16,
+        SizedBox(height: 50),
+        Text(
+          widget.question!,
+          softWrap: true,
+          overflow: TextOverflow.visible,
         ),
+        SizedBox(height: 72),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-          Text(question!),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  isYesSelected = !isYesSelected;
+                  isNoSelected = false;
+                });
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                decoration: BoxDecoration(
+                  color: isYesSelected ? Colors.green.shade700 : Colors.green,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'Yes',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  isNoSelected = !isNoSelected;
+                  isYesSelected = false;
+                });
+              },
+              borderRadius: BorderRadius.circular(8),
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                decoration: BoxDecoration(
+                  color: isNoSelected ? Colors.red.shade700 : Colors.red,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  'No',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
           ],
-        ),
-        const SizedBox(
-          height: 16,
         ),
       ],
     );
   }
 }
-
-List preferencesWidgets = [const PreferencesForm('Do you like sports?'),const PreferencesForm('Are you in a good health state?')];
