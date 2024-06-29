@@ -1,8 +1,10 @@
 import 'dart:convert';
+
 import 'package:des/NotificationServices.dart';
 import 'package:des/Schedule.dart';
 import 'package:des/Screens/Register/Forms/MeditationForm.dart';
 import 'package:des/Screens/Register/Forms/Preferences.dart';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
@@ -14,13 +16,15 @@ import '../../constants.dart' as constants;
 import 'CustomizingLoader.dart';
 import 'Forms/DataForm.dart';
 import 'Forms/imageForm.dart';
+import 'Forms/MeditationForm.dart';
+import 'Forms/Preferences.dart';
 
-int i = 0;
-List<Widget> arr = getScreens();
 Map<String, String> body = {};
 String? imgPath;
 Map<String, String> preferencesAnswers = {};
 List<Widget> preferencesWidgets = [];
+String? meditationDay;
+DateTime? meditationTime;
 
 Future<List<Widget>> fetchPreferencesWidgets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -51,7 +55,8 @@ Future<List<Widget>> fetchPreferencesWidgets() async {
   return preferencesWidgets;
 }
 
-List<Widget> getScreens() {
+List<Widget> getScreens(BuildContext context)
+ {
   List<Widget> screens = [
     DataForm(
       onBirthdaySelected: (selectedBirthday) {
@@ -68,12 +73,18 @@ List<Widget> getScreens() {
     print(imagePath);
     imgPath = imagePath;
   }));
-  screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) 
-  {
-    setMeditaionTime(weekday, time);
+
+  screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) {
+    setMeditationTime(weekday, time);
+
   }));
 
   return screens;
+}
+
+void setMeditationTime(String weekday, DateTime time) {
+  meditationDay = weekday;
+  meditationTime = time;
 }
 
 class Data extends StatefulWidget {
@@ -84,23 +95,16 @@ class Data extends StatefulWidget {
 }
 
 class _DataState extends State<Data> {
-  String? meditationDay;
-  DateTime? meditationTime;
+  List<Widget> arr = [];
+  int i = 0;
 
   @override
   void initState() {
     super.initState();
     fetchPreferencesWidgets().then((widgets) {
       setState(() {
-        arr = getScreens();
+        arr = getScreens(context);
       });
-    });
-  }
-
-  void setMeditationTime(String day, DateTime time) {
-    setState(() {
-      meditationDay = day;
-      meditationTime = time;
     });
   }
 
@@ -148,6 +152,8 @@ class _DataState extends State<Data> {
                                     i = i + 1;
                                   });
                                 } else {
+                                 scheduleMeditationReminders();;
+
                                   sendPreferences();
                                   updateProfile();
                                   Navigator.of(context).push(MaterialPageRoute(
@@ -192,7 +198,7 @@ class _DataState extends State<Data> {
                           'Tell us more about you! ',
                           style: TextStyle(fontSize: 24),
                         ),
-                        arr[i],
+                        arr.isNotEmpty ? arr[i] : Container(),
                       ],
                     ),
                   ),
@@ -205,6 +211,9 @@ class _DataState extends State<Data> {
     );
   }
 }
+
+
+
 
 void updateProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -243,7 +252,9 @@ void sendPreferences() async {
 }
 
 
-void scheduleMeditationReminders( DateTime meditationTime, String meditationDay) {
+
+void scheduleMeditationReminders() 
+{
   Map<String, int> dayMapping = {
     "Sunday": 0,
     "Monday": 1,
@@ -271,8 +282,8 @@ void scheduleMeditationReminders( DateTime meditationTime, String meditationDay)
     if (_selectedDays[i]) {
       int dayDifference = (i - now.weekday + 7) % 7;
       if (dayDifference == 0 &&
-          now.hour >= meditationTime.hour &&
-          now.minute >= meditationTime.minute) 
+          now.hour >= meditationTime!.hour &&
+          now.minute >= meditationTime!.minute) 
           {
                 dayDifference += 7;
            }
@@ -281,8 +292,8 @@ void scheduleMeditationReminders( DateTime meditationTime, String meditationDay)
         now.year,
         now.month,
         now.day,
-        meditationTime.hour,
-        meditationTime.minute,
+        meditationTime!.hour,
+        meditationTime!.minute,
       ).add(Duration(days: dayDifference));
 
       NotificationServices.scheduleNotification(
@@ -296,8 +307,8 @@ void scheduleMeditationReminders( DateTime meditationTime, String meditationDay)
 }
 
 
-void setMeditaionTime(meditationDay, meditationTime) {
-  scheduleMeditationReminders(meditationTime,meditationDay);
+void setMeditaionTime(meditationDay, meditationTime) 
+{
   print(meditationTime.hour);
   print(meditationTime.minute);
   if (meditationDay != null && meditationTime != null) {
