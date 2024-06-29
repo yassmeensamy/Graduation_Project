@@ -24,7 +24,7 @@ class ReportScreen extends StatelessWidget
            /*
            awaitt  ممكن وممكن 
            */
-           await  BlocProvider.of<InsigthsCubit>(context).ResetInsigth();
+           //await  BlocProvider.of<InsigthsCubit>(context).ResetInsigth();
            BlocProvider.of<HandleEmojyDailyCubit>(context).FinishEntry(dailyreport,context);
            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
            return true;

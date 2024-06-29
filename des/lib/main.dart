@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
+import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
@@ -93,6 +94,7 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   _getTokens() async {
+    //logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       accessToken = prefs.getString('accessToken');
