@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:des/Screens/Register/Forms/MeditationForm.dart';
 import 'package:des/Screens/Register/Forms/Preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -65,6 +66,9 @@ List<Widget> getScreens() {
     print(imagePath);
     imgPath = imagePath;
   }));
+  screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) {
+    setMeditaionTime(weekday, time);
+  }));
 
   return screens;
 }
@@ -77,6 +81,9 @@ class Data extends StatefulWidget {
 }
 
 class _DataState extends State<Data> {
+  String? meditationDay;
+  DateTime? meditationTime;
+
   @override
   void initState() {
     super.initState();
@@ -84,6 +91,13 @@ class _DataState extends State<Data> {
       setState(() {
         arr = getScreens();
       });
+    });
+  }
+
+  void setMeditationTime(String day, DateTime time) {
+    setState(() {
+      meditationDay = day;
+      meditationTime = time;
     });
   }
 
@@ -222,5 +236,13 @@ void sendPreferences() async {
   if (response.statusCode != 200) {
     print(response.statusCode);
     print('Failed to update preferences');
+  }
+}
+
+void setMeditaionTime(meditationDay, meditationTime) {
+  if (meditationDay != null && meditationTime != null) {
+    print('Meditation Day: $meditationDay, Time: $meditationTime');
+  } else {
+    print('Meditation time not set');
   }
 }
