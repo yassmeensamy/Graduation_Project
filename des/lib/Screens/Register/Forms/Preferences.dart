@@ -2,16 +2,24 @@ import 'package:flutter/material.dart';
 
 class PreferencesForm extends StatefulWidget {
   final String? question;
+  final String? tag;
+  final Function(String, bool) onAnswerSelected;
 
-  const PreferencesForm(this.question, {Key? key}) : super(key: key);
+  const PreferencesForm(this.question,this.tag, {required this.onAnswerSelected, Key? key}) : super(key: key);
 
   @override
   _PreferencesFormState createState() => _PreferencesFormState();
 }
 
 class _PreferencesFormState extends State<PreferencesForm> {
-  bool isYesSelected = false;
-  bool isNoSelected = false;
+  bool? isYesSelected;
+
+  void selectAnswer(bool answer) {
+    setState(() {
+      isYesSelected = answer;
+    });
+    widget.onAnswerSelected(widget.tag!, answer);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,17 +37,12 @@ class _PreferencesFormState extends State<PreferencesForm> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             InkWell(
-              onTap: () {
-                setState(() {
-                  isYesSelected = !isYesSelected;
-                  isNoSelected = false;
-                });
-              },
+              onTap: () => selectAnswer(true),
               borderRadius: BorderRadius.circular(8),
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: BoxDecoration(
-                  color: isYesSelected ? Colors.green.shade700 : Colors.green,
+                  color: isYesSelected == true ? Colors.green.shade700 : Colors.green,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(
@@ -52,17 +55,12 @@ class _PreferencesFormState extends State<PreferencesForm> {
               ),
             ),
             InkWell(
-              onTap: () {
-                setState(() {
-                  isNoSelected = !isNoSelected;
-                  isYesSelected = false;
-                });
-              },
+              onTap: () => selectAnswer(false),
               borderRadius: BorderRadius.circular(8),
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                 decoration: BoxDecoration(
-                  color: isNoSelected ? Colors.red.shade700 : Colors.red,
+                  color: isYesSelected == false ? Colors.red.shade700 : Colors.red,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

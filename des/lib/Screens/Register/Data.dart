@@ -16,28 +16,35 @@ int i = 0;
 List<Widget> arr = getScreens();
 Map<String, String> body = {};
 String? imgPath;
-
+Map<String, String> preferencesAnswers = {};
 List<Widget> preferencesWidgets = [];
 
 Future<List<Widget>> fetchPreferencesWidgets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
-  var response = await http.get(Uri.parse('${constants.BaseURL}/api/preference-questions/'),
-  headers: {
-    'Authorization' :"Bearer $accessToken"
-  });
-  
+  var response = await http.get(
+    Uri.parse('${constants.BaseURL}/api/preference-questions/'),
+    headers: {'Authorization': "Bearer $accessToken"},
+  );
+
   if (response.statusCode == 200) {
-    List<dynamic> preferencesData = json.decode(response.body).map((question) => question["question_text"].toString())
-        .toList();
+    List<dynamic> preferencesData = json.decode(response.body);
     preferencesWidgets = preferencesData.map((data) {
-      return PreferencesForm(data);
+      Key formKey = Key(data["question_text"]);
+      return PreferencesForm(
+        data["question_text"],
+        data['tag']['name'],
+        key: formKey,
+        onAnswerSelected: (question, answer) {
+          preferencesAnswers[question] = answer ? 'yes' : 'no';
+        },
+      );
     }).toList();
   } else {
     print(response.statusCode);
-     print('Failed to load preferences');
+    print('Failed to load preferences');
   }
-  
+
   return preferencesWidgets;
 }
 
@@ -119,11 +126,12 @@ class _DataState extends State<Data> {
                                 const EdgeInsets.only(top: 100.0, left: 120),
                             child: GestureDetector(
                               onTap: () {
-                                if (i != 1 + preferencesWidgets.length) {
+                                if (i < arr.length - 1) {
                                   setState(() {
                                     i = i + 1;
                                   });
                                 } else {
+                                  sendPreferences();
                                   updateProfile();
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) =>
@@ -192,4 +200,27 @@ void updateProfile() async {
   request.headers['Authorization'] = 'Bearer $accessToken';
   request.fields.addAll(body);
   await request.send();
+}
+
+void sendPreferences() async {
+  List<Map<String, String>> answers = preferencesAnswers.entries.map((entry) {
+    return {"tag": entry.key, "answer": entry.value};
+  }).toList();
+
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? accessToken = prefs.getString('accessToken');
+
+  var response = await http.post(
+    Uri.parse('${constants.BaseURL}/api/preference-questions/answer/'),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+      'Content-Type': 'application/json',
+    },
+    body: json.encode({"answers": answers}),
+  );
+
+  if (response.statusCode != 200) {
+    print(response.statusCode);
+    print('Failed to update preferences');
+  }
 }
