@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:des/NotificationServices.dart';
+import 'package:des/Schedule.dart';
 import 'package:des/Screens/Register/Forms/MeditationForm.dart';
 import 'package:des/Screens/Register/Forms/Preferences.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +68,8 @@ List<Widget> getScreens() {
     print(imagePath);
     imgPath = imagePath;
   }));
-  screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) {
+  screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) 
+  {
     setMeditaionTime(weekday, time);
   }));
 
@@ -203,14 +206,12 @@ class _DataState extends State<Data> {
   }
 }
 
-void updateProfile() async 
-{
+void updateProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
   var request = http.MultipartRequest(
       'PATCH', Uri.parse('${constants.BaseURL}/api/auth/user/'));
-  if (imgPath != null)
-   {
+  if (imgPath != null) {
     request.files.add(await http.MultipartFile.fromPath('image', imgPath!));
   }
   request.headers['Authorization'] = 'Bearer $accessToken';
@@ -241,10 +242,68 @@ void sendPreferences() async {
   }
 }
 
+
+void scheduleMeditationReminders( DateTime meditationTime, String meditationDay) {
+  Map<String, int> dayMapping = {
+    "Sunday": 0,
+    "Monday": 1,
+    "Tuesday": 2,
+    "Wednesday": 3,
+    "Thursday": 4,
+    "Friday": 5,
+    "Saturday": 6
+  };
+
+  List<bool> _selectedDays = List.generate(7, (index) => false);
+  if (dayMapping.containsKey(meditationDay)) 
+  {
+    _selectedDays[dayMapping[meditationDay]!] = true;
+  } 
+  else {
+    print("Invalid day: $meditationDay");
+    return;
+  }
+
+  DateTime now = DateTime.now();
+
+  for (int i = 0; i < _selectedDays.length; i++) 
+  {
+    if (_selectedDays[i]) {
+      int dayDifference = (i - now.weekday + 7) % 7;
+      if (dayDifference == 0 &&
+          now.hour >= meditationTime.hour &&
+          now.minute >= meditationTime.minute) 
+          {
+                dayDifference += 7;
+           }
+
+      DateTime scheduledTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        meditationTime.hour,
+        meditationTime.minute,
+      ).add(Duration(days: dayDifference));
+
+      NotificationServices.scheduleNotification(
+        Schedule(
+          details: "Meditation Reminder",
+          time: scheduledTime,
+        ),
+      );
+    }
+  }
+}
+
+
 void setMeditaionTime(meditationDay, meditationTime) {
+  scheduleMeditationReminders(meditationTime,meditationDay);
+  print(meditationTime.hour);
+  print(meditationTime.minute);
   if (meditationDay != null && meditationTime != null) {
     print('Meditation Day: $meditationDay, Time: $meditationTime');
   } else {
     print('Meditation time not set');
   }
+
 }

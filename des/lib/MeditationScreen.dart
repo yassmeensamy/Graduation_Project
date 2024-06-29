@@ -52,6 +52,7 @@ class _MeditationReminderState extends State<MeditationReminder> {
         ElevatedButton(
           onPressed: () {
             scheduleMeditationReminders();
+          
              //NotificationServices.cancelAllNotifications();
           },
           child: Text('Schedule Reminder'),
