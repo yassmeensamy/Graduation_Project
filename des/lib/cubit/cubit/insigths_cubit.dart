@@ -8,23 +8,21 @@ import 'package:des/Models/WeeklyModel.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http; // Use http from package:http/http.dart
-import 'package:shared_preferences/shared_preferences.dart';
 import '/constants.dart' as constants;
 import '../../Models/TestResultModel.dart';
-
 part 'insigths_state.dart';
 
+
+
+
 class InsigthsCubit extends Cubit<InsigthsState> {
+
   WeeklyHistoryModel? weeklyHistoy = null;
   List<MoodModel> MoodHistory = [];
   List<ActivityModel> AcivityMonthHistory = [];
   List<ActivityModel> AcivityYearHistory = [];
   List<TestResultModel> DepressionHistoy = [];
   InsigthsCubit() : super(InsightLoading()) ;
-
-
-
 
   String extractDayAndMonth(String timestampString) 
   {
@@ -33,7 +31,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
     String day = timestamp.day.toString();
     return "$day $monthName";
   }
-
   Future<List<MoodModel>> fetchMoodHistory() async {
    try{
       Response response = await Api().get(url: "${constants.BaseURL}/api/emotion-count/");
@@ -49,7 +46,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
   }
-
   Future<List<ActivityModel>> fetchActivitiesYearHistory() async {
   
     try {
@@ -66,7 +62,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
   }
-
   Future<List<ActivityModel>> fetchActivitiesMonthHistory() async {
     try {
        Response response =await Api().get(url: "${constants.BaseURL}/api/activity-count-this-month/");
@@ -83,7 +78,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
   }
- 
   Future<List<TestResultModel>> fetchDepressionTestHistory() async {
     try {
         Response response = await Api() .get(url: "${constants.BaseURL}/api/test-history/");
@@ -104,7 +98,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       throw Exception('Failed to fetch data: ${e.toString()}');
     }
   }
-
   Future<WeeklyHistoryModel> fetchWeeklyHistory() async {
     //emit(HomeLoading() as InsigthsState);
 
@@ -152,7 +145,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       emit(InsightError('Failed to fetch data: ${e.toString()}'));
     }
   }
-
   List<WeelklyModel> SearchAboutCategoty(String Category) {
     if (weeklyHistoy!.history.containsKey(Category)) {
       List<WeelklyModel> results = weeklyHistoy!.history[Category]!;
@@ -161,11 +153,14 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       return [];
     }
   }
-
   Future<void> ResetInsigth() async
   {
          fetchActivitiesMonthHistory();
          fetchActivitiesYearHistory();
          fetchMoodHistory();
   }
+
 }
+
+
+

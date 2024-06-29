@@ -2,12 +2,13 @@
 import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
-import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import '../../../../constants.dart' as constants;
+
+
 
 class ReportScreen extends StatelessWidget 
 {
@@ -26,7 +27,7 @@ class ReportScreen extends StatelessWidget
            */
            //await  BlocProvider.of<InsigthsCubit>(context).ResetInsigth();
            BlocProvider.of<HandleEmojyDailyCubit>(context).FinishEntry(dailyreport,context);
-           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+           Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => true);
            return true;
      },
 
@@ -156,7 +157,6 @@ class ReportScreen extends StatelessWidget
     );
   }
 }
-
 class DescriptionTextWidget extends StatefulWidget {
   final String text;
 
@@ -165,7 +165,6 @@ class DescriptionTextWidget extends StatefulWidget {
   @override
   _DescriptionTextWidgetState createState() => new _DescriptionTextWidgetState();
 }
-
 class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
   late String firstHalf;
   late String secondHalf;
