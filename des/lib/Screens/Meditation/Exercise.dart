@@ -71,6 +71,7 @@ class ExerciseScreen extends StatelessWidget {
                     topText:
                         'Before the session, On a scale of 0 to 100, how would you rate how you are feeling each of these emotions:',
                     buttonText: 'Continue',
+                    tip: '',
                   ),
                 ),
               );

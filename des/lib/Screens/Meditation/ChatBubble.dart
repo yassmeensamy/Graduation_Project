@@ -32,8 +32,8 @@ class ChatBubble extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(right: 7, top: 5),
                   child: const CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://d112y698adiu2z.cloudfront.net/photos/production/software_thumbnail_photos/002/346/888/datas/medium.png'),
+                    backgroundImage: AssetImage(
+                        'assets/images/logo.png'),
                     radius: 15.0,
                   ),
                 ),
