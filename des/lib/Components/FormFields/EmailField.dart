@@ -3,13 +3,15 @@ import '../../constants.dart' as constants;
 
 class EmailField extends StatelessWidget {
   final TextEditingController controller;
-  const EmailField(this.controller, {super.key});
+  bool enabled = true;
+  EmailField(this.controller, {this.enabled = true, super.key});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 80,
       child: TextFormField(
+          enabled: enabled,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter an email';

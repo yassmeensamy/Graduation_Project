@@ -21,6 +21,7 @@ String capitalize(String s) {
 String capitalizeEachWord(String s) {
   return s.split(' ').map(capitalize).join(' ');
 }
+
 class Profile extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
@@ -75,73 +76,71 @@ class _ProfileState extends State<Profile> {
           ),
         ],
       ),
-      body: Center(
-        child: _isLoading
-            ? Loader()
-            : Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      body: _isLoading
+          ? Center(child: Loader())
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: 40),
+                    SizedBox(height: 30),
                     CircleAvatar(
-                      radius: 50,
+                      radius: 80,
                       backgroundImage: getProfilePhoto(context),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 20),
                     Text(
-                      capitalizeEachWord(
-                          '${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}'),
+                      '${currentUser?.firstName ?? ''} ${currentUser?.lastName ?? ''}',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 10),
                     Text(
                       '${currentUser?.email}',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Gender: ${currentUser?.gender  == 'M'? 'Male' : 'Female'}',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                    SizedBox(height: 20),
+                    Divider(),
+                    SizedBox(height: 10),
+                    ListTile(
+                      leading: Icon(Icons.person_outline),
+                      title: Text('Gender'),
+                      subtitle: Text('${currentUser?.gender == 'M' ? 'Male' : 'Female'}'),
                     ),
-                    SizedBox(height: 8),
-                    Text(
-                      'Birthdate: ${currentUser?.dob ?? 'Not specified'}',
-                      style: TextStyle(
-                        fontSize: 16,
-                      ),
+                    ListTile(
+                      leading: Icon(Icons.cake_outlined),
+                      title: Text('Birthdate'),
+                      subtitle: Text('${currentUser?.dob ?? 'Not specified'}'),
                     ),
-                    Spacer(),
+                    SizedBox(height: 220),
                     ElevatedButton(
                       onPressed: () {
                         // Handle change password
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blue,
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        primary: Colors.blue,
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                          borderRadius: BorderRadius.circular(24),
                         ),
                       ),
+                      
                       child: Text(
                         'Change Password',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(fontSize: 18),
                       ),
                     ),
-                    SizedBox(height: 40),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
-      ),
+            ),
     );
   }
 
@@ -155,8 +154,7 @@ class _ProfileState extends State<Profile> {
     );
     Map userData = jsonDecode(response.body);
 
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     User? user = userProvider.user;
 
     user!.firstName = userData['first_name'];
