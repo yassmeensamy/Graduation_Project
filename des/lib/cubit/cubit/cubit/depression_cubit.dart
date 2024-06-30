@@ -9,10 +9,8 @@ part 'depression_state.dart';
 
 class DepressionCubit extends Cubit<DepressionState> 
 {
-  late bool checkDepression;
-
-
-  DepressionCubit() : super(DepressionInitial());
+   bool checkDepression=false;
+   DepressionCubit() : super(DepressionInitial());
   Future<void> CheckDepression() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
@@ -28,8 +26,7 @@ class DepressionCubit extends Cubit<DepressionState>
       {
         dynamic data = jsonDecode(response.body);
         checkDepression= data["depression_streak"]; 
-        print("enter el check");
-      
+        print(checkDepression);
       } 
     
     } 

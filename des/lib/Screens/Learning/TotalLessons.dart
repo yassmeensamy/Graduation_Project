@@ -232,7 +232,7 @@ class SubLessonContainer extends StatelessWidget
                                                       color:Color(0xff6495ED).withOpacity(.3)
                                                                         ),
                                                    child: Center(
-                                                        child:Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]? Icon(Icons.playlist_play_outlined) : Icon(Icons.key_off),
+                                                        child:Total[subtopics!.subtopics![index].id]![ind].userProgress["read"]? Icon(Icons.play_arrow) : Icon(Icons.lock),
                                                             ),
                                                           ),
                                                           SizedBox(width: 5,),

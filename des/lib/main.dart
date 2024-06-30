@@ -45,6 +45,7 @@ Future<void> main() async {
     },
   );
   await NotificationServices.initializeNotification();
+  await NotificationServices().setupNotifications();
   runApp(
     MultiBlocProvider(
       providers: 
@@ -88,7 +89,6 @@ class MainNavigatorState extends State<MainNavigator> {
     super.initState();
     _getTokens();
   }
-
   _getTokens() async {
     //logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -100,7 +100,6 @@ class MainNavigatorState extends State<MainNavigator> {
       await fetchUserProfile();
     }
   }
-
   getProfile() async {
     Response response = await get(
         Uri.parse('${constants.BaseURL}/api/auth/user/'),

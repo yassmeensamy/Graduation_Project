@@ -26,7 +26,7 @@ Map<String, String> preferencesAnswers = {};
 List<Widget> preferencesWidgets = [];
 String? meditationDay;
 DateTime? meditationTime;
-
+int Notification_id=0;
 Future<List<Widget>> fetchPreferencesWidgets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
@@ -155,7 +155,8 @@ class _DataState extends State<Data> {
                                     i = i + 1;
                                   });
                                 } else {
-                                 scheduleMeditationReminders();;
+                                  String NotificationType="Meditation Reminder";
+                                 scheduleMeditationReminders(NotificationType);;
 
                                   sendPreferences();
                                   updateProfile();
@@ -256,8 +257,8 @@ void sendPreferences() async {
 
 
 
-void scheduleMeditationReminders() 
-{
+Future<void> scheduleMeditationReminders(String NotificationType) 
+async {
   Map<String, int> dayMapping = {
     "Sunday": 0,
     "Monday": 1,
@@ -299,12 +300,15 @@ void scheduleMeditationReminders()
         meditationTime!.minute,
       ).add(Duration(days: dayDifference));
 
-      NotificationServices.scheduleNotification(
-        Schedule(
-          details: "Meditation Reminder",
+     Notification_id= await NotificationServices.scheduleNotification( 
+      Schedule( 
+         details: NotificationType,
           time: scheduledTime,
         ),
-      );
+      ) as int;
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(NotificationType, Notification_id);
+       print('Notification ID saved: $Notification_id');
     }
   }
 }

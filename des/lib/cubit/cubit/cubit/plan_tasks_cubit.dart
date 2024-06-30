@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
 import 'package:des/Models/PlanTodoModel.dart';
+import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,9 +13,12 @@ part 'plan_tasks_state.dart';
 
 class PlanTasksCubit extends Cubit<PlanTasksState> 
 {
+
   late  PlanTodoModel planTasks;
+  List<TopicModel> plan=[];
   PlanTasksCubit() : super(PlanTasksloading());
-  
+
+ 
 Future<void>FetchPlanToDoList() async
 {
  emit(PlanTasksloading());
@@ -25,7 +29,8 @@ Future<void>FetchPlanToDoList() async
     {
       dynamic responseData = jsonDecode(response.body);
       planTasks=PlanTodoModel.fromJson(responseData);
-                emit(PlanTasksloaded());
+      plan=planTasks.plansToDo;
+           emit(PlanTasksloaded());
     }
  } 
  catch(e)

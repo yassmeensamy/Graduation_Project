@@ -9,7 +9,8 @@ class temp extends StatelessWidget {
   const temp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         return Scaffold(

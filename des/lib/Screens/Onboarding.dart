@@ -3,7 +3,6 @@ import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import '../constants.dart' as constants;
 import 'Login.dart';
 
-
 class OnBoarding extends StatelessWidget {
   const OnBoarding({super.key});
 
@@ -47,12 +46,11 @@ class OnBoarding extends StatelessWidget {
       headerBackgroundColor: constants.pageColor,
       finishButtonText: 'Get Started',
       finishButtonStyle: const FinishButtonStyle(
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(50.0))),
-        backgroundColor: constants.babyBlue,
-        foregroundColor: Colors.white,
-        highlightElevation: 0
-      ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(50.0))),
+          backgroundColor: constants.babyBlue,
+          foregroundColor: Colors.white,
+          highlightElevation: 0),
       onFinish: () {
         finishOnboarding(context);
       },
@@ -86,4 +84,3 @@ class OnBoarding extends StatelessWidget {
     );
   }
 }
-

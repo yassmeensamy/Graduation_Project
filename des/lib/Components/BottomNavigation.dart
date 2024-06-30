@@ -26,7 +26,8 @@ class BottomNavigator extends StatelessWidget {
                 selectedItemColor: const Color(0xff6495ED),
                 unselectedItemColor: const Color(0xff1E1E1E).withOpacity(.7),
                 currentIndex: BlocProvider.of<HomeCubit>(context).currentIndex,
-                onTap: (value) {
+                onTap: (value) 
+                {
                   BlocProvider.of<HomeCubit>(context).changeIndex(value);
                 },
                 //onItemTapped,
