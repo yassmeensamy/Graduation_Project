@@ -4,11 +4,20 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Schedule.dart';
 import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:flutter/material.dart';
+
+
+Future<void> onActionReceivedMethod(ReceivedAction action) async
+ {
+   
+  print('Notification action received: ${action.id}');
+ }
+
 class NotificationServices 
 {
+
   static Future<void> initializeNotification() async {
     await AwesomeNotifications().initialize(
-      null,   // و هتبقي ايكون فلاتر
+      null,   
       [
         NotificationChannel(
           channelKey: 'flutter_schedule_app_channel',
@@ -26,28 +35,36 @@ class NotificationServices
       ],
     );
   }
-   static void cancelAllNotifications() {
-  AwesomeNotifications().cancelAll();
-
-}
-
-  static void setupNotifications() {
+   static void cancelAllNotifications() 
+   {
+         AwesomeNotifications().cancelAll();
+   }
+  void cancelNotificationById(int notificationId) 
+  {
+    AwesomeNotifications().cancel(notificationId);
+  }
+    Future<void> setupNotifications() async {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AwesomeNotifications().setListeners(
-        onActionReceivedMethod: (ReceivedAction action) async {
-          // Ensure that navigatorKey is initialized and context is available
-         (
-            MaterialPageRoute(builder: (context) => WeeklySurvey()),
-          );
-        },
+       onActionReceivedMethod: onActionReceivedMethod,
+      
+        
+       
+        onDismissActionReceivedMethod: (ReceivedAction receivedAction) async 
+        {
+            print("Notification dismissed");
+          }
       );
     });
   }
-  static Future<void> scheduleNotification(Schedule schedule,) async {
+
+  static Future<int> scheduleNotification(Schedule schedule,) async 
+  {
     Random random = Random();
+    int Notification_id= random.nextInt(1000000) + 1;
     await AwesomeNotifications().createNotification(
       content: NotificationContent(
-        id: random.nextInt(1000000) + 1,
+        id:Notification_id,
         channelKey: 'flutter_schedule_app_channel',
         title: "Reminder",
         body: schedule.details,
@@ -76,7 +93,9 @@ class NotificationServices
           label: "Close Reminder",
           autoDismissible: true,
         ),
-      ],
+     
+      ], 
     );
+    return Notification_id;
   }
 }

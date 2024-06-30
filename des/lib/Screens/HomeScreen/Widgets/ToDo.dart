@@ -5,51 +5,23 @@ import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
 import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-/*
-class TODo extends StatelessWidget {
-  final WeeklyToDoPlan todo;
-  TODo({required this.todo});
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(
-        todo.activityName,
-        style: TextStyle(fontSize: 20),
-      ),
-      subtitle: Text(todo.activityDescription),
-      trailing: BlocBuilder<CheckboxCubit, bool>(
-        builder: (context, isChecked) {
-          return Checkbox(
-            value: isChecked,
-            onChanged: (newValue) {
-              print(newValue);
-              context.read<CheckboxCubit>().toggleCheckbox(newValue!);
-              BlocProvider.of<WeeklyTasksCubit>(context).RemoveFromToDoList(todo.id);
-              context.read<CheckboxCubit>().toggleCheckbox(!newValue);
-            },
-          );
-        },
-      ),
-    );
-  }
-}
-*/
-//blocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo[index].name
-class TODo extends StatelessWidget {
+class TODo extends StatelessWidget 
+{
    dynamic todo;
   TODo({required this.todo});
 
   @override
   Widget build(BuildContext context) 
   {
+    context.read<CheckboxCubit>().toggleCheckbox(false);
     return 
     ListTile(
       title: Text(
-              todo is  WeeklyToDoPlan? todo.activityName : todo.Activities[0].content,
+              todo is  WeeklyToDoPlan? todo.activityName : todo.Activities[0].content.substring(0, todo.Activities[0].content.indexOf(':')).trim(),
                style: TextStyle(fontSize: 20),
         ),
-      subtitle: todo is  WeeklyToDoPlan? Text(todo.activityDescription): Text(todo.name),
+      subtitle: todo is  WeeklyToDoPlan? Text(todo.activityDescription): Text(todo.Activities[0].content.substring( todo.Activities[0].content.indexOf(':')+1).trim()+"(${todo.name})"),
       trailing: BlocBuilder<CheckboxCubit, bool>(
         builder: (context, isChecked) {
           return Checkbox(
@@ -58,6 +30,7 @@ class TODo extends StatelessWidget {
             {
               
               context.read<CheckboxCubit>().toggleCheckbox(newValue!);
+              //context.read<CheckboxCubit>().toggleCheckbox(!newValue);
               if(todo is TopicModel)
               {
                
@@ -67,7 +40,7 @@ class TODo extends StatelessWidget {
               {
               BlocProvider.of<WeeklyTasksCubit>(context).RemoveFromToDoList(todo.id);
               }
-              context.read<CheckboxCubit>().toggleCheckbox(!newValue);
+              
             },
           );
         },

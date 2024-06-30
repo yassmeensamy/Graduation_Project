@@ -8,7 +8,8 @@ class Tokens {
   Tokens(this.accessToken, this.refreshToken);
 }
 
-Tokens parseTokens(String responseBody) {
+Tokens parseTokens(String responseBody) 
+{
   final Map<String, dynamic> parsed = jsonDecode(responseBody);
   final String accessToken = parsed['access'];
   final String refreshToken = parsed['refresh'];
@@ -17,7 +18,8 @@ Tokens parseTokens(String responseBody) {
   return Tokens(accessToken, refreshToken);
 }
 
-void saveTokensToSharedPreferences(Tokens tokens) async {
+void saveTokensToSharedPreferences(Tokens tokens) async
+ {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setString('accessToken', tokens.accessToken);
   await prefs.setString('refreshToken', tokens.refreshToken);

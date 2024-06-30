@@ -14,6 +14,12 @@ class WeeklyCubit extends Cubit<WeeklyState>
     List<WeelklyModel>Aspects=[];
     List<Map<String,int>>Rating=[];
   WeeklyCubit() : super(WeeklyInitial());
+
+  void IntilizeRatingList()
+  {
+    Rating = List.generate(
+        Aspects.length, (index) => {'aspect_type_id': index + 1, 'value': 0});
+  }
  void UpdateAspects(int id, int value)
  {
   int existingIndex = Rating.indexWhere((map) => map['aspect_type_id'] == id);
@@ -30,7 +36,8 @@ class WeeklyCubit extends Cubit<WeeklyState>
       Response response = await Api().get( url: "${constants.BaseURL}/api/life-aspect-types/");
       List<dynamic> responseData = jsonDecode(response.body);
       Aspects= responseData.map((json) =>WeelklyModel.fromJson(json)).toList();
-       Rating = List.generate(Aspects.length, (index) => {'aspect_type_id': index+1, 'value': 0} );
+     
+       IntilizeRatingList();
   }
 
     Future<void> CreateRecord() async
@@ -38,6 +45,7 @@ class WeeklyCubit extends Cubit<WeeklyState>
     var data = {"scores": Rating};
     var jsonData = jsonEncode(data);
     Response response = await Api().post(url: "${constants.BaseURL}/api/life-record/",body: jsonData,);
+    IntilizeRatingList();
     }
   }
 

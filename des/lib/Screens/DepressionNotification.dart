@@ -32,7 +32,7 @@ class CustomAlertDialog {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(16.0),
+          padding: EdgeInsets.only(left:10 ,top:5,bottom: 5,right: 8),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,

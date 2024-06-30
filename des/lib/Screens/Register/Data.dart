@@ -40,12 +40,10 @@ class _DataState extends State<Data> {
     return WillPopScope(
       onWillPop: () async {
         if (currentIndex > 0) {
-          if(currentIndex == 1)
-          {
+          if (currentIndex == 1) {
             body = {};
           }
-          if(preferencesAnswers.length > 1 && preferencesAnswers.length < 6)
-          {
+          if (preferencesAnswers.length > 1 && preferencesAnswers.length < 6) {
             preferencesAnswers.remove(preferencesAnswers.keys.last);
           }
           setState(() {
@@ -54,7 +52,7 @@ class _DataState extends State<Data> {
           });
           return false;
         }
-        return true; 
+        return true;
       },
       child: Scaffold(
         body: SingleChildScrollView(
@@ -131,7 +129,7 @@ class _DataState extends State<Data> {
 
   void onNext() {
     print(preferencesAnswers.length);
-          print(currentIndex);
+    print(currentIndex);
     setState(() {
       errorMessage = '';
       if (currentIndex < screens.length - 1) {

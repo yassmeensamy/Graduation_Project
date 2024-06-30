@@ -71,6 +71,7 @@ class WeeklySurvey extends StatelessWidget {
                 // Move the NextButton here
                 NextButton(
                   ontap: () async {
+                   
                     await  context.read<WeeklyCubit>().CreateRecord();
                     await  BlocProvider.of<InsigthsCubit>(context).fetchWeeklyHistory();
                     await    BlocProvider.of<WeeklyTasksCubit>(context).GetWeeklyToDo();

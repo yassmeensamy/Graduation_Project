@@ -21,16 +21,19 @@ Future<int> callLoginApi(
       Tokens tokens = parseTokens(response.body);
       saveTokensToSharedPreferences(tokens);
       successToast('Logged In Successfully');
-      Timer(const Duration(seconds: 2), () {
+      Timer(const Duration(seconds: 2), () 
+      {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => MainNavigator()),
           (Route<dynamic> route) => false,
         );
       });
-    } else if (response.statusCode == 401) {
+    } else if (response.statusCode == 401)
+    {
       errorToast('Invalid Credentials');
-    } else {
+    } 
+    else {
       errorToast('Something went wrong. Please try again later');
     }
   } catch (e) {
@@ -135,6 +138,7 @@ logout(BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove('accessToken');
   await prefs.remove('refreshToken');
+  await prefs.remove('NewUser');
   googleLogout();
   Navigator.pushAndRemoveUntil(
           context,
