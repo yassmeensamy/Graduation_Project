@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../constants.dart' as constants;
+import '../../cubit/cubit/home_cubit.dart';
 
 class MoodImprovementScreen extends StatelessWidget {
   final double moodImprovementPercentage;
@@ -26,13 +28,28 @@ class MoodImprovementScreen extends StatelessWidget {
                   ),
                   Flexible(
                     child: Text("Your Mood Improvement",
-                    softWrap: true,
-                    overflow: TextOverflow.visible,
+                        softWrap: true,
+                        overflow: TextOverflow.visible,
                         style: TextStyle(
                             fontFamily: GoogleFonts.comfortaa().fontFamily,
                             fontSize: 32,
                             fontWeight: FontWeight.bold)),
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      BlocProvider.of<HomeCubit>(context).changeIndex(2);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/home', (route) => false);
+                    },
+                    child: Icon(
+                      Icons.close,
+                      size: 24.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 15,
+                  )
                 ],
               ),
             ),
@@ -46,15 +63,15 @@ class MoodImprovementScreen extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [Color(0xFF6495ED), Color(0xFFB57EDC)],
-                  ), 
+                  ),
                 ),
                 child: Container(
-                  width: 230.0, 
-                  height: 230.0, 
+                  width: 230.0,
+                  height: 230.0,
                   decoration: BoxDecoration(
                     border: Border.all(width: 0, color: Colors.transparent),
                     shape: BoxShape.circle,
-                    color: Colors.white, 
+                    color: Colors.white,
                   ),
                   child: Center(
                     child: Text(
@@ -72,7 +89,6 @@ class MoodImprovementScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 28),
               child: Center(
