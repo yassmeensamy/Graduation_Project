@@ -61,7 +61,7 @@ class OnBoarding extends StatelessWidget {
       controllerColor: constants.babyBlue,
       skipTextButton: const Text(
         'Skip',
-        style: TextStyle(color: constants.babyBlue80, height: 3),
+        style: TextStyle(color: constants.babyBlue80),
       ),
       background: backgrounds,
       totalPage: 4,
