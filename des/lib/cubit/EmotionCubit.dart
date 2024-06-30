@@ -258,6 +258,7 @@ Future<ReportModel?> GetDailyReport() async
 //ده عك بس ده حل مشكله لحد ما نعمل refactor 
 void EmptyData()
 {
+  print("enter empty");
     SelectedMood=" ";
     EmotionType=" " ;
     ImagePath=" ";

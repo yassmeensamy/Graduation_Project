@@ -3,7 +3,8 @@ import 'package:meta/meta.dart';
 
 import 'activity_card_state.dart';
 
-class ActivitiesCubit extends Cubit<ActivitiesState> {
+class ActivitiesCubit extends Cubit<ActivitiesState>
+ {
   ActivitiesCubit() : super(ActivitiesState());
 
   void selectActivity(int index) 
@@ -28,5 +29,8 @@ class ActivitiesCubit extends Cubit<ActivitiesState> {
     final newSelectedReasons = Set.of(state.selectedReasons);
     newSelectedReasons.remove(index); 
     emit(state.copyWith(selectedReasons: newSelectedReasons));
+  }
+    void clearAllData() {
+    emit(ActivitiesState(selectedActivities: {}));
   }
 }

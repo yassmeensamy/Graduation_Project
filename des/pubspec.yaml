@@ -73,6 +73,7 @@ dependencies:
   awesome_notifications: ^0.7.1
   tuple: ^2.0.2
   flutter_datetime_picker_plus: ^2.2.0
+  flutter_screenutil: ^5.9.3
 
 dev_dependencies:
   flutter_launcher_icons: ^0.13.1

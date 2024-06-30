@@ -100,7 +100,6 @@ class InsigthsCubit extends Cubit<InsigthsState> {
   }
   Future<WeeklyHistoryModel> fetchWeeklyHistory() async {
     //emit(HomeLoading() as InsigthsState);
-
     try {
      
        Response response = await Api().get(url: "${constants.BaseURL}/api/life-record-history/");
@@ -132,7 +131,7 @@ class InsigthsCubit extends Cubit<InsigthsState> {
 
   Future<void> loadInsights() async 
   {
-
+    emit(InsightLoading());
     try {
       weeklyHistoy = await fetchWeeklyHistory();
       DepressionHistoy = await fetchDepressionTestHistory();

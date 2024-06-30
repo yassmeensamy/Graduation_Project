@@ -5,6 +5,9 @@ import 'package:des/Api/Api.dart';
 import 'package:des/Models/MoodModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/cubit/EmotionCubit.dart';
+import 'package:des/cubit/cubit/activity_card_cubit.dart';
+import 'package:des/cubit/cubit/insigths_cubit.dart';
+import 'package:des/cubit/mood_card_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -87,7 +90,7 @@ Future<void>  DeleteEntryToday(BuildContext context) async
     {
       print("Deleted Done");
        moodCubit.EmptyData();
-       //await BlocProvider.of<InsigthsCubit>(context).loadInsights();
+      await BlocProvider.of<InsigthsCubit>(context).loadInsights();
        emit( HandleEmojyloaded(primaryEmotions));
     }  
     else 
@@ -102,6 +105,8 @@ Future<void>  DeleteEntryToday(BuildContext context) async
 }
 void FinishEntry(ReportModel report ,BuildContext context)
 {
-    emit(HandleReportloaded(dailyReport!));
+   context.read<MoodCubit>().unselectMood();
+    context.read<ActivitiesCubit>().clearAllData(); 
+   emit(HandleReportloaded(report));
 }
 }

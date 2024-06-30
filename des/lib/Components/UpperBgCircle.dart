@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UpperBgCircle extends StatelessWidget {
   final Color? color;
   final String? txt;
   final double? size;
-  const UpperBgCircle(this.color, this.txt, this.size,{super.key});
+  const UpperBgCircle(this.color, this.txt, this.size, {super.key});
 
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: -80,
+      top: -80.h,
       left: -50,
       child: Container(
         width: size!,
@@ -23,7 +24,7 @@ class UpperBgCircle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding:const EdgeInsets.all(85.0),
+              padding: const EdgeInsets.all(85.0),
               child: Text(
                 txt!,
                 textAlign: TextAlign.center,

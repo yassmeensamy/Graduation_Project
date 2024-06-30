@@ -6,6 +6,7 @@ import 'package:des/Screens/Register/Forms/MeditationForm.dart';
 import 'package:des/Screens/Register/Forms/Preferences.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -129,22 +130,24 @@ class _DataState extends State<Data> {
                   UpperBgCircle(constants.babyBlue70,
                       'Welcome ${currentUser!.firstName}', 370),
                   Positioned(
-                    top: 670,
-                    left: 149,
-                    child: Container(
+                    top: 560.h,
+                    left: 140.h,
+                    child:
+                     Container(
                       width: 380.0,
                       height: 380.0,
                       decoration: const BoxDecoration(
                         color: constants.lilac70,
                         shape: BoxShape.circle,
                       ),
+                      
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 100.0, left: 120),
+                                const EdgeInsets.only(top: 70.0, left: 120),
                             child: GestureDetector(
                               onTap: () {
                                 if (i < arr.length - 1) {

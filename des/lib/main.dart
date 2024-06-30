@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
+import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Post.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
 import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:flutter/material.dart';
@@ -170,27 +173,28 @@ class MainNavigatorState extends State<MainNavigator> {
   }
 
   Widget _buildMaterialApp(Widget homeWidget) {
-    return ChangeNotifierProvider.value(
-      value: userProvider,
-      child: OKToast(
-        child: Builder(
-          builder: (context) {
-            //شوفىىىىى ده تانىى
-            context.watch<InsigthsCubit>().state;
-            context.watch<WeeklyCubit>().state;
-            return MaterialApp(
-              routes: {
-                '/home': (context) => temp(),
-              },
-              debugShowCheckedModeBanner: false,
-              home: Scaffold(
-                backgroundColor: constants.pageColor,
-                body: 
-                 homeWidget,
-              ),
-            );
-          },
-        ),
+    return  ScreenUtilInit(
+      designSize: const Size(360, 690),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, __) => ChangeNotifierProvider.value(
+        value: userProvider,
+        child: OKToast(
+          child: Builder(
+            builder: (context) {
+              return MaterialApp(
+                routes: {
+                  '/home': (context) => temp(), // Replace with your actual route
+                },
+                debugShowCheckedModeBanner: false,
+                home: Scaffold(
+                  backgroundColor: constants.pageColor,
+                  body: homeWidget,
+                ),
+              );
+            },
+          ),
+        )
       ),
     );
   }

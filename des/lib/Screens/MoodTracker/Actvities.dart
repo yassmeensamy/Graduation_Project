@@ -151,22 +151,20 @@ class ActivityCard extends StatelessWidget {
 
         return InkWell(
           onTap: () {
-            if (cardType == "activity") {
-              if (isSelected) {
+            if (cardType == "activity") 
+            {
+              if (isSelected)
+               {
                 context.read<ActivitiesCubit>().deselectActivity(index);
-                context
-                    .read<SecondLayerCubit>()
-                    .ReasonSelected
-                    .removeWhere((map) => map['activity'] == mood.Text);
-              } else {
+                context.read<SecondLayerCubit>().ReasonSelected.removeWhere((map) => map['activity'] == mood.Text);
+              } else 
+              {
                 context.read<ActivitiesCubit>().selectActivity(index);
                 context.read<SecondLayerCubit>().StoreActivity(mood.Text);
               }
             } else if (cardType == "reason") {
               if (isSelected) {
-                context
-                    .read<ActivitiesCubit>()
-                    .deselectReason(index); // Deselect reason
+                context.read<ActivitiesCubit>().deselectReason(index); // Deselect reason
                 context
                     .read<SecondLayerCubit>()
                     .ReasonSelected
