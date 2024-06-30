@@ -160,7 +160,7 @@ class MainNavigatorState extends State<MainNavigator> {
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
       return _buildMaterialApp(const Data());
     } else if (_isLoggedInAndNotVerified()) {
-      return _buildMaterialApp(const Data());
+      return _buildMaterialApp(const VerifyEmail());
     } else if (_isnotLoggedIn()) {
       return _buildMaterialApp(const OnBoarding());
     } else
