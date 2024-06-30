@@ -12,7 +12,7 @@ class MeditationForm extends StatefulWidget {
 
 class _MeditationFormState extends State<MeditationForm> {
   DateTime _selectedTime = DateTime.now();
-  String _selectedWeekday = 'Saturday';
+  String _selectedWeekday = 'None';
 
   void _showTimePicker() {
     DatePicker.showTimePicker(
@@ -64,7 +64,8 @@ class _MeditationFormState extends State<MeditationForm> {
             'Thursday',
             'Friday',
             'Saturday',
-            'Sunday'
+            'Sunday',
+            'None'
           ].map<DropdownMenuItem<String>>((String value) {
             return DropdownMenuItem<String>(
               value: value,

@@ -1,10 +1,8 @@
 import 'dart:convert';
-
 import 'package:des/NotificationServices.dart';
 import 'package:des/Schedule.dart';
 import 'package:des/Screens/Register/Forms/MeditationForm.dart';
 import 'package:des/Screens/Register/Forms/Preferences.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;
@@ -17,8 +15,6 @@ import '../../constants.dart' as constants;
 import 'CustomizingLoader.dart';
 import 'Forms/DataForm.dart';
 import 'Forms/imageForm.dart';
-import 'Forms/MeditationForm.dart';
-import 'Forms/Preferences.dart';
 
 Map<String, String> body = {};
 String? imgPath;
@@ -56,8 +52,7 @@ Future<List<Widget>> fetchPreferencesWidgets() async {
   return preferencesWidgets;
 }
 
-List<Widget> getScreens(BuildContext context)
- {
+List<Widget> getScreens(BuildContext context) {
   List<Widget> screens = [
     DataForm(
       onBirthdaySelected: (selectedBirthday) {
@@ -77,7 +72,6 @@ List<Widget> getScreens(BuildContext context)
 
   screens.add(MeditationForm(onMeditationTimeSelected: (weekday, time) {
     setMeditationTime(weekday, time);
-
   }));
 
   return screens;
@@ -98,6 +92,7 @@ class Data extends StatefulWidget {
 class _DataState extends State<Data> {
   List<Widget> arr = [];
   int i = 0;
+  String err = '';
 
   @override
   void initState() {
@@ -130,39 +125,60 @@ class _DataState extends State<Data> {
                   UpperBgCircle(constants.babyBlue70,
                       'Welcome ${currentUser!.firstName}', 370),
                   Positioned(
-                    top: 560.h,
-                    left: 140.h,
-                    child:
-                     Container(
+                    top: 515.h,
+                    left: 100.h,
+                    child: Container(
                       width: 380.0,
                       height: 380.0,
                       decoration: const BoxDecoration(
                         color: constants.lilac70,
                         shape: BoxShape.circle,
                       ),
-                      
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.only(top: 70.0, left: 120),
+                                const EdgeInsets.only(top: 100.0, left: 130),
                             child: GestureDetector(
                               onTap: () {
-                                if (i < arr.length - 1) {
-                                  setState(() {
-                                    i = i + 1;
-                                  });
-                                } else {
-                                 scheduleMeditationReminders();;
-
-                                  sendPreferences();
-                                  updateProfile();
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CustomizingLoader()));
-                                }
+                                setState(() {
+                                  err = '';
+                                  if (i < arr.length - 1) {
+                                    if (i == 0) {
+                                      if (body.containsKey('birthdate') &&
+                                          body.containsKey('gender')) {
+                                        i++;
+                                      } else {
+                                        err = 'Please answer the question(s)';
+                                      }
+                                    } else if (i < arr.length - 2) {
+                                      if (preferencesAnswers.length == i) {
+                                      print('object');
+                                        i++;
+                                      } else {
+                                        err = 'Please answer the question(s)';
+                                      }
+                                    } else {
+                                      i++;
+                                    }
+                                  } else {
+                                    if (meditationDay != null &&
+                                        meditationDay != 'None' &&
+                                        meditationTime != null) {
+                                      scheduleMeditationReminders();
+                                      sendPreferences();
+                                      updateProfile();
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  const CustomizingLoader()));
+                                    } else {
+                                      err = 'Please answer the question(s)';
+                                    }
+                                  }
+                                });
                               },
                               child: const Row(
                                 children: [
@@ -201,6 +217,10 @@ class _DataState extends State<Data> {
                           'Tell us more about you! ',
                           style: TextStyle(fontSize: 24),
                         ),
+                        Text(
+                          '$err',
+                          style: TextStyle(fontSize: 12, color: Colors.red),
+                        ),
                         arr.isNotEmpty ? arr[i] : Container(),
                       ],
                     ),
@@ -214,9 +234,6 @@ class _DataState extends State<Data> {
     );
   }
 }
-
-
-
 
 void updateProfile() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -254,10 +271,9 @@ void sendPreferences() async {
   }
 }
 
-
-
-void scheduleMeditationReminders() 
-{
+void scheduleMeditationReminders() {
+  print(meditationDay);
+  print(meditationTime);
   Map<String, int> dayMapping = {
     "Sunday": 0,
     "Monday": 1,
@@ -269,27 +285,23 @@ void scheduleMeditationReminders()
   };
 
   List<bool> _selectedDays = List.generate(7, (index) => false);
-  if (dayMapping.containsKey(meditationDay)) 
-  {
+  if (dayMapping.containsKey(meditationDay)) {
     _selectedDays[dayMapping[meditationDay]!] = true;
-  } 
-  else {
+  } else {
     print("Invalid day: $meditationDay");
     return;
   }
 
   DateTime now = DateTime.now();
 
-  for (int i = 0; i < _selectedDays.length; i++) 
-  {
+  for (int i = 0; i < _selectedDays.length; i++) {
     if (_selectedDays[i]) {
       int dayDifference = (i - now.weekday + 7) % 7;
       if (dayDifference == 0 &&
           now.hour >= meditationTime!.hour &&
-          now.minute >= meditationTime!.minute) 
-          {
-                dayDifference += 7;
-           }
+          now.minute >= meditationTime!.minute) {
+        dayDifference += 7;
+      }
 
       DateTime scheduledTime = DateTime(
         now.year,
@@ -307,17 +319,4 @@ void scheduleMeditationReminders()
       );
     }
   }
-}
-
-
-void setMeditaionTime(meditationDay, meditationTime) 
-{
-  print(meditationTime.hour);
-  print(meditationTime.minute);
-  if (meditationDay != null && meditationTime != null) {
-    print('Meditation Day: $meditationDay, Time: $meditationTime');
-  } else {
-    print('Meditation time not set');
-  }
-
 }
