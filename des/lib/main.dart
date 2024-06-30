@@ -36,8 +36,7 @@ import 'screens/Onboarding.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //done
   await AwesomeNotifications()
-      .isNotificationAllowed()
-      .then //يطلب الاذن انه يعمل
+      .isNotificationAllowed().then 
       (
     (isAllowed) {
       if (!isAllowed) {
@@ -48,7 +47,8 @@ Future<void> main() async {
   await NotificationServices.initializeNotification();
   runApp(
     MultiBlocProvider(
-      providers: [
+      providers: 
+      [
         BlocProvider(create: (context) => WeeklyCubit()..GetAspects()),
         BlocProvider(create: (context) => InsigthsCubit()..loadInsights()),
         BlocProvider(create: (context) => TopicsPlanCubit()),
@@ -57,18 +57,12 @@ Future<void> main() async {
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
-        BlocProvider(
-            create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
+        BlocProvider( create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
-        BlocProvider(
-            create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
+        BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
-        BlocProvider(
-            create: (context) => HandleEmojyDailyCubit(
-                  moodCubit: BlocProvider.of<SecondLayerCubit>(context),
-                )..loadData()),
-        BlocProvider(
-          create: (context) => DepressionCubit()..CheckDepression(),
+        BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
+        BlocProvider( create: (context) => DepressionCubit()..CheckDepression(),
         )
       ],
       child: const MainNavigator(),
@@ -154,11 +148,13 @@ class MainNavigatorState extends State<MainNavigator> {
         user.isEmailVerified != null &&
         !user.isEmailVerified!;
   }
-  bool _isnotLoggedIn() {
+  bool _isnotLoggedIn() 
+  {
     return accessToken == null || refreshToken == null;
   }
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
+  {
     if (_isLoggedInVerifiedAndProfileComplete()) {
       return _buildMaterialApp(const temp());
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
@@ -167,11 +163,11 @@ class MainNavigatorState extends State<MainNavigator> {
       return _buildMaterialApp(const VerifyEmail());
     } else if (_isnotLoggedIn()) {
       return _buildMaterialApp(const OnBoarding());
-    } else {
+    } else
+     {
       return _buildMaterialApp(const Loader());
     }
   }
-
   Widget _buildMaterialApp(Widget homeWidget) {
     return  ScreenUtilInit(
       designSize: const Size(360, 690),

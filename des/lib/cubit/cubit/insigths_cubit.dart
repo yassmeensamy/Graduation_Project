@@ -18,10 +18,12 @@ part 'insigths_state.dart';
 class InsigthsCubit extends Cubit<InsigthsState> {
 
   WeeklyHistoryModel? weeklyHistoy = null;
+  bool is7DaysAgo=false ;
   List<MoodModel> MoodHistory = [];
   List<ActivityModel> AcivityMonthHistory = [];
   List<ActivityModel> AcivityYearHistory = [];
   List<TestResultModel> DepressionHistoy = [];
+  Map<String, List<WeelklyModel>> results={};
   InsigthsCubit() : super(InsightLoading()) ;
 
   String extractDayAndMonth(String timestampString) 
@@ -106,7 +108,8 @@ class InsigthsCubit extends Cubit<InsigthsState> {
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
         weeklyHistoy = WeeklyHistoryModel.fromJson(data);
-        Map<String, List<WeelklyModel>> results = weeklyHistoy!.history;
+        results = weeklyHistoy!.history;
+        is7DaysAgo=weeklyHistoy!.is7DaysAgo;
         // خلي بالك من الحته دي  ان ممكن نحتاجها قدام انا خدت ممنها الشهر واليوم بس
         results.forEach((key, value) 
         {
@@ -114,7 +117,7 @@ class InsigthsCubit extends Cubit<InsigthsState> {
             item.timestamp = extractDayAndMonth(item.timestamp!);
           });
         });
-       
+         
         return weeklyHistoy!;
       } 
       else 

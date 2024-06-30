@@ -141,9 +141,9 @@ class NewHome extends StatelessWidget {
         ]),
                         EmotionsContainer(),
                         DepressionTestContainer(),
-                        WeeklySurveyContainer(),
-                        DisplayWeeklyTasks(),
-                        PlanToDoTasks(),
+                      BlocProvider.of<InsigthsCubit>(context).is7DaysAgo==false ?WeeklySurveyContainer():SizedBox.shrink(),
+                      BlocProvider.of<InsigthsCubit>(context).results.isEmpty?SizedBox.shrink(): DisplayWeeklyTasks(),
+                      PlanToDoTasks(),
                       ],
                     ),
                   ),
@@ -578,7 +578,7 @@ class PlanToDoTasks extends StatelessWidget
                 {
                    if (state is PlanTasksloading) 
                    {
-                              return Center(child: CircularProgressIndicator());
+                        return Center(child: CircularProgressIndicator());
                    }
                    else if (state is PlanTasksError)
                    {

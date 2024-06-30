@@ -89,7 +89,7 @@ Future<void>  DeleteEntryToday(BuildContext context) async
     if (response.statusCode == 204) 
     {
       print("Deleted Done");
-       moodCubit.EmptyData();
+       moodCubit.EmptyData(context);
       await BlocProvider.of<InsigthsCubit>(context).loadInsights();
        emit( HandleEmojyloaded(primaryEmotions));
     }  
@@ -105,8 +105,7 @@ Future<void>  DeleteEntryToday(BuildContext context) async
 }
 void FinishEntry(ReportModel report ,BuildContext context)
 {
-   context.read<MoodCubit>().unselectMood();
-    context.read<ActivitiesCubit>().clearAllData(); 
+   
    emit(HandleReportloaded(report));
 }
 }
