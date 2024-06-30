@@ -18,7 +18,6 @@ class myDrawer extends StatelessWidget {
     User? currentUser = userProvider.user;
     return Drawer(
       child: ListView(
-        padding: EdgeInsets.zero,
         children: <Widget>[
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(
@@ -35,8 +34,7 @@ class myDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => (Profile())),
+                  MaterialPageRoute(builder: (context) => (Profile())),
                 );
               },
               child: Text(
@@ -51,19 +49,30 @@ class myDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
+            leading: Icon(
+              Icons.notifications,
+              size: 24.0,
+              color: Colors.black,
+            ),
             title: Text('Notifications'),
             onTap: () {},
           ),
           ListTile(
-            title: Text('Dark mode'),
-            onTap: () {},
-          ),
-          ListTile(
-            title: Text('Reminders'),
+            leading: Icon(
+              Icons.settings,
+              size: 24.0,
+              color: Colors.black,
+            ),
+            title: Text('Prefernces'),
             onTap: () {},
           ),
           Spacer(),
           ListTile(
+            leading: Icon(
+              Icons.logout,
+              size: 24.0,
+              color: Colors.black,
+            ),
             title: Text('Logout'),
             onTap: () async {
               logout(context);

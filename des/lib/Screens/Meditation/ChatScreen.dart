@@ -21,6 +21,8 @@ class ChatScreenState extends State<ChatScreen> {
 
   List<String> thoughtExplanations = [];
   List<String> thoughtTypes = [];
+  List<String> thoughtTips = [];
+  String tip = '';
   List<Map<String, String>> questionsAndTips = [];
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -33,9 +35,10 @@ class ChatScreenState extends State<ChatScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       thoughtTypes = data.map((item) => item['name'] as String).toList();
-
       thoughtExplanations =
           data.map((item) => item['explanation'] as String).toList();
+      thoughtTips =
+          data.map((item) => item['tips'] as String).toList();
       setState(() {
         messages.add({
           'message': 'What type of negative thoughts do you have?',
@@ -100,6 +103,7 @@ class ChatScreenState extends State<ChatScreen> {
     });
     if (thoughtTypes.contains(option)) {
       int index = thoughtTypes.indexOf(option);
+      tip = thoughtTips[index];
 
       if (index != -1) {
         String explanation = thoughtExplanations[index];
@@ -173,10 +177,11 @@ class ChatScreenState extends State<ChatScreen> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const ChallengeYourThoughtsPage(
+          builder: (context) => ChallengeYourThoughtsPage(
             topText:
                 'After the session, On a scale of 0 to 100, how would you rate how you are feeling each of these emotions:',
-            buttonText: 'Finish',
+            buttonText: 'Finish', tip: tip,
+
           ),
         ));
   }

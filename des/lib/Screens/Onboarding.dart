@@ -59,20 +59,20 @@ class OnBoarding extends StatelessWidget {
       controllerColor: constants.babyBlue,
       skipTextButton: const Text(
         'Skip',
-        style: TextStyle(color: constants.babyBlue80, height: 3),
+        style: TextStyle(color: constants.babyBlue80),
       ),
       background: backgrounds,
       totalPage: 4,
       speed: 1.8,
       pageBodies: [
         slide('assets/images/slide 1.png',
-            'Begin your path to inner peace and emotional well-being. Our caring community is here to walk beside you on your journey to a brighter future.'),
+            'your personal companion on a journey towards mindfulness and well-being. Our app is designed to help you cultivate a balanced mind and improve your mental health through meditation, daily check-ins, and personalized plans. Let’s embark on this journey together!'),
         slide('assets/images/slide 2.png',
-            'Begin your path to inner peace and emotional well-being. Our caring community is here to walk beside you on your journey to a brighter future.'),
+            'Explore a variety of guided meditations tailored to your needs. Whether you\'re seeking relaxation, stress relief, or a boost in focus, SoulSync provides sessions that fit into your schedule. Dive into mindfulness and start experiencing the benefits today.'),
         slide('assets/images/slide 3.png',
-            'Begin your path to inner peace and emotional well-being. Our caring community is here to walk beside you on your journey to a brighter future.'),
+            'Stay in tune with your emotions through daily mood tracking. SoulSync helps you identify patterns and triggers, providing insights into your mental well-being. Reflect on your feelings and gain a deeper understanding of your emotional health.'),
         slide('assets/images/slide 4.png',
-            'Begin your path to inner peace and emotional well-being. Our caring community is here to walk beside you on your journey to a brighter future.'),
+            'Create a wellness plan that suits your lifestyle. Customize your meditation schedule, set reminders, and choose specific days for your sessions. SoulSync adapts to your preferences, ensuring a seamless integration into your daily routine.'),
       ],
     );
   }

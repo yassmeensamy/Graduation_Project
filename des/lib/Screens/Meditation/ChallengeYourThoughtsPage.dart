@@ -7,11 +7,12 @@ import 'MoodImprovementScreen.dart';
 class ChallengeYourThoughtsPage extends StatefulWidget {
   final String topText;
   final String buttonText;
+  final String tip;
 
   const ChallengeYourThoughtsPage({
     super.key,
     required this.topText,
-    required this.buttonText,
+    required this.buttonText, required this.tip,
   });
 
   @override
@@ -30,7 +31,7 @@ class ChallengeYourThoughtsPageState extends State<ChallengeYourThoughtsPage> {
 
 
   Future<void> handleValues(double happy, double sad, double loved, double fear,
-      double disgust, double surprised, double angry) async {
+      double disgust, double surprised, double angry, String tip) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey('happy')) {
        double oldHappy = prefs.getDouble('happy')!;
@@ -40,10 +41,8 @@ class ChallengeYourThoughtsPageState extends State<ChallengeYourThoughtsPage> {
     double oldDisgust = prefs.getDouble('disgust')!;
     double oldSurprised = prefs.getDouble('surprised')!;
     double oldAngry = prefs.getDouble('angry')!;
-    // Calculate mood improvement
     double moodImprovement = ((happy - oldHappy) + (oldSad - sad) + (loved - oldLoved) + (oldFear - fear) + (oldDisgust - disgust) + (surprised - oldSurprised) + (oldAngry - angry)) / 7;
 
-    // Delete the old values from SharedPreferences
     await prefs.remove('happy');
     await prefs.remove('sad');
     await prefs.remove('loved');
@@ -54,7 +53,7 @@ class ChallengeYourThoughtsPageState extends State<ChallengeYourThoughtsPage> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => MoodImprovementScreen(moodImprovementPercentage: moodImprovement)),
+      MaterialPageRoute(builder: (context) => MoodImprovementScreen(moodImprovementPercentage: moodImprovement, tip: tip,)),
     );
 
     } else {
@@ -143,7 +142,7 @@ class ChallengeYourThoughtsPageState extends State<ChallengeYourThoughtsPage> {
               child: ElevatedButton(
                 onPressed: () {
                   handleValues(
-                      happy, sad, loved, fear, disgust, surprised, angry);
+                      happy, sad, loved, fear, disgust, surprised, angry, widget.tip);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF6A6DCD),
