@@ -1,26 +1,31 @@
+import 'dart:convert';
 import 'package:des/Components/AuthButton.dart';
 import 'package:des/Components/FormFields/PasswordField.dart';
-import 'package:des/main.dart';
+import 'package:des/Screens/Login.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import '../../Components/LoginTemp.dart';
+import '../../Components/Toasts.dart';
 import '../../constants.dart' as constants;
 
+String email = '';
+
 class Reset extends StatelessWidget {
-  const Reset({super.key});
+  Reset(e) {
+    email = e;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const LoginTemp(
+    return LoginTemp(
         constants.babyBlue70, 'Forgot Password?', 390.0, Content());
   }
 }
 
 class Content extends StatelessWidget {
-  const Content({super.key});
-
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,20 +51,36 @@ class Content extends StatelessWidget {
 }
 
 class LoginFrom extends StatefulWidget {
-  const LoginFrom({super.key});
-
   @override
   State<LoginFrom> createState() => _LoginFromState();
 }
 
 class _LoginFromState extends State<LoginFrom> {
-  updatePassword() {
-    
-   Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MainNavigator()),
-          (Route<dynamic> route) => false,
-        );
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  updatePassword() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        Response response = await post(
+            Uri.parse('${constants.BaseURL}/api/auth/reset-password/'),
+            body: {
+              "email": email,
+              "new_password": passwordController.text,
+            });
+        if (response.statusCode == 200) {
+          successToast(jsonDecode(response.body)['message']);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => Login()),
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          errorToast('Something went wrong. Please try again later');
+        }
+      } catch (e) {
+        errorToast('Something went wrong. Please try again later');
+      }
+    }
   }
 
   TextEditingController passwordController = TextEditingController();
@@ -67,21 +88,23 @@ class _LoginFromState extends State<LoginFrom> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        PasswordField(passwordController),
-        const constants.VerticalPadding(5),
-        PasswordField(passwordController),
-        const SizedBox(
-          height: 16,
-        ),
-        const constants.VerticalPadding(16),
-        AuthButton(
-            isLoading: isLoading,
-            onPressed: updatePassword,
-            txt: "Submit",
-            color: constants.babyBlue),
-      ],
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          PasswordField(passwordController),
+          const constants.VerticalPadding(5),
+          const SizedBox(
+            height: 16,
+          ),
+          const constants.VerticalPadding(16),
+          AuthButton(
+              isLoading: isLoading,
+              onPressed: updatePassword,
+              txt: "Submit",
+              color: constants.babyBlue),
+        ],
+      ),
     );
   }
 }

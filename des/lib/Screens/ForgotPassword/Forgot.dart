@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:des/Components/AuthButton.dart';
 import 'package:des/Components/FormFields/EmailField.dart';
 import 'package:flutter/material.dart';
@@ -95,20 +97,23 @@ class _EmailFromState extends State<EmailFrom> {
           body: {
             "email": email,
           });
+
       if (response.statusCode == 200) {
-        successToast('OTP sent Successfully');
+        successToast(jsonDecode(response.body)['message']);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => Verfiy(email)),
         );
+      } else if (response.statusCode == 400) {
+        errorToast(jsonDecode(response.body)['error']);
       } else {
         errorToast('Something went wrong. Please try again later');
       }
-      setState(() {
-      isLoading = false;
-    });
     } catch (e) {
       errorToast('Something went wrong. Please try again later');
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:des/Components/Toasts.dart';
 import 'package:des/Tokens.dart';
 import 'package:des/main.dart';
@@ -21,19 +22,16 @@ Future<int> callLoginApi(
       Tokens tokens = parseTokens(response.body);
       saveTokensToSharedPreferences(tokens);
       successToast('Logged In Successfully');
-      Timer(const Duration(seconds: 2), () 
-      {
+      Timer(const Duration(seconds: 2), () {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => MainNavigator()),
           (Route<dynamic> route) => false,
         );
       });
-    } else if (response.statusCode == 401)
-    {
-      errorToast('Invalid Credentials');
-    } 
-    else {
+    } else if (response.statusCode == 400) {
+      errorToast(jsonDecode(response.body)['non_field_errors'][0].toString());
+    } else {
       errorToast('Something went wrong. Please try again later');
     }
   } catch (e) {
@@ -65,8 +63,7 @@ Future<int> callRegisterApi(
         );
       });
     } else if (response.statusCode == 400) {
-      print(response.body);
-      errorToast('This Email is already used');
+      errorToast(jsonDecode(response.body)['email'][0].toString());
     } else {
       errorToast('Something went wrong. Please try again later');
     }
@@ -94,7 +91,7 @@ Future<int> callVerifyOTPApi(BuildContext context, String otp) async {
     if (response.statusCode == 200) {
       successToast('Verified Successfully');
       Timer(const Duration(seconds: 2), () {
-       Navigator.pushAndRemoveUntil(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => MainNavigator()),
           (Route<dynamic> route) => false,
@@ -141,9 +138,8 @@ logout(BuildContext context) async {
   await prefs.remove('NewUser');
   googleLogout();
   Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => MainNavigator()),
-          (Route<dynamic> route) => false,
-        );
+    context,
+    MaterialPageRoute(builder: (context) => MainNavigator()),
+    (Route<dynamic> route) => false,
+  );
 }
-

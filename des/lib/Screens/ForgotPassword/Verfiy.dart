@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:des/Components/AuthButton.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
@@ -49,14 +50,15 @@ class Content extends StatelessWidget {
               decoration: TextDecoration.underline,
               fontSize: 18),
         ),
-        CodeFrom(),
+        CodeFrom(email),
       ],
     );
   }
 }
 
 class CodeFrom extends StatefulWidget {
-  const CodeFrom({super.key});
+  String email;
+  CodeFrom(this.email);
 
   @override
   State<CodeFrom> createState() => _CodeFromState();
@@ -73,7 +75,7 @@ class _CodeFromState extends State<CodeFrom> {
       otpArray.add(controller.text);
     }
     String otp = otpArray.join();
-    verifyResetOTP(otp, context);
+    verifyResetOTP(otp, context, widget.email);
   }
 
   @override
@@ -84,7 +86,20 @@ class _CodeFromState extends State<CodeFrom> {
       children: [
         const constants.VerticalPadding(32),
         VerificationCodeFields(controllers),
-        const constants.VerticalPadding(64),
+        const constants.VerticalPadding(32),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text('Didn’t receive code ? '),
+            GestureDetector(
+                onTap: () {
+                  callResetOTPApi(widget.email, context);
+                },
+                child: const Text('Resend',
+                    style: TextStyle(fontWeight: FontWeight.bold))),
+          ],
+        ),
+        const constants.VerticalPadding(32),
         AuthButton(
             isLoading: isLoading,
             onPressed: verifyOTP,
@@ -94,7 +109,8 @@ class _CodeFromState extends State<CodeFrom> {
     );
   }
 
-  Future<void> verifyResetOTP(String otp, BuildContext context) async {
+  Future<void> verifyResetOTP(
+      String otp, BuildContext context, String email) async {
     setState(() {
       isLoading = true;
     });
@@ -102,16 +118,18 @@ class _CodeFromState extends State<CodeFrom> {
       Response response = await post(
           Uri.parse('${constants.BaseURL}/api/auth/verify-reset-otp/'),
           body: {
+            "email": email,
             "otp": otp,
           });
       if (response.statusCode == 200) {
-        successToast('Verified Successfully');
+        successToast(jsonDecode(response.body)['message']);
         Timer(const Duration(seconds: 2), () {
           Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => const Reset()));
+              .push(MaterialPageRoute(builder: (context) => Reset(email)));
         });
       } else if (response.statusCode == 400) {
-        errorToast('Invalid or expired OTP');
+        print(response.body);
+        errorToast(jsonDecode(response.body)['non_field_errors'][0].toString());
       } else {
         errorToast('Something went wrong. Please try again later');
       }
@@ -119,7 +137,30 @@ class _CodeFromState extends State<CodeFrom> {
       errorToast('Something went wrong. Please try again later');
     }
     setState(() {
-        isLoading = false;
-      });
+      isLoading = false;
+    });
+  }
+
+  Future<void> callResetOTPApi(String email, BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      Response response = await post(
+          Uri.parse('${constants.BaseURL}/api/auth/send-reset-otp/'),
+          body: {
+            "email": email,
+          }); 
+      if (response.statusCode == 200) {
+        successToast('OTP sent Successfully');
+      } else {
+        errorToast('Something went wrong. Please try again later');
+      }
+    } catch (e) {
+      errorToast('Something went wrong. Please try again later');
+    }
+    setState(() {
+      isLoading = false;
+    });
   }
 }
