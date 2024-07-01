@@ -8,7 +8,7 @@ class AnswerState
   AnswerState({this.Selectedindex=-1});
   AnswerState copyWith (int Selected)
   {
-       return AnswerState(Selectedindex : Selected ?? this.Selectedindex);
+       return AnswerState(Selectedindex : Selected );
   }
   
 }

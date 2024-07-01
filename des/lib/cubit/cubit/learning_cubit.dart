@@ -5,8 +5,6 @@ import 'package:des/Models/Learning/LearningModel.dart';
 import 'package:des/Models/Learning/Lesson.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http; // Use http from package:http/http.dart
 import '../../Api/Api.dart';
 import '/constants.dart' as constants;
 part 'learning_state.dart';
@@ -14,8 +12,7 @@ part 'learning_state.dart';
 class LearningCubit extends Cubit<LearningState> {
   List<LearningModel> LearningTopics = [];
   List<String> subParagraphs = [];
-  LearningCubit() : super(LearningInitial())
-   {
+  LearningCubit() : super(LearningInitial()) {
     FetchMainTopics();
   }
   Future<void> GetTopicsandLessons(int Topic_Id) async {

@@ -1,8 +1,6 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:des/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:palette_generator/palette_generator.dart';
 import 'package:spotify/spotify.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
@@ -254,7 +252,7 @@ class MusicScreen extends StatelessWidget {
                 music.artistName ?? '-',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1
+                    .bodyLarge
                     ?.copyWith(color: Colors.white),
               ),
             ],

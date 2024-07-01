@@ -54,6 +54,7 @@ class LoginFrom extends StatefulWidget {
 
 class _LoginFromState extends State<LoginFrom> {
   updatePassword() {
+    
    Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => MainNavigator()),

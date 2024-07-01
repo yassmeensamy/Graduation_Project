@@ -124,7 +124,7 @@ class _ProfileState extends State<Profile> {
                         // Handle change password
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
+                        backgroundColor: Colors.blue,
                         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),

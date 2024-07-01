@@ -4,7 +4,6 @@ import 'package:des/Components/loader.dart';
 import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Post.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
@@ -90,7 +89,7 @@ class MainNavigatorState extends State<MainNavigator> {
     _getTokens();
   }
   _getTokens() async {
-    //logout(context);
+    // logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       refreshToken = prefs.getString('refreshToken');
@@ -159,7 +158,7 @@ class MainNavigatorState extends State<MainNavigator> {
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
       return _buildMaterialApp(const Data());
     } else if (_isLoggedInAndNotVerified()) {
-      return _buildMaterialApp(const Data());
+      return _buildMaterialApp(const VerifyEmail());
     } else if (_isnotLoggedIn()) {
       return _buildMaterialApp(const OnBoarding());
     } else

@@ -1,8 +1,6 @@
 import 'package:des/Components/NextButton.dart';
 import 'package:des/Models/WeeklyModel.dart';
-import 'package:des/Screens/temp.dart';
 import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
-
 import 'package:des/cubit/cubit/insigths_cubit.dart';
 import 'package:des/cubit/cubit/slider_cubit.dart';
 import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';

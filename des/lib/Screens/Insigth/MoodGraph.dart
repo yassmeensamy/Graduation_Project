@@ -2,7 +2,6 @@ import 'package:des/Models/MoodModel.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../Models/MoodgraphModel.dart';
 
 class MoodCount extends StatelessWidget {
   final String text;
