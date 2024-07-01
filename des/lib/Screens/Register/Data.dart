@@ -139,7 +139,8 @@ class _DataState extends State<Data> {
             currentIndex < screens.length - 2 &&
             validatePreferences()) {
           currentIndex++;
-        } else if (currentIndex >= screens.length - 2) {
+        }
+         else if (currentIndex >= screens.length - 2) {
           currentIndex++;
         } else {
           errorMessage = 'Please answer the question(s)';

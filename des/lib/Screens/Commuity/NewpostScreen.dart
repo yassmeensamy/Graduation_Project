@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../constants.dart' as constants;
+import '/constants.dart' as constants;
 
 class NewPostScreen extends StatelessWidget {
   const NewPostScreen({Key? key}) : super(key: key);
@@ -8,14 +8,16 @@ class NewPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:constants.pageColor, // Assuming constants.pageColor is defined
-        appBar: AppBar(
+      backgroundColor:
+          constants.pageColor, // Assuming constants.pageColor is defined
+      appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
           "Create Post",
-          style: GoogleFonts.nunitoSans( fontWeight: FontWeight.w700, fontSize: 24, color: Colors.black),
+          style: GoogleFonts.nunitoSans(
+              fontWeight: FontWeight.w700, fontSize: 24, color: Colors.black),
         ),
         actions: [
           //TextButton(onPressed: (){}, child: )
