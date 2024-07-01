@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Models/Learning/LearningModel.dart';
-import 'package:des/Screens/Learning/ContentLesson.dart';
 import 'package:des/Screens/Learning/TotalLessons.dart';
 import 'package:des/cubit/cubit/learning_cubit.dart';
 import 'package:flutter/material.dart';

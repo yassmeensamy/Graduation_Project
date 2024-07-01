@@ -5,6 +5,7 @@ import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
 import 'package:des/Screens/DepressionNotification.dart';
+import 'package:des/Screens/HomeScreen/Widgets/Calender.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Rectangle.dart';
 import 'package:des/Screens/HomeScreen/Widgets/ToDo.dart';
 import 'package:des/Screens/MoodTracker/SecondLayerMood.dart';
@@ -22,7 +23,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../constants.dart' as constants;
 
 /*
@@ -179,13 +179,13 @@ class NewHome extends StatelessWidget {
 }
 */
 
-
 class NewHome extends StatelessWidget {
   NewHome({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final ValueNotifier<bool> shouldShowDialog = ValueNotifier<bool>(true); // Changed to true initially
- 
+  final ValueNotifier<bool> shouldShowDialog =
+      ValueNotifier<bool>(true); // Changed to true initially
+
   void showCustomDialog(BuildContext context) {
     CustomAlertDialog(
       context: context,
@@ -194,23 +194,19 @@ class NewHome extends StatelessWidget {
           "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
     ).show();
   }
- 
-
 
   @override
   Widget build(BuildContext context) {
-        UserProvider userProvider =
+    UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
-     print("hello");
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: constants.pageColor,
       drawer: myDrawer(),
       body: Builder(
-        builder: (context) 
-        {
-           context.watch<DepressionCubit>().state;
+        builder: (context) {
+          context.watch<DepressionCubit>().state;
           context.watch<InsigthsCubit>().state;
           context.watch<WeeklyCubit>().state;
           context.watch<PlanTasksCubit>().state;
@@ -235,8 +231,7 @@ class NewHome extends StatelessWidget {
               }
             });
           });
-          
-        
+
           return Column(
             children: [
               Expanded(
@@ -248,70 +243,83 @@ class NewHome extends StatelessWidget {
                       children: [
                         //HeaderHomeSCreen(_scaffoldKey),
                         Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              GestureDetector(
-                onTap: () {
-                  _scaffoldKey.currentState?.openDrawer();
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(top: 16),
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(image: getProfilePhoto(context))),
-                ),
-              ),
-              const Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text(
-                    DateFormat('EEEE').format(DateTime.now()),
-                    style:
-                        const TextStyle(color: constants.txtGrey, fontSize: 16),
-                  ),
-                  Text(
-                    DateFormat.MMMMd().format(DateTime.now()),
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Padding(
-                  padding: EdgeInsets.only(top: 16.0),
-                  child: IconButton(
-                    onPressed: () {
-                      print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
-                      print(DateFormat('d').format(DateTime.now()));
-                    },
-                    icon: Icon(
-                      Icons.calendar_month_outlined,
-                      color: constants.darkGrey,
-                    ),
-                  ))
-            ],
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Text(
-            'Welcome Back, ${currentUser!.firstName}',
-            style: const TextStyle(fontSize: 22),
-          ),
-        ]),
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      _scaffoldKey.currentState?.openDrawer();
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.only(top: 16),
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: getProfilePhoto(context))),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        DateFormat('EEEE')
+                                            .format(DateTime.now()),
+                                        style: const TextStyle(
+                                            color: constants.txtGrey,
+                                            fontSize: 16),
+                                      ),
+                                      Text(
+                                        DateFormat.MMMMd()
+                                            .format(DateTime.now()),
+                                        style: const TextStyle(fontSize: 20),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    width: 16,
+                                  ),
+                                  Padding(
+                                      padding: EdgeInsets.only(top: 16.0),
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MindfulMomentsTracker()));
+                                        },
+                                        icon: Icon(
+                                          Icons.calendar_month_outlined,
+                                          color: constants.darkGrey,
+                                        ),
+                                      ))
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                'Welcome Back, ${currentUser!.firstName}',
+                                style: const TextStyle(fontSize: 22),
+                              ),
+                            ]),
                         EmotionsContainer(),
                         DepressionTestContainer(),
-                      BlocProvider.of<InsigthsCubit>(context).is7DaysAgo==false ?WeeklySurveyContainer():SizedBox.shrink(),
-                      BlocProvider.of<InsigthsCubit>(context).results.isEmpty?SizedBox.shrink(): DisplayWeeklyTasks(),
-                      BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty? SizedBox.shrink(): PlanToDoTasks(),
+                        BlocProvider.of<InsigthsCubit>(context).is7DaysAgo ==
+                                false
+                            ? WeeklySurveyContainer()
+                            : SizedBox.shrink(),
+                        BlocProvider.of<InsigthsCubit>(context).results.isEmpty
+                            ? SizedBox.shrink()
+                            : DisplayWeeklyTasks(),
+                        BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
+                            ? SizedBox.shrink()
+                            : PlanToDoTasks(),
                       ],
                     ),
                   ),
@@ -324,6 +332,7 @@ class NewHome extends StatelessWidget {
     );
   }
 }
+
 class DepressionTestContainer extends StatelessWidget {
   const DepressionTestContainer({super.key});
 
@@ -653,46 +662,51 @@ class MoodSelectedContainer extends StatelessWidget {
   }
 }
 
-class PlanToDoTasks extends StatelessWidget 
-{
+class PlanToDoTasks extends StatelessWidget {
   const PlanToDoTasks({super.key});
   @override
-  Widget build(BuildContext context) 
-  {
-    return RectangleContainer(constants.mint,
-    Column(
+  Widget build(BuildContext context) {
+    return RectangleContainer(
+      constants.mint,
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-                     Text("Daily Tasks",style: GoogleFonts.openSans(fontSize: 24 ,color: Colors.black),),
+          Text(
+            "Daily Tasks",
+            style: GoogleFonts.openSans(fontSize: 24, color: Colors.black),
+          ),
           Container(
             child: BlocBuilder<PlanTasksCubit, PlanTasksState>(
-                builder: (context, state) 
-                {
-                   if (state is PlanTasksloading) 
-                   {
-                        return Center(child: CircularProgressIndicator());
-                   }
-                   else if (state is PlanTasksError)
-                   {
-                    return Container(color: Colors.black,);
-                   }
-                   return  
-                     BlocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo.length!=0 ?
-                      ListView.builder(
+                builder: (context, state) {
+              if (state is PlanTasksloading) {
+                return Center(child: CircularProgressIndicator());
+              } else if (state is PlanTasksError) {
+                return Container(
+                  color: Colors.black,
+                );
+              }
+              return BlocProvider.of<PlanTasksCubit>(context)
+                          .planTasks
+                          .plansToDo
+                          .length !=
+                      0
+                  ? ListView.builder(
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: BlocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo.length, 
-                      itemBuilder: (BuildContext context, int index)
-                       {
-                        
+                      itemCount: BlocProvider.of<PlanTasksCubit>(context)
+                          .planTasks
+                          .plansToDo
+                          .length,
+                      itemBuilder: (BuildContext context, int index) {
                         return BlocProvider<CheckboxCubit>(
                           create: (context) => CheckboxCubit(),
                           child: TODo(
-                              todo: BlocProvider.of<PlanTasksCubit >(context).planTasks.plansToDo[index]),
+                              todo: BlocProvider.of<PlanTasksCubit>(context)
+                                  .planTasks
+                                  .plansToDo[index]),
                         );
                       },
-                   
                     )
                   : Center(
                       child: Text(
@@ -702,8 +716,6 @@ class PlanToDoTasks extends StatelessWidget
           ),
         ],
       ),
-    
-    
     );
   }
 }
@@ -845,6 +857,3 @@ class WeeklySurveyContainer extends StatelessWidget {
     );
   }
 }
-    
-
-

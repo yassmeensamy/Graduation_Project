@@ -79,6 +79,13 @@ class RegisterFrom extends StatefulWidget {
 class _RegisterFromState extends State<RegisterFrom> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool isLoading = false;
+    bool _obscurePassword = true;
+
+   void _toggleOldPasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +103,7 @@ class _RegisterFromState extends State<RegisterFrom> {
         });
       }
     }
+
     return Form(
       key: _formKey,
       child: Column(
@@ -104,7 +112,12 @@ class _RegisterFromState extends State<RegisterFrom> {
           const constants.VerticalPadding(5),
           EmailField(emailController),
           const constants.VerticalPadding(5),
-          PasswordField(passwordController),
+          PasswordField(
+            passwordController,
+            obscureText: _obscurePassword,
+            labelText: 'Password',
+            toggleVisibility: _toggleOldPasswordVisibility,
+          ),
           const constants.VerticalPadding(13),
           AuthButton(
               isLoading: isLoading,

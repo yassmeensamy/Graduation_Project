@@ -5,17 +5,13 @@ import 'package:des/cubit/cubit/Test/answer_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 import '/constants.dart' as constants;
 import '../../../Models/QuestionModel.dart';
 import '../../../Models/TestResultModel.dart';
 
-
 class Testcubit extends Cubit<TestState> {
-  String? accessToken ;
-  Testcubit(BuildContext context) : super(TestLoading())
-  {
+  String? accessToken;
+  Testcubit(BuildContext context) : super(TestLoading()) {
     getQuestions(context);
   }
 
@@ -23,25 +19,19 @@ class Testcubit extends Cubit<TestState> {
   List<Map<String, int>> scores = [];
   bool isselected = false; // علشان نعرف هو اتنيل  اختار ولا لا
   int value = -1;
-  void getQuestions(BuildContext context) 
-  {
-    if (questions.isNotEmpty) 
-    {
+  void getQuestions(BuildContext context) {
+    if (questions.isNotEmpty) {
       scores = List.generate(questions.length, (index) => {"value": -1});
       context.read<AnswerCubit>().disSelected();
       emit(TestQuestion(questions));
-    }
-     else 
-     {
-          getAllQuestions();
+    } else {
+      getAllQuestions();
     }
   }
 
-  
-  Future<void> getAllQuestions() async 
-  {
-  
-    Response response = await Api().get(url:"${constants.BaseURL}/api/questions/");
+  Future<void> getAllQuestions() async {
+    Response response =
+        await Api().get(url: "${constants.BaseURL}/api/questions/");
     if (response.statusCode == 200) {
       List<dynamic> data = jsonDecode(response.body);
       questions = data.map((item) => Question.fromJson(item)).toList();
@@ -55,65 +45,52 @@ class Testcubit extends Cubit<TestState> {
     }
   }
 
-void fetchNextQuestions(int currentQuestionIndex, BuildContext context) 
-  { 
-    if (currentQuestionIndex < questions.length) 
-    { 
-      if(currentQuestionIndex < questions.length)
-      {
-       if (isselected) 
-      {
-           StoreAswers(currentQuestionIndex, value);       
-           currentQuestionIndex++; 
-           if (currentQuestionIndex < questions.length)   
-           {
-              if(getCurrentQuestionSelectd(currentQuestionIndex)!=-1)
-               { 
-                 context.read<AnswerCubit>().Selected(getCurrentQuestionSelectd(currentQuestionIndex));
-               }
-              else
-                 {
-                    context.read<AnswerCubit>().disSelected();
-                 }
-                emit(TestQuestionChanged(currentQuestionIndex));
-           } 
-           else 
-                {
-                     fetchFinalScore();
-                     ClearScores(context);
-                 }
+  void fetchNextQuestions(int currentQuestionIndex, BuildContext context) {
+    if (currentQuestionIndex < questions.length) {
+      if (currentQuestionIndex < questions.length) {
+        if (isselected) {
+          StoreAswers(currentQuestionIndex, value);
+          currentQuestionIndex++;
+          if (currentQuestionIndex < questions.length) {
+            if (getCurrentQuestionSelectd(currentQuestionIndex) != -1) {
+              context
+                  .read<AnswerCubit>()
+                  .Selected(getCurrentQuestionSelectd(currentQuestionIndex));
+            } else {
+              context.read<AnswerCubit>().disSelected();
+            }
+            emit(TestQuestionChanged(currentQuestionIndex));
+          } else {
+            fetchFinalScore();
+            ClearScores(context);
+          }
+        } else {
+          displaySnackBar(context);
+        }
       }
-       else 
-       {
-        displaySnackBar(context);
-      }
-    }
     }
   }
-  
-  int getCurrentQuestionSelectd(int currentIndex)
-{
-  return scores[currentIndex]['value'] ?? -1;
-}
-  void ClearScores(BuildContext context) 
-  {
+
+  int getCurrentQuestionSelectd(int currentIndex) {
+    return scores[currentIndex]['value'] ?? -1;
+  }
+
+  void ClearScores(BuildContext context) {
     scores = [];
   }
-  
-  void fetchPreveriousQuestions(
-    int currentQuestionIndex, BuildContext context) {
-    if(currentQuestionIndex>0)
-    {  currentQuestionIndex--;
-       if(getCurrentQuestionSelectd(currentQuestionIndex)!=-1)
-       {
-        context.read<AnswerCubit>().Selected(getCurrentQuestionSelectd(currentQuestionIndex));
-       }
-            emit(TestQuestionChanged(currentQuestionIndex));
-    }   
-    else 
-    {
-      ClearScores(context);
 
+  void fetchPreveriousQuestions(
+      int currentQuestionIndex, BuildContext context) {
+    if (currentQuestionIndex > 0) {
+      currentQuestionIndex--;
+      if (getCurrentQuestionSelectd(currentQuestionIndex) != -1) {
+        context
+            .read<AnswerCubit>()
+            .Selected(getCurrentQuestionSelectd(currentQuestionIndex));
+      }
+      emit(TestQuestionChanged(currentQuestionIndex));
+    } else {
+      ClearScores(context);
     }
   }
 
@@ -126,12 +103,11 @@ void fetchNextQuestions(int currentQuestionIndex, BuildContext context)
     );
   }
 
-  void fetchFinalScore() async 
-  {
-    
+  void fetchFinalScore() async {
     var data = {"answers": scores};
     var jsonData = jsonEncode(data);
-     Response response =  await Api().post(url: "${constants.BaseURL}/api/questions/",body: jsonData);
+    Response response = await Api()
+        .post(url: "${constants.BaseURL}/api/questions/", body: jsonData);
     if (response.statusCode == 200) {
       dynamic data = jsonDecode(response.body);
       TestResultModel TestResult = TestResultModel.fromJson(data);

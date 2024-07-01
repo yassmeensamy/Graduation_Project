@@ -38,7 +38,7 @@ class CardQuestion extends StatelessWidget {
               
               child: Center(
                 child: Text(
-                  Question??" ",
+                  Question,
                    textAlign: TextAlign.center,
                   style: const TextStyle(fontSize: 18),
                 ),

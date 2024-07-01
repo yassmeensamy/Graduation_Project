@@ -90,7 +90,7 @@ class MainNavigatorState extends State<MainNavigator> {
     _getTokens();
   }
   _getTokens() async {
-    //logout(context);
+    // logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       refreshToken = prefs.getString('refreshToken');
@@ -104,7 +104,6 @@ class MainNavigatorState extends State<MainNavigator> {
     Response response = await get(
         Uri.parse('${constants.BaseURL}/api/auth/user/'),
         headers: {'Authorization': 'Bearer $accessToken'});
-    print(response.body);
     Map userData = jsonDecode(response.body);
     return userData;
   }

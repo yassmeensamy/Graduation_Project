@@ -13,8 +13,6 @@ Tokens parseTokens(String responseBody)
   final Map<String, dynamic> parsed = jsonDecode(responseBody);
   final String accessToken = parsed['access'];
   final String refreshToken = parsed['refresh'];
-  print(accessToken);
-  print(refreshToken);
   return Tokens(accessToken, refreshToken);
 }
 

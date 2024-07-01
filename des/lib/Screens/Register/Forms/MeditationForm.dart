@@ -3,8 +3,9 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 
 class MeditationForm extends StatefulWidget {
   final Function(String, DateTime) onMeditationTimeSelected;
-
-  const MeditationForm({required this.onMeditationTimeSelected, Key? key}) : super(key: key);
+  String question;
+  bool day;
+  MeditationForm({required this.onMeditationTimeSelected, Key? key, required this.question, required this.day}) : super(key: key);
 
   @override
   _MeditationFormState createState() => _MeditationFormState();
@@ -13,7 +14,7 @@ class MeditationForm extends StatefulWidget {
 class _MeditationFormState extends State<MeditationForm> {
   DateTime _selectedTime = DateTime.now();
   String _selectedWeekday = 'None';
-
+  
   void _showTimePicker() {
     DatePicker.showTimePicker(
       context,
@@ -40,16 +41,16 @@ class _MeditationFormState extends State<MeditationForm> {
         const SizedBox(
           height: 16,
         ),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text('When do you want to meditate?'),
+            Text(widget.question),
           ],
         ),
         const SizedBox(
           height: 16,
         ),
-        DropdownButton<String>(
+        widget.day ? DropdownButton<String>(
           value: _selectedWeekday,
           onChanged: (String? newValue) {
             setState(() {
@@ -72,7 +73,7 @@ class _MeditationFormState extends State<MeditationForm> {
               child: Text(value),
             );
           }).toList(),
-        ),
+        ):const SizedBox(height: 0) ,
         const SizedBox(height: 20),
         Text(
           '${_selectedTime.hour}:${_selectedTime.minute}',

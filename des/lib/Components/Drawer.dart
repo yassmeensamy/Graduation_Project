@@ -1,11 +1,12 @@
-import 'package:des/Screens/Profile/Profile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../Controllers/AuthController.dart';
+import '../Screens/Profile/NotificationScreen.dart';
+import '../Screens/Profile/Profile.dart';
+import '../Screens/Profile/updatePrefernces.dart';
+import '../constants.dart' as constants;
 import '../Models/user.dart';
 import '../Providers/UserProvider.dart';
-import '../constants.dart' as constants;
-import 'package:des/Controllers/AuthController.dart';
-
 import 'ProfilePhoto.dart';
 
 class myDrawer extends StatelessWidget {
@@ -17,7 +18,8 @@ class myDrawer extends StatelessWidget {
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
     return Drawer(
-      child: ListView(
+      backgroundColor: constants.pageColor,
+      child: Column(
         children: <Widget>[
           UserAccountsDrawerHeader(
             decoration: BoxDecoration(
@@ -55,7 +57,12 @@ class myDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             title: Text('Notifications'),
-            onTap: () {},
+            onTap: () {
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => (NotificationScreen())),
+                );
+            },
           ),
           ListTile(
             leading: Icon(
@@ -63,20 +70,29 @@ class myDrawer extends StatelessWidget {
               size: 24.0,
               color: Colors.black,
             ),
-            title: Text('Prefernces'),
-            onTap: () {},
-          ),
-          Spacer(),
-          ListTile(
-            leading: Icon(
-              Icons.logout,
-              size: 24.0,
-              color: Colors.black,
-            ),
-            title: Text('Logout'),
-            onTap: () async {
-              logout(context);
+            title: Text('Preferences'),
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => (QuestionScreen())),
+                );
             },
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: ListTile(
+                leading: Icon(
+                  Icons.logout,
+                  size: 24.0,
+                  color: Colors.black,
+                ),
+                title: Text('Logout'),
+                onTap: () async {
+                  logout(context);
+                },
+              ),
+            ),
           ),
         ],
       ),

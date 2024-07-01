@@ -44,7 +44,6 @@ class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
     Response response = await Api().post(
         url: "${constants.BaseURL}/api/mood-primary-entry/", body: json_data);
     if (response.statusCode == 200 || response.statusCode == 201) {
-      dynamic responseData = jsonDecode(response.body);
     } else {
       emit(EmotionCubitStateFailur(
           "Request failed with status: ${response.statusCode}"));
@@ -231,8 +230,7 @@ class SecondLayerCubit extends Cubit<SecondLayerCubitCubitState> {
   }
 
 //ده عك بس ده حل مشكله لحد ما نعمل refactor
-  void EmptyData(BuildContext context) 
-  {
+  void EmptyData(BuildContext context) {
     context.read<MoodCubit>().unselectMood();
     context.read<ActivitiesCubit>().clearAllData();
     SelectedMood = " ";

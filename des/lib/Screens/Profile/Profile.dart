@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../Models/user.dart';
 import '../../Providers/UserProvider.dart';
 import '../../main.dart';
+import 'changePassword.dart';
 
 String capitalize(String s) {
   if (s.isEmpty) return s;
@@ -118,13 +119,13 @@ class _ProfileState extends State<Profile> {
                       title: Text('Birthdate'),
                       subtitle: Text('${currentUser?.dob ?? 'Not specified'}'),
                     ),
-                    SizedBox(height: 220),
+                    SizedBox(height: 100),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle change password
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePassword()));
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
+                        backgroundColor: Colors.blue,
                         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 14),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(24),

@@ -31,18 +31,17 @@ void googleAuth(BuildContext context) async {
     errorToast("Sign In Faild");
   } else {
     GoogleSignInAuthentication googleAuth = await user.authentication;
-    String? img = user.photoUrl;
     String accessToken = googleAuth.accessToken!;
     print(accessToken);
-    googleAuthApi(accessToken, context, img);
+    googleAuthApi(accessToken, context);
   }
 }
 
-void googleAuthApi(String token, BuildContext context, String? img) async {
+void googleAuthApi(String token, BuildContext context) async {
   try {
     Response response = await post(
         Uri.parse('${constants.BaseURL}/api/auth/google/'),
-        body: {'token': token, 'image': img});
+        body: {'token': token});
     if (response.statusCode == 200) {
       Tokens tokens = parseTokens(response.body);
       saveTokensToSharedPreferences(tokens);

@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
 import 'package:des/Models/Plans/AcivityModel.dart';
 import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 import '/constants.dart' as constants;
 part 'plan_tips_state.dart';
 
@@ -47,8 +44,6 @@ class PlanTipsCubit extends Cubit<PlanTipsState> {
     emit(PlanTipsLoading());
     var data = {"topic_name": topic_name};
     var json_data = jsonEncode(data);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
     try {
       Response response = await Api().post(
           url: "${constants.BaseURL}/api/plan/restart-topic/", body: json_data);
