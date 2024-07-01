@@ -81,10 +81,18 @@ class LoginFrom extends StatefulWidget {
 TextEditingController emailController = TextEditingController();
 TextEditingController passwordController = TextEditingController();
 
+
 class _LoginFromState extends State<LoginFrom> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
+  bool _obscurePassword = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscurePassword = !_obscurePassword;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +104,7 @@ class _LoginFromState extends State<LoginFrom> {
         String email = emailController.text.toString();
         String password = passwordController.text.toString();
         await callLoginApi(context, email, password);
-        
+
         setState(() {
           isLoading = false;
         });
@@ -109,7 +117,12 @@ class _LoginFromState extends State<LoginFrom> {
         children: [
           EmailField(emailController),
           const constants.VerticalPadding(5),
-          PasswordField(passwordController, obscureText: true, labelText: 'Password', toggleVisibility: () {  },),
+          PasswordField(
+            passwordController,
+            obscureText: _obscurePassword,
+            labelText: 'Password',
+            toggleVisibility: _togglePasswordVisibility,
+          ),
           const constants.VerticalPadding(16),
           const Row(
             mainAxisAlignment: MainAxisAlignment.end,
