@@ -34,7 +34,9 @@ void callUpdateProfileApi(BuildContext context, data, image) async{
           );
         } else {
           print(response.statusCode);
+          print(response);
           errorToast('Failed to update profile');
+          errorToast(response.statusCode.toString());
         }
       } catch (e) {
         print(e);

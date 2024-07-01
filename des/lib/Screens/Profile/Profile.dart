@@ -119,7 +119,7 @@ class _ProfileState extends State<Profile> {
                       title: Text('Birthdate'),
                       subtitle: Text('${currentUser?.dob ?? 'Not specified'}'),
                     ),
-                    SizedBox(height: 220),
+                    SizedBox(height: 100),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePassword()));

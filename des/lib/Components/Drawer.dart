@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Controllers/AuthController.dart';
 import '../Screens/Profile/Profile.dart';
+import '../Screens/Profile/updatePrefernces.dart';
 import '../constants.dart' as constants;
 import '../Models/user.dart';
 import '../Providers/UserProvider.dart';
@@ -64,7 +65,12 @@ class myDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             title: Text('Preferences'),
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => (QuestionScreen())),
+                );
+            },
           ),
           Expanded(
             child: Align(
