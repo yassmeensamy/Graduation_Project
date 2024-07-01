@@ -92,7 +92,7 @@ class _LoginFromState extends State<LoginFrom> {
       key: _formKey,
       child: Column(
         children: [
-          PasswordField(passwordController),
+          PasswordField(passwordController, obscureText: true, labelText: 'Password', toggleVisibility: () {  }, ),
           const constants.VerticalPadding(5),
           const SizedBox(
             height: 16,

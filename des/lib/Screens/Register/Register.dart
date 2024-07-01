@@ -104,7 +104,7 @@ class _RegisterFromState extends State<RegisterFrom> {
           const constants.VerticalPadding(5),
           EmailField(emailController),
           const constants.VerticalPadding(5),
-          PasswordField(passwordController),
+          PasswordField(passwordController, obscureText: true, labelText: 'Password', toggleVisibility: () {  },),
           const constants.VerticalPadding(13),
           AuthButton(
               isLoading: isLoading,

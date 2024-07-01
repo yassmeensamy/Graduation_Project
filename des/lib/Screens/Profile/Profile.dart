@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../Models/user.dart';
 import '../../Providers/UserProvider.dart';
 import '../../main.dart';
+import 'changePassword.dart';
 
 String capitalize(String s) {
   if (s.isEmpty) return s;
@@ -121,7 +122,7 @@ class _ProfileState extends State<Profile> {
                     SizedBox(height: 220),
                     ElevatedButton(
                       onPressed: () {
-                        // Handle change password
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => ChangePassword()));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blue,
