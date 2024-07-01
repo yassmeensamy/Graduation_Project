@@ -128,24 +128,25 @@ class _DataState extends State<Data> {
   }
 
   void onNext() {
-    print(preferencesAnswers.length);
-    print(currentIndex);
     setState(() {
       errorMessage = '';
       if (currentIndex < screens.length - 1) {
         if (currentIndex == 0 && validatePersonalInfo()) {
           currentIndex++;
         } else if (currentIndex > 0 &&
-            currentIndex < screens.length - 2 &&
+            currentIndex < screens.length - 3 &&
             validatePreferences()) {
           currentIndex++;
-        } else if (currentIndex >= screens.length - 2) {
+        } else if (currentIndex == screens.length - 2 && validateMeditation()) {
+          currentIndex++;
+        } else if (currentIndex == screens.length - 3) {
           currentIndex++;
         } else {
           errorMessage = 'Please answer the question(s)';
         }
-      } else if (validateMeditation()) {
+      } else if (validateDailyTracking()) {
         scheduleMeditationReminders();
+        scheduleTrackingReminders();
         sendPreferences();
         updateProfile();
         Navigator.of(context)
@@ -170,12 +171,7 @@ class _DataState extends State<Data> {
         meditationTime != null;
   }
 
-  void onBack() {
-    setState(() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        errorMessage = '';
-      }
-    });
+  bool validateDailyTracking() {
+    return trackingTime != null;
   }
 }

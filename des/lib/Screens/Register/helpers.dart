@@ -16,6 +16,7 @@ Map<String, String> preferencesAnswers = {};
 List<Widget> preferencesWidgets = [];
 String? meditationDay;
 DateTime? meditationTime;
+DateTime? trackingTime;
 
 Future<List<Widget>> fetchPreferencesWidgets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -61,8 +62,15 @@ List<Widget> getScreens(BuildContext context) {
     }),
     MeditationForm(onMeditationTimeSelected: (weekday, time) {
       setMeditationTime(weekday, time);
-    }),
+    }, question: 'When do you want to meditate?', day: true,),
+    MeditationForm(onMeditationTimeSelected: (weekday, time) {
+      setTrackingTime(time);
+    }, question: 'When do you want to be notified about daily tracking?', day: false,),
   ];
+}
+
+void setTrackingTime(DateTime time) {
+  trackingTime = time;
 }
 
 void setMeditationTime(String weekday, DateTime time) {
@@ -151,4 +159,10 @@ void scheduleMeditationReminders() {
       );
     }
   }
+}
+
+
+void scheduleTrackingReminders()
+{
+  print(trackingTime);
 }
