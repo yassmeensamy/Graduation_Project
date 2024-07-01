@@ -13,6 +13,7 @@ class QuestionScreen extends StatefulWidget {
 class _QuestionScreenState extends State<QuestionScreen> {
   List<dynamic> questions = [];
   Map<String, String> answers = {};
+  bool canSubmit = false;
 
   @override
   void initState() {
@@ -38,31 +39,42 @@ class _QuestionScreenState extends State<QuestionScreen> {
     }
   }
 
+  void updateAnswer(String tag, String answer) {
+    setState(() {
+      answers[tag] = answer;
+      canSubmit = answers.length == questions.length;
+    });
+  }
+
   void submitAnswers() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
-    List<Map<String, String>> answerList = answers.entries
-        .map((entry) => {'tag': entry.key, 'answer': entry.value})
-        .toList();
+    if (canSubmit) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? accessToken = prefs.getString('accessToken');
+      List<Map<String, String>> answerList = answers.entries
+          .map((entry) => {'tag': entry.key, 'answer': entry.value})
+          .toList();
 
-    print(json.encode({'answers': answerList}));
+      print(json.encode({'answers': answerList}));
 
-    final response = await http.post(
-      Uri.parse('${constants.BaseURL}/api/preference-questions/answer/'),
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $accessToken"
-      },
-      body: json.encode({'answers': answerList}),
-    );
+      final response = await http.post(
+        Uri.parse('${constants.BaseURL}/api/preference-questions/answer/'),
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $accessToken"
+        },
+        body: json.encode({'answers': answerList}),
+      );
 
-    if (response.statusCode == 200) {
-      successToast(jsonDecode(response.body)['message']);
-      Navigator.of(context).pop();
+      if (response.statusCode == 200) {
+        successToast(jsonDecode(response.body)['message']);
+        Navigator.of(context).pop();
+      } else {
+        errorToast('Something went wrong, please try again later.');
+        print(response.body);
+        print(response.statusCode);
+      }
     } else {
-      errorToast('Something went wrong, please try again later.');
-      print(response.body);
-      print(response.statusCode);
+      errorToast('Please Answer All Questions');
     }
   }
 
@@ -87,66 +99,70 @@ class _QuestionScreenState extends State<QuestionScreen> {
       ),
       body: questions.isEmpty
           ? Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: questions.length,
-              itemBuilder: (context, index) {
-                final question = questions[index];
-                return Card(
-                  margin: EdgeInsets.all(8.0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          question['question_text'],
-                          style: TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 8.0),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    answers[question['tag']['name']] == 'yes'
-                                        ? Colors.green
-                                        : Colors.grey,
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: questions.length,
+                    itemBuilder: (context, index) {
+                      final question = questions[index];
+                      return Card(
+                        margin: EdgeInsets.all(8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                question['question_text'],
+                                style: TextStyle(
+                                    fontSize: 18.0, fontWeight: FontWeight.bold),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  answers[question['tag']['name']] = 'yes';
-                                });
-                              },
-                              child: Text('Yes'),
-                            ),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    answers[question['tag']['name']] == 'no'
-                                        ? Colors.red
-                                        : Colors.grey,
+                              SizedBox(height: 8.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          answers[question['tag']['name']] ==
+                                                  'yes'
+                                              ? Colors.green
+                                              : Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      updateAnswer(
+                                          question['tag']['name'], 'yes');
+                                    },
+                                    child: Text('Yes'),
+                                  ),
+                                  ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor:
+                                          answers[question['tag']['name']] == 'no'
+                                              ? Colors.red
+                                              : Colors.grey,
+                                    ),
+                                    onPressed: () {
+                                      updateAnswer(question['tag']['name'], 'no');
+                                    },
+                                    child: Text('No'),
+                                  ),
+                                ],
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  answers[question['tag']['name']] = 'no';
-                                });
-                              },
-                              child: Text('No'),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                ElevatedButton(
+                  onPressed: submitAnswers,
+                  child: Text('Submit'),
+                )
+              ],
             ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: submitAnswers,
-        child: Icon(Icons.send),
-      ),
     );
   }
 }

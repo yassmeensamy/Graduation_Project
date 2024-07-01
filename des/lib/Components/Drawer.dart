@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../Controllers/AuthController.dart';
+import '../Screens/Profile/NotificationScreen.dart';
 import '../Screens/Profile/Profile.dart';
 import '../Screens/Profile/updatePrefernces.dart';
 import '../constants.dart' as constants;
@@ -56,7 +57,12 @@ class myDrawer extends StatelessWidget {
               color: Colors.black,
             ),
             title: Text('Notifications'),
-            onTap: () {},
+            onTap: () {
+               Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => (NotificationScreen())),
+                );
+            },
           ),
           ListTile(
             leading: Icon(
