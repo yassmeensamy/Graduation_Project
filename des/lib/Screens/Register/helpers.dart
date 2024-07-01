@@ -16,7 +16,7 @@ Map<String, String> preferencesAnswers = {};
 List<Widget> preferencesWidgets = [];
 String? meditationDay;
 DateTime? meditationTime;
-
+int Notification_id=0;
 Future<List<Widget>> fetchPreferencesWidgets() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? accessToken = prefs.getString('accessToken');
@@ -108,7 +108,8 @@ void sendPreferences() async {
   }
 }
 
-void scheduleMeditationReminders() {
+Future<void> scheduleMeditationReminders(String NotificationType) 
+async {
   Map<String, int> dayMapping = {
     "Sunday": 0,
     "Monday": 1,
@@ -116,27 +117,31 @@ void scheduleMeditationReminders() {
     "Wednesday": 3,
     "Thursday": 4,
     "Friday": 5,
-    "Saturday": 6,
+    "Saturday": 6
   };
 
-  List<bool> selectedDays = List.generate(7, (index) => false);
-  if (dayMapping.containsKey(meditationDay)) {
-    selectedDays[dayMapping[meditationDay]!] = true;
-  } else {
+  List<bool> _selectedDays = List.generate(7, (index) => false);
+  if (dayMapping.containsKey(meditationDay)) 
+  {
+    _selectedDays[dayMapping[meditationDay]!] = true;
+  } 
+  else {
     print("Invalid day: $meditationDay");
     return;
   }
 
   DateTime now = DateTime.now();
 
-  for (int i = 0; i < selectedDays.length; i++) {
-    if (selectedDays[i]) {
+  for (int i = 0; i < _selectedDays.length; i++) 
+  {
+    if (_selectedDays[i]) {
       int dayDifference = (i - now.weekday + 7) % 7;
       if (dayDifference == 0 &&
           now.hour >= meditationTime!.hour &&
-          now.minute >= meditationTime!.minute) {
-        dayDifference += 7;
-      }
+          now.minute >= meditationTime!.minute) 
+          {
+                dayDifference += 7;
+           }
 
       DateTime scheduledTime = DateTime(
         now.year,
@@ -146,9 +151,16 @@ void scheduleMeditationReminders() {
         meditationTime!.minute,
       ).add(Duration(days: dayDifference));
 
-      NotificationServices.scheduleNotification(
-        Schedule(details: "Meditation Reminder", time: scheduledTime),
-      );
+     Notification_id= await NotificationServices.scheduleNotification( 
+      Schedule( 
+         details: NotificationType,
+          time: scheduledTime,
+        ),
+      ) as int;
+       SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setInt(NotificationType, Notification_id);
+       print('Notification ID saved: $Notification_id');
     }
   }
+
 }
