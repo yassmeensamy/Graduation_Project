@@ -201,7 +201,6 @@ class NewHome extends StatelessWidget {
         UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
-     print("hello");
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: constants.pageColor,
