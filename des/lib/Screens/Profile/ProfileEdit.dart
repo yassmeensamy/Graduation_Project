@@ -1,11 +1,14 @@
 import 'dart:io';
 import 'package:des/Components/FormFields/EmailField.dart';
 import 'package:des/Components/FormFields/NameField.dart';
-import 'package:des/Controllers/ProfileController.dart';
+import 'package:des/Components/Toasts.dart';
+import 'package:des/Screens/Profile/Profile.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../constants.dart' as constants;
 import '../../Components/AuthButton.dart';
 import '../../Components/ProfilePhoto.dart';
@@ -232,8 +235,8 @@ class _ProfileEditState extends State<ProfileEdit> {
                       initialDate: DateTime.tryParse(currentUser!.dob ?? '') ??
                           DateTime(2000),
                       firstDate: DateTime(1900),
-                      lastDate:
-                          DateTime.now().subtract(const Duration(days: 18 * 365)),
+                      lastDate: DateTime.now()
+                          .subtract(const Duration(days: 18 * 365)),
                     );
                     if (pickedDate != null) {
                       String formattedDate =
@@ -303,11 +306,45 @@ class _ProfileEditState extends State<ProfileEdit> {
         'gender': gender,
       };
 
-      callUpdateProfileApi(context, data, image);
+      try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? accessToken = prefs.getString('accessToken');
 
-      setState(() {
-        isLoading = false;
-      });
+        var request = http.MultipartRequest(
+            'PATCH', Uri.parse('${constants.BaseURL}/api/auth/user/'));
+        if (image != null) {
+          request.files
+              .add(await http.MultipartFile.fromPath('image', (image!.path)));
+        }
+
+        request.headers['Authorization'] = 'Bearer $accessToken';
+        print(accessToken);
+        request.fields.addAll(data);
+        print(data);
+
+        final response = await request.send();
+
+        if (response.statusCode == 200) {
+          successToast('Profile updated successfully');
+          Navigator.of(context).pop();
+          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => (Profile())),
+          );
+        } else if (response.statusCode == 413) {
+          errorToast('The image size is very large');
+        } else {
+          errorToast('Failed to update profile');
+        }
+      } catch (e) {
+        print(e);
+        errorToast('Failed to update profile');
+      }
     }
+
+    setState(() {
+      isLoading = false;
+    });
   }
 }
