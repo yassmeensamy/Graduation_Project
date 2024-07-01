@@ -145,7 +145,7 @@ class _DataState extends State<Data> {
           errorMessage = 'Please answer the question(s)';
         }
       } else if (validateDailyTracking()) {
-        scheduleMeditationReminders();
+        scheduleMeditationReminders('Meditation Reminder');
         scheduleTrackingReminders();
         sendPreferences();
         updateProfile();
