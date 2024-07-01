@@ -168,118 +168,120 @@ class _ProfileEditState extends State<ProfileEdit> {
       ),
       body: Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Container(
-                height: 210,
-                width: 210,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(100),
-                  image: (image == null)
-                      ? photo != null
-                          ? DecorationImage(image: photo!, fit: BoxFit.cover)
-                          : null
-                      : DecorationImage(
-                          image: FileImage(File(image!.path)),
-                          fit: BoxFit.cover,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Container(
+                  height: 210,
+                  width: 210,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    image: (image == null)
+                        ? photo != null
+                            ? DecorationImage(image: photo!, fit: BoxFit.cover)
+                            : null
+                        : DecorationImage(
+                            image: FileImage(File(image!.path)),
+                            fit: BoxFit.cover,
+                          ),
+                  ),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: GestureDetector(
+                      onTap: myAlert,
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(right: 40, bottom: 40),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(100),
                         ),
-                ),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: myAlert,
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      margin: const EdgeInsets.only(right: 40, bottom: 40),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(100),
+                        child: const Icon(Icons.edit),
                       ),
-                      child: const Icon(Icons.edit),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20),
-              NameField(
-                _NameController,
-              ),
-              EmailField(
-                _emailController,
-                enabled: false,
-              ),
-              SizedBox(height: 20),
-              TextFormField(
-                onTap: () async {
-                  DateTime? pickedDate = await showDatePicker(
-                    builder: (context, child) {
-                      return Theme(
-                        data: Theme.of(context).copyWith(
-                          colorScheme: const ColorScheme.light(
-                            primary: constants.babyBlue,
-                            onPrimary: Colors.white,
-                            onSurface: Colors.black,
-                            onBackground: constants.lilac,
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                    context: context,
-                    initialDate: DateTime.tryParse(currentUser!.dob ?? '') ??
-                        DateTime(2000),
-                    firstDate: DateTime(1900),
-                    lastDate:
-                        DateTime.now().subtract(const Duration(days: 18 * 365)),
-                  );
-                  if (pickedDate != null) {
-                    String formattedDate =
-                        DateFormat('yyyy-MM-dd').format(pickedDate);
-                    setState(() {
-                      _birthdateController.text = formattedDate;
-                    });
-                  }
-                },
-                controller: _birthdateController,
-                readOnly: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.txtGrey),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: constants.lilac70),
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                  ),
-                  hintText: 'MM-DD-YYYY',
-                  suffixIcon: Icon(Icons.calendar_month),
-                  hintStyle: TextStyle(color: constants.txtGrey),
-                  suffixIconColor: constants.txtGrey,
+                SizedBox(height: 20),
+                NameField(
+                  _NameController,
                 ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  radio('M', 'Male', 'assets/images/male.png'),
-                  const SizedBox(width: 32),
-                  radio('F', 'Female', 'assets/images/female.png'),
-                ],
-              ),
-              SizedBox(height: 20),
-              AuthButton(
-                  isLoading: isLoading,
-                  onPressed: () {
-                    _saveProfile();
+                EmailField(
+                  _emailController,
+                  enabled: false,
+                ),
+                SizedBox(height: 20),
+                TextFormField(
+                  onTap: () async {
+                    DateTime? pickedDate = await showDatePicker(
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            colorScheme: const ColorScheme.light(
+                              primary: constants.babyBlue,
+                              onPrimary: Colors.white,
+                              onSurface: Colors.black,
+                              onBackground: constants.lilac,
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                      context: context,
+                      initialDate: DateTime.tryParse(currentUser!.dob ?? '') ??
+                          DateTime(2000),
+                      firstDate: DateTime(1900),
+                      lastDate:
+                          DateTime.now().subtract(const Duration(days: 18 * 365)),
+                    );
+                    if (pickedDate != null) {
+                      String formattedDate =
+                          DateFormat('yyyy-MM-dd').format(pickedDate);
+                      setState(() {
+                        _birthdateController.text = formattedDate;
+                      });
+                    }
                   },
-                  txt: "Save",
-                  color: constants.babyBlue80),
-            ],
+                  controller: _birthdateController,
+                  readOnly: true,
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: constants.txtGrey),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: constants.lilac70),
+                      borderRadius: BorderRadius.all(Radius.circular(15)),
+                    ),
+                    hintText: 'MM-DD-YYYY',
+                    suffixIcon: Icon(Icons.calendar_month),
+                    hintStyle: TextStyle(color: constants.txtGrey),
+                    suffixIconColor: constants.txtGrey,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    radio('M', 'Male', 'assets/images/male.png'),
+                    const SizedBox(width: 32),
+                    radio('F', 'Female', 'assets/images/female.png'),
+                  ],
+                ),
+                SizedBox(height: 20),
+                AuthButton(
+                    isLoading: isLoading,
+                    onPressed: () {
+                      _saveProfile();
+                    },
+                    txt: "Save",
+                    color: constants.babyBlue80),
+              ],
+            ),
           ),
         ),
       ),
