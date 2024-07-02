@@ -43,17 +43,22 @@ class CustomAlertDialog {
            Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              
+             
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  Expanded(child: 
                Text(
                 title,
+                softWrap: true,
+                maxLines: 2,
+
                 style: TextStyle(
                   fontSize: 22.0,
                   fontWeight: FontWeight.w600,
                 ),
               ),
+                  ),
 
               IconButton(
                   onPressed: () {
@@ -68,6 +73,7 @@ class CustomAlertDialog {
 
                 ]
               ),
+              
               SizedBox(height: 16.0),
               Text(
                 message,

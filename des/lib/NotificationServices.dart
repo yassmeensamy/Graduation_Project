@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Schedule.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> onActionReceivedMethod(ReceivedAction action) async {
   print('Notification action received: ${action.id}');
@@ -30,12 +31,22 @@ class NotificationServices {
     );
   }
 
-  static void cancelAllNotifications() {
+  static Future<void> cancelAllNotifications() async
+   {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+     await prefs.remove('Meditation Reminder');
+     await prefs.remove('DailyMood Rreminder');
+     prefs.getString('refreshToken');
     AwesomeNotifications().cancelAll();
   }
 
-  void cancelNotificationById(int notificationId) {
-    AwesomeNotifications().cancel(notificationId);
+  Future<void> cancelNotificationById(String NotificationType)  async 
+  {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? Notification_id= prefs.getInt(NotificationType);
+    print( Notification_id);
+    AwesomeNotifications().cancel(Notification_id!);
+     await prefs.remove('DailyMood Rreminder');
   }
 
   Future<void> setupNotifications() async {
@@ -88,4 +99,5 @@ class NotificationServices {
     );
     return Notification_id;
   }
+  
 }

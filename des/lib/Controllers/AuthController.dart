@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:des/Components/Toasts.dart';
+import 'package:des/NotificationServices.dart';
 import 'package:des/Tokens.dart';
 import 'package:des/main.dart';
 import 'package:flutter/material.dart';
@@ -135,8 +136,9 @@ logout(BuildContext context) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove('accessToken');
   await prefs.remove('refreshToken');
-  await prefs.remove('NewUser');
   googleLogout();
+ NotificationServices.cancelAllNotifications();
+   await prefs.clear();
   Navigator.pushAndRemoveUntil(
     context,
     MaterialPageRoute(builder: (context) => MainNavigator()),

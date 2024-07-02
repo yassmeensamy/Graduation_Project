@@ -12,6 +12,7 @@ class Api
       {
          'Authorization': 'Bearer $accessToken',
       };
+       print(accessToken) ;
     http.Response response = await http.get(Uri.parse(url),headers: headers);
     if (response.statusCode == 200) 
     {
@@ -41,7 +42,9 @@ class Api
     } 
     else
      {
+      
       print("error in post ${response.statusCode}");
+      //print(response.body);
        throw Exception("Request failed");
     }
   }

@@ -14,7 +14,7 @@ class WeeklyCubit extends Cubit<WeeklyState> {
 
   void IntilizeRatingList() {
     Rating = List.generate(
-        Aspects.length, (index) => {'aspect_type_id': index + 1, 'value': 0});
+        Aspects.length, (index) => {'aspect_type_id': index + 1, 'value': 1});
   }
 
   void UpdateAspects(int id, int value) {
@@ -36,6 +36,7 @@ class WeeklyCubit extends Cubit<WeeklyState> {
   }
 
   Future<void> CreateRecord() async {
+ 
     var data = {"scores": Rating};
     var jsonData = jsonEncode(data);
     Response response = await Api().post(

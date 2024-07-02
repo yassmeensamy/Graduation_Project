@@ -4,6 +4,8 @@ import 'package:des/Components/loader.dart';
 import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Commuity/NewpostScreen.dart';
+import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
 
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
@@ -90,7 +92,8 @@ class MainNavigatorState extends State<MainNavigator> {
     _getTokens();
   }
   _getTokens() async {
-    // logout(context);
+    //logout(context);
+      
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       refreshToken = prefs.getString('refreshToken');
@@ -183,7 +186,9 @@ class MainNavigatorState extends State<MainNavigator> {
                 debugShowCheckedModeBanner: false,
                 home: Scaffold(
                   backgroundColor: constants.pageColor,
-                  body: homeWidget,
+                  body: homeWidget
+                  //NewPostScreen(),
+                  //PostsScreen(),
                 ),
               );
             },

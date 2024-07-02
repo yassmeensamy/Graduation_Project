@@ -5,6 +5,7 @@ import '../../Components/upperBgCircle.dart';
 import '../../Models/user.dart';
 import '../../Providers/UserProvider.dart';
 import '../../constants.dart' as constants;
+
 import 'CustomizingLoader.dart';
 import 'helpers.dart';
 
@@ -136,7 +137,6 @@ class _DataState extends State<Data> {
             currentIndex < screens.length - 3 &&
             validatePreferences()) {
           currentIndex++;
-        } else if (currentIndex >= screens.length - 2) {
         } else if (currentIndex == screens.length - 2 && validateMeditation()) {
           currentIndex++;
         } else if (currentIndex == screens.length - 3) {
@@ -146,7 +146,7 @@ class _DataState extends State<Data> {
         }
       } else if (validateDailyTracking()) {
         scheduleMeditationReminders('Meditation Reminder');
-        scheduleTrackingReminders();
+        scheduleTrackingReminders("DailyMood Rreminder");
         sendPreferences();
         updateProfile();
         Navigator.of(context)

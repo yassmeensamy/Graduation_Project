@@ -77,8 +77,7 @@ class WeeklySurvey extends StatelessWidget {
                     
                     
                     
-                                    
-                     
+              
                         
                   },
                   groundColor: constants.purpledark,
@@ -137,9 +136,9 @@ class SliderButton extends StatelessWidget {
                 context.read<WeeklyCubit>().UpdateAspects(Aspect_id, newValue.toInt());
                 print(context.read<WeeklyCubit>().Rating);
               },
-              min: 0,
+              min: 1,
               max: 10,
-              divisions: 9,
+              divisions: 8,
               label: "${state.toInt()}",
             );
           })),

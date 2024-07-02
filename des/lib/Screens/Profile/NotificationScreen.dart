@@ -1,3 +1,4 @@
+import 'package:des/NotificationServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import '../../constants.dart' as constants;
@@ -171,8 +172,16 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  void handleNotification() {
+  void handleNotification()
+   {
     print('Meditation Time: $_meditationTime on $_selectedWeekday');
     print('Daily Tracking Time: $_trackingTime');
   }
+
+  void ResetNotification(String NotificationType) async
+  {
+    await  NotificationServices().cancelNotificationById(NotificationType);
+  }
 }
+
+

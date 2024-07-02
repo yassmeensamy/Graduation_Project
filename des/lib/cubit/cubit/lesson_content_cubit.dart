@@ -15,7 +15,7 @@ class LessonContentCubit extends Cubit<LessonContentState>
     emit(LessonContentloading());
     var data = {"lesson_id": lesson_id};
     var json_data = jsonEncode(data);
-    Response response = await Api().post(url: "${constants.BaseURL}/api/unchecked-activities/",body: json_data, );
+    Response response = await Api().post(url: "${constants.BaseURL}/api/lessons/",body: json_data, );
     if (response.statusCode == 200) 
     {
       dynamic responseData = jsonDecode(response.body);
