@@ -9,6 +9,7 @@ import 'package:des/Screens/HomeScreen/Widgets/Calender.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Rectangle.dart';
 import 'package:des/Screens/HomeScreen/Widgets/ToDo.dart';
 import 'package:des/Screens/MoodTracker/SecondLayerMood.dart';
+import 'package:des/Screens/Register/helpers.dart';
 import 'package:des/Screens/Test/TestScreen.dart';
 import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/EmotionCubit.dart';
@@ -197,6 +198,7 @@ class NewHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;

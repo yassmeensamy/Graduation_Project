@@ -34,8 +34,8 @@ class NotificationServices {
   static Future<void> cancelAllNotifications() async
    {
      SharedPreferences prefs = await SharedPreferences.getInstance();
-     await prefs.remove('Meditation Reminder');
-     await prefs.remove('DailyMood Rreminder');
+     //await prefs.remove('Meditation Reminder');
+     //await prefs.remove('DailyMood Rreminder');
      prefs.getString('refreshToken');
     AwesomeNotifications().cancelAll();
   }
@@ -44,9 +44,8 @@ class NotificationServices {
   {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? Notification_id= prefs.getInt(NotificationType);
-    print( Notification_id);
     AwesomeNotifications().cancel(Notification_id!);
-     await prefs.remove('DailyMood Rreminder');
+     await prefs.remove(NotificationType);
   }
 
   Future<void> setupNotifications() async {
@@ -99,5 +98,28 @@ class NotificationServices {
     );
     return Notification_id;
   }
-  
+
+static Future<DateTime?> getNotificationTimeById(String NotificationType) async 
+{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int? Notification_id = prefs.getInt(NotificationType);
+    List<NotificationModel> scheduledNotifications =   await AwesomeNotifications().listScheduledNotifications();
+    for (var notification in scheduledNotifications) {
+      if (notification.content?.id == Notification_id) 
+      { 
+        NotificationCalendar? schedule =   notification.schedule as NotificationCalendar?;
+        if (schedule != null) {
+          return DateTime(
+            schedule.year ?? 0,
+            schedule.month ?? 1,
+            schedule.day ?? 1,
+            schedule.hour ?? 0,
+            schedule.minute ?? 0,
+            schedule.second ?? 0,
+          );
+        }
+      }
+    }
+    return null;
+  }
 }

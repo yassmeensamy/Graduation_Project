@@ -1,4 +1,5 @@
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Register/helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart';
 import '../../constants.dart' as constants;
@@ -120,6 +121,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         );
                       }).toList(),
                     ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          handleMeditaionNotification('Meditation Time');
+                          //handleNotification('Meditation Time');
+                        },
+                        child: Text('Save Change'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: constants.babyBlue80),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -153,17 +168,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 30),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          handleNotification(
+                            "Daily Tracking Time",
+                          );
+                        }, //handleNotification,
+                        child: Text('Save Change'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: constants.babyBlue80),
+                      ),
+                    ),
                   ],
                 ),
-              ),
-            ),
-            const SizedBox(height: 30),
-            Center(
-              child: ElevatedButton(
-                onPressed: handleNotification,
-                child: Text('Save Times'),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: constants.babyBlue80),
               ),
             ),
           ],
@@ -172,16 +191,28 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  void handleNotification()
-   {
-    print('Meditation Time: $_meditationTime on $_selectedWeekday');
-    print('Daily Tracking Time: $_trackingTime');
+  Future<void> handleNotification(String NotificationType) async 
+  {
+    //DateTime?time = await NotificationServices.getNotificationTimeById(NotificationType);
+    await NotificationServices().cancelNotificationById(NotificationType);
+    scheduleTrackingReminders(NotificationType, trackTime: _trackingTime);
   }
 
-  void ResetNotification(String NotificationType) async
-  {
-    await  NotificationServices().cancelNotificationById(NotificationType);
+  Future<void> handleMeditaionNotification(String NotificationType) async {
+    print(_meditationTime);
+    print(NotificationType);
+    await NotificationServices().cancelNotificationById(NotificationType);
+    scheduleMeditationReminders(NotificationType,
+        meditaion: _meditationTime, selectedWeekday: _selectedWeekday);
+  }
+
+  Future<DateTime?> GetMeditationTime() async {
+    return await NotificationServices.getNotificationTimeById(
+        "Meditation Time");
+  }
+
+  Future<DateTime?> GetDailyTime() async {
+    return await NotificationServices.getNotificationTimeById(
+        "Daily Tracking Time");
   }
 }
-
-

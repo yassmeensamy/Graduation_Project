@@ -132,7 +132,8 @@ Future<int> callResendOTPApi() async {
   return 100;
 }
 
-logout(BuildContext context) async {
+logout(BuildContext context) async 
+{
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.remove('accessToken');
   await prefs.remove('refreshToken');

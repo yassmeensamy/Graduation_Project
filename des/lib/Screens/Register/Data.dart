@@ -128,7 +128,7 @@ class _DataState extends State<Data> {
   }
 
   void onNext() {
-    setState(() {
+    setState(()  {
       errorMessage = '';
       if (currentIndex < screens.length - 1) {
         if (currentIndex == 0 && validatePersonalInfo()) {
@@ -144,10 +144,12 @@ class _DataState extends State<Data> {
         } else {
           errorMessage = 'Please answer the question(s)';
         }
-      } else if (validateDailyTracking()) {
-        scheduleMeditationReminders('Meditation Reminder');
-        scheduleTrackingReminders("DailyMood Rreminder");
+      } else if (validateDailyTracking())
+       {
+        scheduleMeditationReminders('Meditation Time');
+        scheduleTrackingReminders ("Daily Tracking Time",);
         sendPreferences();
+        
         updateProfile();
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (_) => const CustomizingLoader()));

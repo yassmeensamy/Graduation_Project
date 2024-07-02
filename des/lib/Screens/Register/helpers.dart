@@ -133,10 +133,14 @@ DateTime HandleNotificationTime(DateTime? Selectedtime) {
   return scheduledTime;
 }
 
+//MedtitaionTrack
+Future<void> scheduleMeditationReminders(String NotificationType,{DateTime? meditaion, String? selectedWeekday}) 
+async 
+{
 
-Future<void> scheduleMeditationReminders(String NotificationType) 
-async {
-  Map<String, int> dayMapping = {
+  
+  Map<String, int> dayMapping = 
+  {
     "Sunday": 0,
     "Monday": 1,
     "Tuesday": 2,
@@ -145,13 +149,17 @@ async {
     "Friday": 5,
     "Saturday": 6
   };
-
+  print("Notification ${selectedWeekday}");
+  
+  
   List<bool> _selectedDays = List.generate(7, (index) => false);
   if (dayMapping.containsKey(meditationDay)) 
   {
-    _selectedDays[dayMapping[meditationDay]!] = true;
+    _selectedDays[dayMapping[selectedWeekday == null ? meditationDay: selectedWeekday]!] = true;
   } 
-  else {
+  else 
+  {
+    print(selectedWeekday);
     print("Invalid day: $meditationDay");
     return;
   }
@@ -168,37 +176,37 @@ async {
           {
                 dayDifference += 7;
            }
-       DateTime scheduledTime= HandleNotificationTime(meditationTime);   
-         int notificationId = await NotificationServices.scheduleNotification(
+       DateTime scheduledTime= HandleNotificationTime(meditaion== null ? meditationTime: meditaion);   
+        int notificationId = await NotificationServices.scheduleNotification(
         Schedule(
           details: NotificationType,
           time: scheduledTime,
         ),
       );   
        SharedPreferences prefs = await SharedPreferences.getInstance();
-       print(prefs.getInt(NotificationType));
       await prefs.setInt(NotificationType, notificationId);
+      print(prefs.getInt(NotificationType));
        print('Notification ID saved Meditaion: $notificationId');
+      
     }
   }
 
 }
 
 
-
-Future<void> scheduleTrackingReminders(String notificationType) async 
+/// TrackNotification
+Future<void> scheduleTrackingReminders(String notificationType,{DateTime? trackTime}) async 
 {
-
- DateTime scheduledTime=HandleNotificationTime(trackingTime);
+ DateTime scheduledTime=HandleNotificationTime(trackTime ==null? trackingTime : trackTime);
   int notificationId = await NotificationServices.scheduleNotification(
     Schedule(
       details: notificationType,
       time: scheduledTime,
     ),
   );
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   await prefs.setInt(notificationType, notificationId);
   print('Notification ID saved: $notificationId');
 }
-
 
