@@ -49,7 +49,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       if (response.statusCode == 201) {
         successToast('Post created successfully');
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => PostsScreen()));
+            .push(MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
       } else {
         errorToast('Failed to create post');
       }
