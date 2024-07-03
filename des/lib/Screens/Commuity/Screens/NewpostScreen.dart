@@ -1,157 +1,115 @@
 import 'dart:io';
-import 'package:des/Components/NextButton.dart';
-import 'package:des/Models/user.dart';
-import 'package:des/Providers/UserProvider.dart';
+import 'package:des/Components/Toasts.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
+import '../../../constants.dart' as constants;
 import 'package:shared_preferences/shared_preferences.dart';
-import '../cubit/cubit/picked_image_cubit.dart';
-import '/constants.dart' as constants;
-import 'dart:convert';
 
 import 'CommuintyScreens.dart';
 
-class NewPostScreen extends StatelessWidget {
-  const NewPostScreen({Key? key}) : super(key: key);
-
+class CreatePostPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    TextEditingController newPostContent = TextEditingController();
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
-    User currentUser = userProvider.user!;
-
-    return BlocProvider<PickedImageCubit>(
-      create: (context) => PickedImageCubit(),
-      child: Scaffold(
-        backgroundColor: constants.pageColor,
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            "Create Post",
-            style: GoogleFonts.nunitoSans(
-              fontWeight: FontWeight.w700,
-              fontSize: 24,
-              color: Colors.black,
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () async {
-                final image = context.read<PickedImageCubit>().image;
-                if (image != null) {
-                  await createNewPost(newPostContent.text, image);
-                }
-              },
-              child: Text(
-                "Post",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                HeaderPost(),
-                SizedBox(height: 30),
-                NewPostContainer(newPostContent: newPostContent),
-                SizedBox(height: 60),
-                NextButton(
-                  ontap: () {
-                    // Handle next button action
-                  },
-                  groundColor: constants.mint,
-                  text: "Post",
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<void> createNewPost(String content, File image) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? accessToken = prefs.getString('accessToken');
-    final url = Uri.parse('${constants.BaseURL}/api/posts/create/');
-    var request = http.MultipartRequest('POST', url);
-    request.headers['Authorization'] = 'Bearer $accessToken';
-    request.fields['content'] = content;
-    request.files.add(await http.MultipartFile.fromPath('image', image.path));
-    try {
-      var response = await request.send();
-      if (response.statusCode == 200) {
-        print('Post created successfully');
-      } else {
-        print('Failed to create post');
-      }
-    } catch (e) {
-      print('Error: $e');
-    }
-  }
+  _CreatePostPageState createState() => _CreatePostPageState();
 }
 
-class NewPostContainer extends StatelessWidget {
-  final TextEditingController newPostContent;
+class _CreatePostPageState extends State<CreatePostPage> {
+  final _formKey = GlobalKey<FormState>();
+  File? _image;
+  final TextEditingController _postController = TextEditingController();
 
-  NewPostContainer({required this.newPostContent});
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> _submitPost() async {
+    if (_formKey.currentState!.validate()) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('accessToken');
+
+      var request = http.MultipartRequest(
+          'POST', Uri.parse('${constants.BaseURL}/api/posts/create/'));
+      request.headers['Authorization'] = 'Bearer $token';
+      request.fields['content'] = _postController.text;
+
+      if (_image != null) {
+        request.files
+            .add(await http.MultipartFile.fromPath('image', _image!.path));
+      }
+
+      var response = await request.send();
+
+      if (response.statusCode == 201) {
+        successToast('Post created successfully');
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
+      } else {
+        errorToast('Failed to create post');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Stack(
-        children: [
-          TextField(
-            controller: newPostContent,
-            maxLines: 20,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(17),
-                borderSide: const BorderSide(color: Colors.grey),
-              ),
-              hintText: 'Share your positivity today',
-              hintStyle: GoogleFonts.lato(
-                textStyle: const TextStyle(fontSize: 18, letterSpacing: .5),
-              ),
-            ),
+    return Scaffold(
+      backgroundColor: constants.pageColor,
+      appBar: AppBar(
+          elevation: 0,
+          title: Text(
+            'Create New Post',
+            style: TextStyle(color: Colors.black),
           ),
-          Positioned(
-            bottom: 20,
-            right: 20,
-            child: IconButton(
-              onPressed: () {
-                context.read<PickedImageCubit>().getImageFromGallery();
-              },
-              icon: Icon(Icons.photo),
-            ),
-          ),
-          BlocBuilder<PickedImageCubit, PickedImageState>(
-            builder: (context, state) {
-              if (state is ImagePickerSuccess) {
-                return Positioned(
-                  bottom: 20,
-                  right: 20,
-                  left: 20,
-                  child: Image.file(
-                    File(state.image!.path),
-                    height: 300,
-                    width: 300,
-                  ),
-                );
-              }
-              return Container();
+          backgroundColor: constants.pageColor,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            color: Colors.black,
+            onPressed: () {
+              Navigator.of(context).pop();
             },
+          )),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _postController,
+                decoration: InputDecoration(
+                  labelText: 'Share Your Positivity Today!',
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
+              _image != null
+                  ? Image.file(
+                      _image!,
+                      height: 200,
+                    )
+                  : Text('No image selected'),
+              ElevatedButton(
+                onPressed: _pickImage,
+                child: Icon(Icons.image),
+              ),
+              ElevatedButton(
+                onPressed: _submitPost,
+                child: Text('Post'),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

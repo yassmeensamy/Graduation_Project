@@ -317,7 +317,7 @@ class CreatePost extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => NewPostScreen()));
+            .push(MaterialPageRoute(builder: (context) => CreatePostPage()));
       },
       child: Row(
         children: [
