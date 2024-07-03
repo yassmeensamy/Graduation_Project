@@ -4,12 +4,12 @@ import 'package:des/Models/ActivityModel.dart';
 import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
+import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
 import 'package:des/Screens/DepressionNotification.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Calender.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Rectangle.dart';
 import 'package:des/Screens/HomeScreen/Widgets/ToDo.dart';
 import 'package:des/Screens/MoodTracker/SecondLayerMood.dart';
-import 'package:des/Screens/Register/helpers.dart';
 import 'package:des/Screens/Test/TestScreen.dart';
 import 'package:des/Screens/Weekly/WeeklySurvey.dart';
 import 'package:des/cubit/EmotionCubit.dart';
@@ -312,6 +312,7 @@ class NewHome extends StatelessWidget {
                             ]),
                         EmotionsContainer(),
                         DepressionTestContainer(),
+                          CommuintyContainer(),
                         BlocProvider.of<InsigthsCubit>(context).is7DaysAgo ==
                                 false
                             ? WeeklySurveyContainer()
@@ -319,9 +320,13 @@ class NewHome extends StatelessWidget {
                         BlocProvider.of<InsigthsCubit>(context).results.isEmpty
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
+                            
+                            /*
                         BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
+                            */
+
                       ],
                     ),
                   ),
@@ -832,6 +837,59 @@ class WeeklySurveyContainer extends StatelessWidget {
                 onTap: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => WeeklySurvey()));
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'Join Now',
+                      style: TextStyle(
+                          color: constants.lilac,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17),
+                    ),
+                    Icon(
+                      Icons.play_arrow,
+                      color: constants.lilac,
+                      size: 20,
+                    )
+                  ],
+                )),
+          ]),
+          Image.asset(
+            'assets/images/Emotions/meetup.png',
+            width: 92,
+          ),
+        ],
+      ),
+    );
+  }
+}
+class CommuintyContainer extends StatelessWidget {
+  CommuintyContainer({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return RectangleContainer(
+      constants.lilac30,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              'Peer Group Meetup',
+              style: TextStyle(fontSize: 22),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: const Text(
+                'Let’s open up to the  thing that \n matters amoung the people',
+                softWrap: true,
+                style: TextStyle(color: constants.darkGrey),
+              ),
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => PostsScreen()));
                 },
                 child: Row(
                   children: [

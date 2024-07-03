@@ -1,8 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
+import 'package:des/Screens/Commuity/Models/Post.dart';
+import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
+import 'package:des/Screens/Commuity/cubit/comments_cubit.dart';
+import 'package:des/Screens/Commuity/cubit/posts_commuity_cubit.dart';
 import 'package:des/Screens/DepressionNotification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart' as constants;
@@ -12,19 +18,57 @@ class PostsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  BlocProvider
+    (
+        create: (context) => PostsCommuityCubit()..GetAllpost(),
+        child:
+    Scaffold(
         backgroundColor: constants.pageColor,
-        body: ListView.builder(
-            itemCount: 2, // Total number of items
-            itemBuilder: (context, index) {
-              return PostCard();
+        body: Padding(padding: EdgeInsets.only(top:0,left:10,right: 10),
+        child: 
+        Column(
+          children: 
+          [ SizedBox(height: 50,),
+           //CreatePost(),
+           BlocBuilder<PostsCommuityCubit,PostsCommuityState>(
+        builder: (context, state) 
+        {
+          if(state is PostsCommuityloading)
+          {
+            return  Center(child:CircularProgressIndicator());
+          }
+          else if (state is PostsCommuityerror)
+          {
+            return Container(color: Colors.red,);
+          }
+          else
+          {
+            return 
+            Expanded(
+            child:ListView.builder(
+            itemCount: context.read<PostsCommuityCubit>().AllPosts.length, // Total number of items
+            itemBuilder: (context, index) 
+            {
+              return PostCard(post: context
+                                    .read<PostsCommuityCubit>()
+                                    .AllPosts[index],
+                                  );
             }));
+          }
+        }
+        ),
+          ]
+        )
+        
+    ),
+    )
+    );
   }
 }
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
-
+  PostModel post;
+  PostCard( {required this.post});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -38,16 +82,14 @@ class PostCard extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 25.0, left: 12, right: 12),
+          padding: const EdgeInsets.only(top: 20.0, left: 12, right: 12),
           child: Column(
             children: [
               HeaderPost(createdAt: "11:30"),
-              ContentPost(
-                  contentpost:
-                      "I'd love to hear how you manage anxiety in your life. Feel free to  your experiences or ask any questions you may have. Remember, you're not alone in this journey!,"),
+              ContentPost(post: post,
+              ),
               CommitsAndLikes(
-                NumLikes: 21,
-                NumComment: 7,
+                post:post,
               )
             ],
           ),
@@ -171,26 +213,67 @@ class HeaderPost extends StatelessWidget {
 }
 
 class ContentPost extends StatelessWidget {
-  String contentpost;
-  ContentPost({required this.contentpost});
+  PostModel post;
+  ContentPost({required this.post});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 20),
-      child: Text(contentpost,
-          textAlign: TextAlign.center,
-          style: GoogleFonts.abhayaLibre(
-            fontSize: 22,
-          )),
+      child: Column(
+        children: 
+        [        
+          Text(post.content,
+                textAlign: TextAlign.center,
+                style: GoogleFonts.abhayaLibre(
+                  fontSize: 22,
+                )),
+                /*
+           CachedNetworkImage(
+              imageUrl: topic!.image,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                color: constants.mint.withOpacity(.5),
+                // Colors.grey[300],
+              ),
+              errorWidget: (context, url, error) => Center(
+                child: Icon(
+                  Icons.error,
+                  color: Colors.red,
+                ),
+              ),
+            ),  
+            */  
+             //Image.asset("assets/images/male.png"),
+             /*
+            Container(
+              width:  MediaQuery.of(context).size.width-100,
+              height: 240,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage("assets/images/male.png"),
+                  //getProfilePhoto(context), //NetworkImage
+                  fit: BoxFit.cover,
+                ),
+              ),
+              )
+              */
+            
+           
+
+
+        ],
+      )
+      
     );
   }
 }
 
 class CommitsAndLikes extends StatelessWidget {
-  int NumLikes;
-  int NumComment;
-  CommitsAndLikes({required this.NumComment, required this.NumLikes});
+  PostModel post;
+  CommitsAndLikes({required this.post});
 
   @override
   Widget build(BuildContext context) {
@@ -200,26 +283,84 @@ class CommitsAndLikes extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () {},
-                icon: Icon(
-                  Icons.favorite,
+                icon: Icon
+                (
+                  Icons.favorite_border_outlined,
                   color: Colors.black,
                 )),
             Text(
-              NumLikes.toString(),
+              post.Commentnums.toString(),
               style: GoogleFonts.comfortaa(color: Color(0xffB0B0B0)),
             )
           ],
         ),
         Row(
           children: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.comment)),
+            IconButton(onPressed: () 
+            {
+               Navigator.of(context).push(slideBottomRoute(page: CommentsScreen(Post_id: post.id,)));
+            }, icon: Icon(Icons.comment)),
             Text(
-              NumComment.toString(),
+              post.Commentnums.toString(),
               style: GoogleFonts.comfortaa(color: Color(0xffB0B0B0)),
             )
           ],
         )
       ],
+    );
+  }
+}
+
+
+PageRouteBuilder slideBottomRoute({required Widget page}) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+
+class CreatePost extends StatelessWidget {
+  const CreatePost({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row
+    (
+       children: [
+        Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: AssetImage("assets/images/male.png"),
+                  //getProfilePhoto(context), //NetworkImage
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Expanded(child:
+            Container(
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child:Center(child:Text("Share your postivity today!")),
+            ),
+            )
+       ],
     );
   }
 }

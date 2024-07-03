@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
-import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Commuity/NewpostScreen.dart';
+import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
+import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
 import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
-
+import 'package:des/Screens/Commuity/cubit/commuity_cubit_cubit.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
@@ -64,8 +64,11 @@ Future<void> main() async {
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
         BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
+        BlocProvider( create: (context) => CommuityCubitCubit()),
         BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
         BlocProvider( create: (context) => DepressionCubit()..CheckDepression(),
+      
+          
         )
       ],
       child: const MainNavigator(),
@@ -185,9 +188,14 @@ class MainNavigatorState extends State<MainNavigator> {
                 debugShowCheckedModeBanner: false,
                 home: Scaffold(
                   backgroundColor: constants.pageColor,
-                  body: homeWidget
+                  body: //CommentsApp()
+                  //CommentsScreen(),
+                  //CommentsScreen()
+                  homeWidget
                   //NewPostScreen(),
                   //PostsScreen(),
+                  //PostsScreen(),
+                  //NewPostScreen(),
                 ),
               );
             },
