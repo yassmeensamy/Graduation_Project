@@ -81,7 +81,7 @@ class NewPostScreen extends StatelessWidget {
   Future<void> createNewPost(String content, File image) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-    final url = Uri.parse('YOUR_API_ENDPOINT');
+    final url = Uri.parse('${constants.BaseURL}/api/posts/create/');
     var request = http.MultipartRequest('POST', url);
     request.headers['Authorization'] = 'Bearer $accessToken';
     request.fields['content'] = content;
