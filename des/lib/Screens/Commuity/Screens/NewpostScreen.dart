@@ -2,29 +2,30 @@ import 'dart:io';
 import 'package:des/Components/NextButton.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
-import 'package:des/Screens/Commuity/cubit/commuity_cubit_cubit.dart';
-import 'package:des/Screens/Commuity/cubit/cubit/picked_image_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import '../cubit/cubit/picked_image_cubit.dart';
 import '/constants.dart' as constants;
+import 'dart:convert';
+
 import 'CommuintyScreens.dart';
-import 'dart:io';
+
 class NewPostScreen extends StatelessWidget {
   const NewPostScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     TextEditingController newPostContent = TextEditingController();
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
     User currentUser = userProvider.user!;
 
     return BlocProvider<PickedImageCubit>(
       create: (context) => PickedImageCubit(),
-      child:
-       Scaffold(
+      child: Scaffold(
         backgroundColor: constants.pageColor,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
@@ -40,11 +41,11 @@ class NewPostScreen extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () {
-                context.read<CommuityCubitCubit>().CreateNewPost(
-                      newPostContent.text,
-                      context.read<PickedImageCubit>().image!,
-                    );
+              onPressed: () async {
+                final image = context.read<PickedImageCubit>().image;
+                if (image != null) {
+                  await createNewPost(newPostContent.text, image);
+                }
               },
               child: Text(
                 "Post",
@@ -75,6 +76,26 @@ class NewPostScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> createNewPost(String content, File image) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('accessToken');
+    final url = Uri.parse('${constants.BaseURL}/api/posts/create/');
+    var request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $accessToken';
+    request.fields['content'] = content;
+    request.files.add(await http.MultipartFile.fromPath('image', image.path));
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Post created successfully');
+      } else {
+        print('Failed to create post');
+      }
+    } catch (e) {
+      print('Error: $e');
+    }
   }
 }
 

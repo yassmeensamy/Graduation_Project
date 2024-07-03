@@ -1,10 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
 import 'package:des/Screens/Commuity/Models/Post.dart';
 import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
-import 'package:des/Screens/Commuity/cubit/comments_cubit.dart';
+import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_cubit.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_state.dart';
 import 'package:des/Screens/DepressionNotification.dart';
@@ -71,7 +70,7 @@ class PostsCommunityScreen extends StatelessWidget {
 }
 class PostCard extends StatelessWidget {
   PostModel post;
-  PostCard( {required this.post});
+  PostCard({required this.post});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -89,10 +88,11 @@ class PostCard extends StatelessWidget {
           child: Column(
             children: [
               HeaderPost(createdAt: "11:30"),
-              ContentPost(post: post,
+              ContentPost(
+                post: post,
               ),
               CommitsAndLikes(
-                post:post,
+                post: post,
               )
             ],
           ),
@@ -107,9 +107,8 @@ class HeaderPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context,
-        listen:
-            false); // Make sure UserProvider is correctly imported and provided above in the widget tree.
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     User currentUser = userProvider.user!;
 
     return Row(
@@ -132,9 +131,7 @@ class HeaderPost extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                  width:
-                      10), // Add some space between the profile picture and the text
+              SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,16 +139,12 @@ class HeaderPost extends StatelessWidget {
                     '${currentUser.firstName} ${currentUser.lastName}',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                      height:
-                          4), // Add some space between the name and createdAt
-                  if (createdAt != null) // Check if createdAt is not null
+                  SizedBox(height: 4),
+                  if (createdAt != null)
                     Text(
                       '$createdAt',
                       style: GoogleFonts.comfortaa(
-                          fontSize: 14,
-                          color: Color(0xffB0B0B0) // Adjust color as needed
-                          ),
+                          fontSize: 14, color: Color(0xffB0B0B0)),
                     ),
                 ],
               ),
@@ -163,18 +156,19 @@ class HeaderPost extends StatelessWidget {
               style: TextButton.styleFrom(
                 padding: EdgeInsets.only(right: 4),
                 minimumSize: Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink wrap
-                visualDensity:
-                    VisualDensity.compact, // Make the button more compact
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
               ),
               onPressed: () {
                 print("delete");
-                 {
+                {
                   CustomAlertDialog(
                     context: context,
-                    title: 'do you Want to Delete this post',
+                    title: 'Do you Want to Delete this Post',
                     message:
-                        "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
+                        "Are You Sure that you want to delete this post? This action cannot be undone.",
+                    actionText: 'Delete',
+                    icon: Icons.delete,
                   ).show();
                 }
               },
@@ -193,11 +187,10 @@ class HeaderPost extends StatelessWidget {
             ),
             TextButton(
               style: TextButton.styleFrom(
-                padding: EdgeInsets.only(left: 4), // Remove default padding
-                minimumSize: Size(0, 0), // Minimum size to zero
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap, // Shrink wrap
-                visualDensity:
-                    VisualDensity.compact, // Make the button more compact
+                padding: EdgeInsets.only(left: 4),
+                minimumSize: Size(0, 0),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
               ),
               onPressed: () {},
               child: Text(
@@ -222,16 +215,14 @@ class ContentPost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Column(
-        children: 
-        [        
-          Text(post.content,
-                textAlign: TextAlign.center,
+        padding: const EdgeInsets.only(top: 20),
+        child: Column(
+          children: [
+            Text(post.content,
                 style: GoogleFonts.abhayaLibre(
                   fontSize: 22,
                 )),
-                /*
+            /*
            CachedNetworkImage(
               imageUrl: topic!.image,
               fit: BoxFit.cover,
@@ -246,9 +237,9 @@ class ContentPost extends StatelessWidget {
                 ),
               ),
             ),  
-            */  
-             //Image.asset("assets/images/male.png"),
-             /*
+            */
+            //Image.asset("assets/images/male.png"),
+            /*
             Container(
               width:  MediaQuery.of(context).size.width-100,
               height: 240,
@@ -263,14 +254,8 @@ class ContentPost extends StatelessWidget {
               ),
               )
               */
-            
-           
-
-
-        ],
-      )
-      
-    );
+          ],
+        ));
   }
 }
 
@@ -286,8 +271,7 @@ class CommitsAndLikes extends StatelessWidget {
           children: [
             IconButton(
                 onPressed: () {},
-                icon: Icon
-                (
+                icon: Icon(
                   Icons.favorite_border_outlined,
                   color: Colors.black,
                 )),
@@ -299,10 +283,14 @@ class CommitsAndLikes extends StatelessWidget {
         ),
         Row(
           children: [
-            IconButton(onPressed: () 
-            {
-               Navigator.of(context).push(slideBottomRoute(page: CommentsScreen(Post_id: post.id,)));
-            }, icon: Icon(Icons.comment)),
+            IconButton(
+                onPressed: () {
+                  Navigator.of(context).push(slideBottomRoute(
+                      page: CommentsScreen(
+                    Post_id: post.id,
+                  )));
+                },
+                icon: Icon(Icons.comment)),
             Text(
               post.Commentnums.toString(),
               style: GoogleFonts.comfortaa(color: Color(0xffB0B0B0)),
@@ -313,7 +301,6 @@ class CommitsAndLikes extends StatelessWidget {
     );
   }
 }
-
 
 PageRouteBuilder slideBottomRoute({required Widget page}) {
   return PageRouteBuilder(
@@ -337,33 +324,37 @@ class CreatePost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row
-    (
-       children: [
-        Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage("assets/images/male.png"),
-                  //getProfilePhoto(context), //NetworkImage
-                  fit: BoxFit.cover,
-                ),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => NewPostScreen()));
+      },
+      child: Row(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: getProfilePhoto(context),
+                fit: BoxFit.cover,
               ),
             ),
-            Expanded(child:
-            Container(
+          ),
+          Expanded(
+            child: Container(
               height: 40,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
               ),
-              child:Center(child:Text("Share your postivity today!")),
+              child: Center(child: Text("Share your postivity today!")),
             ),
-            )
-       ],
+          )
+        ],
+      ),
     );
   }
 }
