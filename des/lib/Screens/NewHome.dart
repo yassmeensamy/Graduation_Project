@@ -890,7 +890,7 @@ class CommuintyContainer extends StatelessWidget {
             InkWell(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PostsScreen()));
+                      MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
                 },
                 child: Row(
                   children: [

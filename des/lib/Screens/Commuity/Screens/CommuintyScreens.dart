@@ -5,6 +5,7 @@ import 'package:des/Screens/Commuity/Models/Post.dart';
 import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
 import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_cubit.dart';
+import 'package:des/Screens/Commuity/cubit/posts_commuity_state.dart';
 import 'package:des/Screens/DepressionNotification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,51 +13,61 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart' as constants;
 
-class PostsScreen extends StatelessWidget {
-  const PostsScreen({super.key});
-
+class PostsCommunityScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => PostsCommuityCubit()..GetAllpost(),
-        child: Scaffold(
-          backgroundColor: constants.pageColor,
-          body: Padding(
+      create: (context) => PostsCommunityCubit()..getAllPosts(),
+      child: BlocBuilder<PostsCommunityCubit, PostsState>(
+        builder: (context, state) {
+          return Scaffold(
+            backgroundColor: constants.pageColor,
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.black),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+              iconTheme: const IconThemeData(color: Colors.black),
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              title: const Text(
+                "Comments",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
+            body: Padding(
               padding: EdgeInsets.only(top: 0, left: 10, right: 10),
-              child: Column(children: [
-                SizedBox(
-                  height: 50,
-                ),
-                CreatePost(),
-                BlocBuilder<PostsCommuityCubit, PostsCommuityState>(
-                    builder: (context, state) {
-                  if (state is PostsCommuityloading) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (state is PostsCommuityerror) {
-                    return Container(
+              child: Column(
+                children: [
+                  SizedBox(height: 50),
+                  // CreatePost(),
+                  if (state.postsState == RequestState.loading)
+                    Center(child: CircularProgressIndicator()),
+                  if (state.postsState == RequestState.error)
+                    Container(
                       color: Colors.red,
-                    );
-                  } else {
-                    return Expanded(
-                        child: ListView.builder(
-                            itemCount: context
-                                .read<PostsCommuityCubit>()
-                                .AllPosts
-                                .length,
-                            itemBuilder: (context, index) {
-                              return PostCard(
-                                post: context
-                                    .read<PostsCommuityCubit>()
-                                    .AllPosts[index],
-                              );
-                            }));
-                  }
-                }),
-              ])),
-        ));
+                      child: Center(child: Text('Error loading posts')),
+                    ),
+                  if (state.postsState == RequestState.loaded)
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: state.posts!.length, // Total number of items
+                        itemBuilder: (context, index) {
+                          return PostCard(post: state.posts![index]);
+                        },
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
-
 class PostCard extends StatelessWidget {
   PostModel post;
   PostCard({required this.post});
