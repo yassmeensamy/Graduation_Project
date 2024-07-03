@@ -9,8 +9,8 @@ import '../../../constants.dart' as constants;
 class CommentsScreen extends StatelessWidget 
 {
   int Post_id;
-  CommentsScreen({required this.Post_id});
-
+  BuildContext postcontext;
+  CommentsScreen({required this.Post_id ,required this.postcontext});
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -20,7 +20,7 @@ class CommentsScreen extends StatelessWidget
          leading: IconButton(
             icon: Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () async {
-              await context.read<PostsCommunityCubit>().getAllPosts();
+              await  postcontext.read<PostsCommunityCubit>().getAllPosts();
               
               Navigator.pop(context);
             },

@@ -22,21 +22,7 @@ class PostsCommunityScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: constants.pageColor,
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.black),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              iconTheme: const IconThemeData(color: Colors.black),
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              title: const Text(
-                "Comments",
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
+
             body: Padding(
               padding: EdgeInsets.only(top: 0, left: 10, right: 10),
               child: Column(
@@ -55,7 +41,7 @@ class PostsCommunityScreen extends StatelessWidget {
                       child: ListView.builder(
                         itemCount: state.posts!.length, // Total number of items
                         itemBuilder: (context, index) {
-                          return PostCard(post: state.posts![index]);
+                          return PostCard(post: state.posts![index] , postcontext: context);
                         },
                       ),
                     ),
@@ -70,7 +56,8 @@ class PostsCommunityScreen extends StatelessWidget {
 }
 class PostCard extends StatelessWidget {
   PostModel post;
-  PostCard({required this.post});
+  BuildContext postcontext;
+  PostCard({required this.post ,required this.postcontext});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -93,6 +80,7 @@ class PostCard extends StatelessWidget {
               ),
               CommitsAndLikes(
                 post: post,
+                postcontext:postcontext,
               )
             ],
           ),
@@ -261,7 +249,8 @@ class ContentPost extends StatelessWidget {
 
 class CommitsAndLikes extends StatelessWidget {
   PostModel post;
-  CommitsAndLikes({required this.post});
+  BuildContext postcontext;
+  CommitsAndLikes({required this.post ,required this.postcontext});
 
   @override
   Widget build(BuildContext context) {
@@ -288,6 +277,7 @@ class CommitsAndLikes extends StatelessWidget {
                   Navigator.of(context).push(slideBottomRoute(
                       page: CommentsScreen(
                     Post_id: post.id,
+                    postcontext:postcontext,
                   )));
                 },
                 icon: Icon(Icons.comment)),
