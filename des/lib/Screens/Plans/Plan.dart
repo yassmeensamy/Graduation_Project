@@ -11,13 +11,11 @@ import '../../../constants.dart' as constants;
 class PlanScreen extends StatelessWidget 
 { 
   String topic_name;
-   late TopicModel PlansTopicTips;
+  late TopicModel PlansTopicTips;
   PlanScreen(this.topic_name);
-
   @override
   Widget build(BuildContext context) 
   {
-  
     return BlocProvider(
       create: (context) => PlanTipsCubit()..FetchPlanActivities(topic_name),
       child: BlocConsumer<PlanTipsCubit, PlanTipsState>(
@@ -41,7 +39,7 @@ class PlanScreen extends StatelessWidget
               CachedNetworkImage(
                 
                 height: screenHeight * 0.35,
-                imageUrl: constants.BaseURL+PlansTopicTips.image,
+                imageUrl: PlansTopicTips.image,
                 fit: BoxFit.cover,
                 placeholder: (context, url) => Container(
                   color: Colors.grey[300],

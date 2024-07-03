@@ -3,6 +3,7 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
+import 'package:des/Screens/Commuity/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
 import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
@@ -191,6 +192,8 @@ class MainNavigatorState extends State<MainNavigator> {
                   body: //CommentsApp()
                   //CommentsScreen(),
                   //CommentsScreen()
+                  //CreatePostPage(),
+                  //NewPostScreen(),
                   homeWidget
                   //NewPostScreen(),
                   //PostsScreen(),

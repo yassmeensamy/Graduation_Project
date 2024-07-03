@@ -11,6 +11,9 @@ part 'topics_plan_state.dart';
 
 class TopicsPlanCubit extends Cubit<TopicsPlanState> 
 {
+   List<TopicModel> enrolledPlans = [];
+  List<TopicModel> UnenrolledPlans = [];
+  List<TopicModel>PlansTopics=[];
   TopicsPlanCubit() : super(TopicsPlanLoadingState())
   {
        FetchMainTopics();
@@ -25,7 +28,19 @@ class TopicsPlanCubit extends Cubit<TopicsPlanState>
       if (response.statusCode == 200) 
       {
         List<dynamic> data= jsonDecode(response.body);
-        List<TopicModel>PlansTopics= data.map((e) => TopicModel.fromJson(e)).toList();
+        PlansTopics= data.map((e) => TopicModel.fromJson(e)).toList();
+     
+        for(int i=0 ;i<PlansTopics.length;i++)
+        {
+          if(PlansTopics[i].enrolled==true)
+          {
+                 enrolledPlans.add(PlansTopics[i]);
+          }
+          else 
+          {
+                       UnenrolledPlans.add(PlansTopics[i]);
+          }
+        }
         emit(TopicsPlanLoadedState(PlansTopics));
        } 
       else 

@@ -6,6 +6,8 @@ class TopicModel {
   String colorTheme;
   String image;
   List<ActivityplanModel> Activities;
+  String description;
+  bool enrolled;
 
   TopicModel({
     required this.id,
@@ -13,6 +15,8 @@ class TopicModel {
     required this.colorTheme,
     required this.image,
     required this.Activities,
+    required this.description,
+    required this.enrolled,
   });
 
   factory TopicModel.fromJson(Map<String, dynamic> json) {
@@ -29,11 +33,14 @@ class TopicModel {
         activitiesList.add(ActivityplanModel.fromJson(acivity));
       }
     }
+
     return TopicModel(
       id: json['id'] ?? maintopic!["id"],
       name: json['name'] ?? maintopic!["name"],
       colorTheme: json['color'] ?? maintopic!["color"],
       image: json['image'] ?? maintopic!["image"],
+      description: json["description"] ?? maintopic!["description"],
+      enrolled: json["enrolled"] ?? maintopic!["enrolled"],
       Activities: activitiesList,
     );
   }

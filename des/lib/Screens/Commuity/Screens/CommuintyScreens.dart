@@ -247,10 +247,18 @@ class ContentPost extends StatelessWidget {
   }
 }
 
-class CommitsAndLikes extends StatelessWidget {
-  PostModel post;
-  BuildContext postcontext;
-  CommitsAndLikes({required this.post ,required this.postcontext});
+class CommitsAndLikes extends StatefulWidget {
+  final PostModel post;
+  final BuildContext postcontext;
+
+  CommitsAndLikes({required this.post, required this.postcontext});
+
+  @override
+  _CommitsAndLikesState createState() => _CommitsAndLikesState();
+}
+
+class _CommitsAndLikesState extends State<CommitsAndLikes> {
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -259,30 +267,38 @@ class CommitsAndLikes extends StatelessWidget {
         Row(
           children: [
             IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.favorite_border_outlined,
-                  color: Colors.black,
-                )),
+              onPressed: () {
+                setState(() {
+                  isLiked = !isLiked; // Toggle like state
+                });
+              },
+              icon: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_border_outlined,
+                color: isLiked ? Colors.red : Colors.black,
+              ),
+            ),
             Text(
-              post.Commentnums.toString(),
+              widget.post.Commentnums.toString(),
               style: GoogleFonts.comfortaa(color: Color(0xffB0B0B0)),
             )
           ],
         ),
+        SizedBox(width: 16), // Adjust spacing between sections if needed
         Row(
           children: [
             IconButton(
-                onPressed: () {
-                  Navigator.of(context).push(slideBottomRoute(
-                      page: CommentsScreen(
-                    Post_id: post.id,
-                    postcontext:postcontext,
-                  )));
-                },
-                icon: Icon(Icons.comment)),
+              onPressed: () {
+                Navigator.of(context).push(slideBottomRoute(
+                  page: CommentsScreen(
+                   Post_id: widget.post.id,
+                    postcontext: widget.postcontext,
+                  ),
+                ));
+              },
+              icon: Icon(Icons.comment),
+            ),
             Text(
-              post.Commentnums.toString(),
+              widget.post.Commentnums.toString(),
               style: GoogleFonts.comfortaa(color: Color(0xffB0B0B0)),
             )
           ],

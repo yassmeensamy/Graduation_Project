@@ -5,6 +5,7 @@ class PostModel {
   String postDate;
   int Commentnums;
   int likesnums;
+  //bool is_liked;
   PostModel({
     required this.id,
     required this.content,
@@ -12,6 +13,8 @@ class PostModel {
     required this.postDate,
     required this.Commentnums,
     required this.likesnums,
+    //required this.is_liked,
+   
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {

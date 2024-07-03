@@ -226,8 +226,7 @@ class NewHome extends StatelessWidget {
           */
           Future.microtask(() {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (shouldShowDialog.value &&
-                  context.read<DepressionCubit>().checkDepression) {
+              if (shouldShowDialog.value && context.read<DepressionCubit>().checkDepression) {
                 print("off");
                 showCustomDialog(context);
                 shouldShowDialog.value = false;
