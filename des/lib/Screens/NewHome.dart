@@ -193,12 +193,13 @@ class NewHome extends StatelessWidget {
       title: 'Depression Notification',
       message:
           "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
+      actionText: 'Go To Test',
+      icon: Icons.arrow_back,
     ).show();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
@@ -312,7 +313,7 @@ class NewHome extends StatelessWidget {
                             ]),
                         EmotionsContainer(),
                         DepressionTestContainer(),
-                          CommuintyContainer(),
+                        CommuintyContainer(),
                         BlocProvider.of<InsigthsCubit>(context).is7DaysAgo ==
                                 false
                             ? WeeklySurveyContainer()
@@ -320,13 +321,12 @@ class NewHome extends StatelessWidget {
                         BlocProvider.of<InsigthsCubit>(context).results.isEmpty
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
-                            
-                            /*
+
+                        /*
                         BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
                             */
-
                       ],
                     ),
                   ),
@@ -864,6 +864,7 @@ class WeeklySurveyContainer extends StatelessWidget {
     );
   }
 }
+
 class CommuintyContainer extends StatelessWidget {
   CommuintyContainer({super.key});
   @override

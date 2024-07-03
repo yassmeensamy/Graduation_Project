@@ -5,11 +5,15 @@ class CustomAlertDialog {
   final BuildContext context;
   final String title;
   final String message;
+  final String actionText;
+  final IconData icon;
 
   CustomAlertDialog({
     required this.context,
     required this.title,
     required this.message,
+    required this.actionText,
+    required this.icon,
   });
 
   void show() {
@@ -32,7 +36,7 @@ class CustomAlertDialog {
     return Stack(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left:10 ,top:5,bottom: 5,right: 8),
+          padding: EdgeInsets.all(10),
           decoration: BoxDecoration(
             shape: BoxShape.rectangle,
             color: Colors.white,
@@ -92,8 +96,8 @@ class CustomAlertDialog {
                           MaterialPageRoute(
                               builder: (context) => TestScreen()));
                     },
-                    icon: Icon(Icons.arrow_forward),
-                    label: Text('Go to Test'),
+                    icon: Icon(icon),
+                    label: Text(actionText),
                   ),
                   SizedBox(width: 16.0),
                   
