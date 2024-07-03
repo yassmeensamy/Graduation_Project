@@ -41,13 +41,15 @@ class _CreatePostPageState extends State<CreatePostPage> {
 
       if (_image != null) {
         request.files
-            .add(await http.MultipartFile.fromPath('image', _image!.path));
+            .add(await http.MultipartFile.fromPath('img', _image!.path));
       }
 
       var response = await request.send();
 
       if (response.statusCode == 201) {
         successToast('Post created successfully');
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
         Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
       } else {
