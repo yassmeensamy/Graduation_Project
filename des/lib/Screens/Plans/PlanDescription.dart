@@ -1,10 +1,47 @@
+import 'package:des/Components/NextButton.dart';
+import 'package:des/Models/Plans/TopicModel.dart';
+import 'package:des/Screens/Plans/Plan.dart';
+import 'package:des/Screens/Plans/Widgets/TopicPhoto.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class PlanDescription extends StatelessWidget 
+
+class PlanDescrtion extends StatelessWidget 
 {
- PlanDescription({super.key});
+  late TopicModel PlansTopicTips;
+  PlanDescrtion(this.PlansTopicTips);
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    final screenHeight = MediaQuery.of(context).size.height;
+    return Scaffold(
+      body:
+    Stack(
+      children: [
+        TopicPhoto(PlansTopicTips.image),
+        Positioned(
+          top: screenHeight * 0.45,
+          left: 20,
+          right: 20,
+          child: Center(
+              child: Text(PlansTopicTips.description,
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.openSans(fontSize: 30))),
+        ),
+        Positioned(
+            top: screenHeight * 0.8,
+            left: 20,
+            right: 20,
+            child: NextButton(
+                ontap: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(PlansTopicTips.name),));
+                },
+                groundColor: Color(int.parse(
+                    PlansTopicTips.colorTheme.replaceFirst('#', '0xFF'))),
+                text: "Enroll",
+                TextColor: Colors.white))
+      ],
+    ),
+    );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:des/Screens/Plans/Plan.dart';
+import 'package:des/Screens/Plans/PlanDescription.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
-import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -30,27 +30,31 @@ class PlansContent extends StatelessWidget
         }
         else 
         {
-          return Scaffold(
+          return 
+          Scaffold(
           backgroundColor: constants.pageColor,
             body: Padding(
-                   padding: EdgeInsets.only(top: 35, left: 10, right: 10),
-               child: Column(
+                   padding: EdgeInsets.only(top:40, left: 10, right: 10),
+               child: SingleChildScrollView(
+                child:
+                Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-
                         Text("What brings you to \n SoulSync",style: GoogleFonts.inter(fontSize: 27,fontWeight: FontWeight.w500),),
                          context.read<TopicsPlanCubit>().enrolledPlans.isNotEmpty?
-                         Expanded(child: 
-                         EnrolledPlan(flag:true)):SizedBox.shrink(),
-                        context.read<TopicsPlanCubit>().UnenrolledPlans.isNotEmpty? Expanded(child: EnrolledPlan(flag: false))
+                         EnrolledPlan(flag:true):SizedBox.shrink(),
+                         SizedBox(height: 5,),
+                        context.read<TopicsPlanCubit>().UnenrolledPlans.isNotEmpty? EnrolledPlan(flag: false)
                       : SizedBox.shrink(),
+                      
             ],
         ),
             
       )
           
-    );
+    ),
+          );
   }
     },
       listener:  
@@ -81,9 +85,9 @@ class PlanCard extends StatelessWidget
           child: InkWell(
             onTap:()
              {
-              //BlocProvider.of<PlanTasksCubit >(context).FetchPlanToDoList();
-              Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(topic!.name),)
-          ); 
+              topic!.enrolled ?
+                                Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(topic!.name),)): Navigator.push(context,MaterialPageRoute(builder: (context) => PlanDescrtion(topic!),));
+          
             },
           child:
            Container(
@@ -180,9 +184,10 @@ class PlanArrange extends StatelessWidget
    PlanArrange(this.PlansTopics);
   @override
   Widget build(BuildContext context) {
-    return Expanded(child: 
+    return
       GridView.custom(
             physics: ScrollPhysics(),
+            shrinkWrap: true,
             gridDelegate: SliverWovenGridDelegate.count(
             crossAxisCount: 2,
             mainAxisSpacing: 1,
@@ -199,8 +204,8 @@ class PlanArrange extends StatelessWidget
             (context, index) => PlanCard( PlansTopics[index],),
             childCount: PlansTopics.length,
           ),
-                ),
-    );
+                );
+  
       
   }
 }
@@ -211,7 +216,7 @@ class EnrolledPlan extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return  Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                         crossAxisAlignment: CrossAxisAlignment.start,
                           children: 
                           [ 
                              Text(flag==false?"choose a topic to focus on:":"YourPlan",style: GoogleFonts.abhayaLibre(fontSize: 30,color: Color(0xffA1A4B2)),),

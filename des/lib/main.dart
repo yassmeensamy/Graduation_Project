@@ -199,6 +199,7 @@ class MainNavigatorState extends State<MainNavigator> {
                   //PostsScreen(),
                   //PostsScreen(),
                   //NewPostScreen(),
+                   //CreatePostPage(),
                 ),
               );
             },
