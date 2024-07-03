@@ -28,7 +28,7 @@ class PostsCommunityScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 50),
-                  // CreatePost(),
+                  CreatePost(),
                   if (state.postsState == RequestState.loading)
                     Center(child: CircularProgressIndicator()),
                   if (state.postsState == RequestState.error)
