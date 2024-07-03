@@ -1,6 +1,7 @@
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Screens/Commuity/Models/CommentModel.dart';
 import 'package:des/Screens/Commuity/cubit/comments_cubit.dart';
+import 'package:des/Screens/Commuity/cubit/posts_commuity_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../constants.dart' as constants;
@@ -16,6 +17,14 @@ class CommentsScreen extends StatelessWidget
         create: (context) => CommentsCubit()..GetAllcomments(Post_id),
         child:Scaffold(
       appBar: AppBar(
+         leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () async {
+              await context.read<PostsCommunityCubit>().getAllPosts();
+              
+              Navigator.pop(context);
+            },
+          ),
         iconTheme: const IconThemeData(color: Colors.black),
         elevation: 0,
         backgroundColor: Colors.transparent,

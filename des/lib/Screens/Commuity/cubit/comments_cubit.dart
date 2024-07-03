@@ -24,7 +24,7 @@ class CommentsCubit extends Cubit<CommentsState>
   }
   Future<void>CreateComment (int id , String Content) async
   {
-    print(Content);
+     print("create is done");
    var data={ "post_id": id,"content": Content};
    var json_data=jsonEncode(data);
    Response response = await Api().post( url: "${constants.BaseURL}/api/comments/create/", body: json_data, );
