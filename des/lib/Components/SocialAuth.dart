@@ -64,26 +64,6 @@ class SocialAuth extends StatelessWidget {
                 size: 32,
               ),
               googleAuth),
-          const SizedBox(
-            width: 25,
-          ),
-          const SocialIcon(
-              Icon(
-                Icons.facebook,
-                color: Colors.blue,
-                size: 32,
-              ),
-              googleAuth),
-          const SizedBox(
-            width: 25,
-          ),
-          const SocialIcon(
-              Icon(
-                Icons.apple,
-                color: Colors.black,
-                size: 32,
-              ),
-              googleAuth),
         ],
       ),
       const constants.VerticalPadding(10)

@@ -57,18 +57,12 @@ class _EditPostPageState extends State<EditPostPage> {
       request.fields['content'] = _postController.text;
       request.fields['id'] = widget.postId.toString();
 
-      if (!_imageDeleted) {
+      if (!_imageDeleted && _image!=null) {
         request.files
             .add(await http.MultipartFile.fromPath('img', _image!.path));
       } else {
         request.files.remove('img');
       }
-
-      print('Request URL: ${request.url}');
-      print('Request Headers: ${request.headers}');
-      print('Request Fields: ${request.fields}');
-      print('Request Files: ${request.files}');
-
       var response = await request.send();
 
       if (response.statusCode == 200) {
