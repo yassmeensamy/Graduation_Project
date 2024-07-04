@@ -1,3 +1,4 @@
+/*
 class CommentModel {
   int id;
   String content;
@@ -21,3 +22,4 @@ class CommentModel {
     );
   }
 }
+*/

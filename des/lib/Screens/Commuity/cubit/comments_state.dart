@@ -8,6 +8,6 @@ final class Commentserror extends CommentsState {}
 
 final class CommentsSucess extends CommentsState 
 {
-  List<CommentModel>comments=[];
+  List<PostModel>comments=[];
   CommentsSucess(this.comments);
 }

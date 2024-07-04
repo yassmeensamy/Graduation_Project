@@ -5,25 +5,30 @@ class PostModel {
   String content;
   String? img;
   String postDate;
-  int Commentnums;
-  int likesnums;
-  bool is_liked;
-  bool is_created;
-  
+  int? Commentnums;
+  int? likesnums;
+  bool? is_liked;
+  bool ?is_created;
+  User user;
  
   PostModel({
     required this.id,
     required this.content,
-    required this.img,
-    required this.postDate,
-    required this.Commentnums,
-    required this.likesnums,
-    required this.is_liked,
-    required this.is_created,
+     this.img,
+       required this.postDate,
+      this.Commentnums,
+      this.likesnums,
+      this.is_liked,
+      this.is_created,
+    required this.user,
   
   });
 
-  factory PostModel.fromJson(Map<String, dynamic> json) {
+  factory PostModel.fromJson(Map<String, dynamic> json)
+   {
+
+    dynamic userdata=json["user"];
+    User user=User.fromJson(userdata);
     return PostModel(
       id: json['id'] ,
       content: json['content'] ,
@@ -33,6 +38,8 @@ class PostModel {
       likesnums: json['like_count'],
       is_liked:json["is_liked"],
       is_created:json["created_by_current_user"],
+      user:user,
+
     );
   }
 }
