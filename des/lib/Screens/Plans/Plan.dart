@@ -1,7 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:des/Screens/Plans/DayTipScreen.dart';
+import 'package:des/Screens/Plans/Widgets/TopicPhoto.dart';
 import 'package:des/cubit/PlanCubits/cubit/plan_tips_cubit.dart';
+import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
+import 'package:des/cubit/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,7 +19,29 @@ class PlanScreen extends StatelessWidget
   @override
   Widget build(BuildContext context) 
   {
-    return BlocProvider(
+    return WillPopScope(
+       onWillPop: () async 
+       {
+        try
+         {
+          context.read<TopicsPlanCubit>().FetchMainTopics();
+          
+
+             BlocProvider.of<HomeCubit>(context).changeIndex(4);
+             Navigator.pushNamedAndRemoveUntil(
+                context, '/home', (route) => false);
+        
+          return false;
+        } 
+        catch (e) 
+        {
+          print("حصل خطأ في FinishEntry أو التنقل: $e");
+          return false;
+        }
+      },
+    
+    child:
+    BlocProvider(
       create: (context) => PlanTipsCubit()..FetchPlanActivities(topic_name),
       child: BlocConsumer<PlanTipsCubit, PlanTipsState>(
         builder: (context, state)
@@ -27,46 +52,9 @@ class PlanScreen extends StatelessWidget
               return Scaffold(
                   body: Stack(
               children: [
-          Positioned.fill(
-            top: 0,
-            left: 0,
-            right: 0,
-           bottom:screenHeight * 0.48 ,
-            child:
-            Container(
-             
-              child: 
-              CachedNetworkImage(
-                
-                height: screenHeight * 0.35,
-                imageUrl: PlansTopicTips.image,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: Colors.grey[300],
-                ),
-                errorWidget: (context, url, error) => Center(
-                  child: Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          
-          Positioned(
-            top: screenHeight * 0.32, // Start below the first container
-            left: 0,
-            right: 0,
-            height: screenHeight * 0.7, // Take up the remaining visible area
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(30),
-                color: constants.pageColor,
-              ),
-            ),
-          ),
-          Positioned(
+         TopicPhoto(PlansTopicTips.image),
+    
+        Positioned(
             top: screenHeight * 0.3, // Start below the first container
             left: 0,
             right: 0,
@@ -103,7 +91,7 @@ class PlanScreen extends StatelessWidget
               ),
             ),
           ),
-          Positioned(
+        Positioned(
             top: screenHeight * 0.9,
             left: 220,
             right: 0,
@@ -124,9 +112,12 @@ class PlanScreen extends StatelessWidget
               ),
             ),
           ),
-          ],
-          ),
-       );
+         ]
+         ),
+          
+              );
+           
+       
           }  
           else if (state is PlanTipsError) 
           {
@@ -149,6 +140,7 @@ class PlanScreen extends StatelessWidget
           }
          } ,
       ),
+    )
   
     );
   }
@@ -242,3 +234,5 @@ class PlanTipsLoading extends StatelessWidget {
   
   }
 }
+
+

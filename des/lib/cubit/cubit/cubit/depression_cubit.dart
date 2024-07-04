@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:des/Models/Plans/AcivityModel.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,9 +11,12 @@ part 'depression_state.dart';
 
 class DepressionCubit extends Cubit<DepressionState> 
 {
+   late ActivityplanModel DepressionAcitivy ;
    bool checkDepression=false;
    DepressionCubit() : super(DepressionInitial());
-  Future<void> CheckDepression() async {
+  Future<void> CheckDepression() async 
+  {
+ 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
 
@@ -45,11 +49,17 @@ class DepressionCubit extends Cubit<DepressionState>
     var response = await http.get( Uri.parse("${constants.BaseURL}/api/dep_first-unflagged-activity/"), headers: headers);
     if(response.statusCode==200)
     {
-
+      dynamic data=jsonDecode(response.body);
+      DepressionAcitivy=ActivityplanModel.fromJson(data);
     }
-    else if (response.statusCode==404)
+    else if(response.statusCode==404)
     {
 
+       dynamic data=jsonDecode(response.body);
+       /*
+       "detail": "No unflagged activity found for the user and depression level.",
+    "level_depression": "moderate depression"
+    */
     }
     }
     catch  (e) {

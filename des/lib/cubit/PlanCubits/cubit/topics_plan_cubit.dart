@@ -24,6 +24,8 @@ class TopicsPlanCubit extends Cubit<TopicsPlanState>
      emit(TopicsPlanLoadingState());
      try
      {
+      enrolledPlans = [];
+      UnenrolledPlans = [];
      Response response = await Api().get(url:"${constants.BaseURL}/api/plan/topics/");
       if (response.statusCode == 200) 
       {

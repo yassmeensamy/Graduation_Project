@@ -1,4 +1,4 @@
-import 'package:des/Screens/Test/TestScreen.dart';
+
 import 'package:flutter/material.dart';
 
 class CustomAlertDialog {
@@ -7,6 +7,7 @@ class CustomAlertDialog {
   final String message;
   final String actionText;
   final IconData icon;
+  final VoidCallback onPressed;
 
   CustomAlertDialog({
     required this.context,
@@ -14,6 +15,7 @@ class CustomAlertDialog {
     required this.message,
     required this.actionText,
     required this.icon,
+    required this.onPressed
   });
 
   void show() {
@@ -89,13 +91,16 @@ class CustomAlertDialog {
                 children: <Widget>[
 
                   TextButton.icon(
-                    onPressed: () {
+                    onPressed: onPressed,
+                  
+                      /*
                       Navigator.of(context).pop();
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => TestScreen()));
-                    },
+                              */
+                    
                     icon: Icon(icon),
                     label: Text(actionText),
                   ),

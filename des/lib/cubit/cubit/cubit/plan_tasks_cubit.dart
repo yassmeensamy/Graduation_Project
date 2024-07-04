@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
 import 'package:des/Models/PlanTodoModel.dart';
+import 'package:des/Models/Plans/AcivityModel.dart';
 import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -11,22 +12,25 @@ part 'plan_tasks_state.dart';
 
 class PlanTasksCubit extends Cubit<PlanTasksState> {
   late PlanTodoModel planTasks;
-  List<TopicModel> plan = [];
+  List<ActivityplanModel> plan = [];
   PlanTasksCubit() : super(PlanTasksloading());
 
   Future<void> FetchPlanToDoList() async {
+
     emit(PlanTasksloading());
     try {
-      Response response = await Api()
-          .get(url: "${constants.BaseURL}/api/first-false-user-activity/");
+      print("heee");
+      Response response = await Api().get(url: "${constants.BaseURL}/api/first-false-user-activity/");
       if (response.statusCode == 200) {
         dynamic responseData = jsonDecode(response.body);
-        planTasks = PlanTodoModel.fromJson(responseData);
-        plan = planTasks.plansToDo;
+        List<dynamic>Todoplans = responseData["first_false_activities"];
+        plan=Todoplans.map((e) => ActivityplanModel.fromJson(e)).toList();
+        //print(plan.length);
         emit(PlanTasksloaded());
       }
-    } catch (e) {
-      print(e);
+    } catch (e) 
+    {
+      print("error ${e}");
     }
   }
 
@@ -41,7 +45,7 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       return false;
     }
   }
-
+/*
   void RemoveFromToDoList(int ActivityId, String topic_name) async {
     int index = 0;
     if (await Mark_as_done(ActivityId, topic_name) == true) {
@@ -55,6 +59,5 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       emit(PlanTasksloaded());
     } else {
       emit(PlanTasksError());
-    }
+    }*/
   }
-}

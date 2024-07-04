@@ -1,3 +1,5 @@
+import 'package:des/Models/user.dart';
+
 class PostModel {
   int id;
   String content;
@@ -5,7 +7,10 @@ class PostModel {
   String postDate;
   int Commentnums;
   int likesnums;
-  //bool is_liked;
+  bool is_liked;
+  bool is_created;
+  
+ 
   PostModel({
     required this.id,
     required this.content,
@@ -13,8 +18,9 @@ class PostModel {
     required this.postDate,
     required this.Commentnums,
     required this.likesnums,
-    //required this.is_liked,
-   
+    required this.is_liked,
+    required this.is_created,
+  
   });
 
   factory PostModel.fromJson(Map<String, dynamic> json) {
@@ -25,6 +31,8 @@ class PostModel {
       postDate: json['created_at'] ,
       Commentnums: json['comment_count'],
       likesnums: json['like_count'],
+      is_liked:json["is_liked"],
+      is_created:json["created_by_current_user"],
     );
   }
 }
