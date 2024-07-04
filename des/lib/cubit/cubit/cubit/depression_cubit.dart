@@ -52,6 +52,15 @@ class DepressionCubit extends Cubit<DepressionState>
       dynamic data=jsonDecode(response.body);
       DepressionAcitivy=ActivityplanModel.fromJson(data);
     }
+    else if(response.statusCode==404)
+    {
+
+       dynamic data=jsonDecode(response.body);
+       /*
+       "detail": "No unflagged activity found for the user and depression level.",
+    "level_depression": "moderate depression"
+    */
+    }
     }
     catch  (e) {
       throw Exception('Failed to fetch data: ${e.toString()}');

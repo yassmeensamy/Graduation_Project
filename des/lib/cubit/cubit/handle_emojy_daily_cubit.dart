@@ -46,7 +46,8 @@ class HandleEmojyDailyCubit extends Cubit<HandleEmojyDailyState> {
     }
   }
 
-  Future<void> chechMoodEnrty() async {
+  Future<void> chechMoodEnrty() async 
+  {
     reportHistory = await ReportHistory();
     if (reportHistory
         .containsKey(DateFormat('y-MM-dd').format(DateTime.now()))) {

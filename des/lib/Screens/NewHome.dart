@@ -26,159 +26,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart' as constants;
 
-/*
-class NewHome extends StatelessWidget {
-  NewHome({super.key});
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final ValueNotifier<bool> shouldShowDialog = ValueNotifier<bool>(true);
-
-  void showCustomDialog(BuildContext context) {
-    CustomAlertDialog(
-      context: context,
-      title: 'Depression Notification',
-      message:
-          "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
-    ).show();
-  }
-
-  Future<bool> _loadNewUserStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool("NewUser") ?? false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
-    User? currentUser = userProvider.user;
-
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: constants.pageColor,
-      drawer: myDrawer(),
-      body: FutureBuilder<bool>(
-        future: _loadNewUserStatus(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: Container(color: Colors.red,));
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error loading data'));
-          } else 
-          {
-            bool isNewUser = snapshot.data ?? false;
-
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (shouldShowDialog.value &&
-                  context.read<DepressionCubit>().checkDepression) {
-                showCustomDialog(context);
-                shouldShowDialog.value = false;
-              }
-            });
-
-            return Column(
-              children: [
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 32.0, horizontal: 16),
-                      child: Column(
-                        children: [
-                          //HeaderHomeScreen(_scaffoldKey),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      _scaffoldKey.currentState?.openDrawer();
-                                    },
-                                    child: Container(
-                                      margin: const EdgeInsets.only(top: 16),
-                                      width: 50,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          shape: BoxShape.circle,
-                                          image: DecorationImage(
-                                              image: getProfilePhoto(context))),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        DateFormat('EEEE')
-                                            .format(DateTime.now()),
-                                        style: const TextStyle(
-                                            color: constants.txtGrey,
-                                            fontSize: 16),
-                                      ),
-                                      Text(
-                                        DateFormat.MMMMd()
-                                            .format(DateTime.now()),
-                                        style: const TextStyle(fontSize: 20),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    width: 16,
-                                  ),
-                                  Padding(
-                                      padding: EdgeInsets.only(top: 16.0),
-                                      child: IconButton(
-                                        onPressed: () {
-                                          print(DateFormat('yyyy-MM-dd')
-                                              .format(DateTime.now()));
-                                          print(DateFormat('d')
-                                              .format(DateTime.now()));
-                                        },
-                                        icon: Icon(
-                                          Icons.calendar_month_outlined,
-                                          color: constants.darkGrey,
-                                        ),
-                                      ))
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 16,
-                              ),
-                              Text(
-                                'Welcome Back, ${currentUser!.firstName}',
-                                style: const TextStyle(fontSize: 22),
-                              ),
-                            ],
-                          ),
-                          EmotionsContainer(),
-                          DepressionTestContainer(),
-                          BlocProvider.of<InsigthsCubit>(context).is7DaysAgo ==
-                                  false
-                              ? WeeklySurveyContainer()
-                              : SizedBox.shrink(),
-                          BlocProvider.of<InsigthsCubit>(context)
-                                  .results
-                                  .isEmpty
-                              ? SizedBox.shrink()
-                              : DisplayWeeklyTasks(),
-                              isNewUser?SizedBox.shrink(): PlanToDoTasks(),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }
-        },
-      ),
-    );
-  }
-}
-*/
 
 class NewHome extends StatelessWidget {
   NewHome({super.key});
@@ -195,6 +43,12 @@ class NewHome extends StatelessWidget {
           "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
       actionText: 'Go To Test',
       icon: Icons.arrow_back,
+      onPressed: (){
+      
+                      Navigator.of(context).pop();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => TestScreen()));
+      }
     ).show();
   }
 
@@ -326,6 +180,7 @@ class NewHome extends StatelessWidget {
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
                             */
+                            
                       ],
                     ),
                   ),
@@ -725,7 +580,6 @@ class PlanToDoTasks extends StatelessWidget {
     );
   }
 }
-
 class TextLine extends StatelessWidget {
   final String first;
   final dynamic second;

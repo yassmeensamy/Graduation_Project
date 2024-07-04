@@ -34,7 +34,7 @@ class TODo extends StatelessWidget
               if(todo is TopicModel)
               {
                
-                BlocProvider.of<PlanTasksCubit >(context).RemoveFromToDoList(todo.Activities[0].id, todo.name);
+               // BlocProvider.of<PlanTasksCubit >(context).RemoveFromToDoList(todo.Activities[0].id, todo.name);
               }
               else
               {

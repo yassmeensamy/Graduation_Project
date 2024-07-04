@@ -3,7 +3,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Commuity/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
 import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
@@ -63,13 +62,11 @@ Future<void> main() async {
         BlocProvider(create: (context) => HomeCubit()),
         BlocProvider( create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
-        BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
+       BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
         BlocProvider( create: (context) => CommuityCubitCubit()),
         BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
         BlocProvider( create: (context) => DepressionCubit()..CheckDepression(),
-      
-          
         )
       ],
       child: const MainNavigator(),

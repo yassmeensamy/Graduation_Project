@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
@@ -22,7 +23,6 @@ class PostsCommunityScreen extends StatelessWidget {
         builder: (context, state) {
           return Scaffold(
             backgroundColor: constants.pageColor,
-
             body: Padding(
               padding: EdgeInsets.only(top: 0, left: 10, right: 10),
               child: Column(
@@ -74,7 +74,7 @@ class PostCard extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20.0, left: 12, right: 12),
           child: Column(
             children: [
-              HeaderPost(createdAt: "11:30"),
+              HeaderPost(post),
               ContentPost(
                 post: post,
               ),
@@ -89,9 +89,9 @@ class PostCard extends StatelessWidget {
 }
 
 class HeaderPost extends StatelessWidget {
-  final String? createdAt;
+  PostModel post;
 
-  HeaderPost({this.createdAt});
+  HeaderPost(this.post);
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +119,7 @@ class HeaderPost extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(width: 10),
+              SizedBox(width:10 ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -128,69 +128,18 @@ class HeaderPost extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
-                  if (createdAt != null)
+                 
                     Text(
-                      '$createdAt',
+                      post.postDate,
                       style: GoogleFonts.comfortaa(
                           fontSize: 14, color: Color(0xffB0B0B0)),
                     ),
                 ],
               ),
+                SizedBox(width: 70,),
+              post.is_created?Update_delete(post.id):SizedBox.shrink()
             ]),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.only(right: 4),
-                minimumSize: Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              ),
-              onPressed: () {
-                print("delete");
-                {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Do you Want to Delete this Post',
-                    message:
-                        "Are You Sure that you want to delete this post? This action cannot be undone.",
-                    actionText: 'Delete',
-                    icon: Icons.delete,
-                  ).show();
-                }
-              },
-              child: Text(
-                "delete",
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 18,
-                  color: Color(0xffFC4C4C),
-                ),
-              ),
-            ),
-            Container(
-              width: 2,
-              height: 20,
-              color: Color(0xff100F11).withOpacity(.2),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.only(left: 4),
-                minimumSize: Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              ),
-              onPressed: () {},
-              child: Text(
-                "Edit",
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 18,
-                  color: Color(0xff8B4CFC),
-                ),
-              ),
-            ),
-          ],
-        ),
+        
       ],
     );
   }
@@ -205,14 +154,20 @@ class ContentPost extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.only(top: 20),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(post.content,
+            Text(
+              post.content,
+               //textAlign: TextAlign.left,
+               softWrap: true,
                 style: GoogleFonts.abhayaLibre(
                   fontSize: 22,
+                  
                 )),
-            /*
+            post.img==null?SizedBox.shrink():
            CachedNetworkImage(
-              imageUrl: topic!.image,
+              imageUrl:post.img!,
               fit: BoxFit.cover,
               placeholder: (context, url) => Container(
                 color: constants.mint.withOpacity(.5),
@@ -224,24 +179,7 @@ class ContentPost extends StatelessWidget {
                   color: Colors.red,
                 ),
               ),
-            ),  
-            */
-            //Image.asset("assets/images/male.png"),
-            /*
-            Container(
-              width:  MediaQuery.of(context).size.width-100,
-              height: 240,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: AssetImage("assets/images/male.png"),
-                  //getProfilePhoto(context), //NetworkImage
-                  fit: BoxFit.cover,
-                ),
-              ),
-              )
-              */
+            ), 
           ],
         ));
   }
@@ -273,8 +211,8 @@ class _CommitsAndLikesState extends State<CommitsAndLikes> {
                 });
               },
               icon: Icon(
-                isLiked ? Icons.favorite : Icons.favorite_border_outlined,
-                color: isLiked ? Colors.red : Colors.black,
+                 widget.post.is_liked  ? Icons.favorite : Icons.favorite_border_outlined,
+                color: widget.post.is_liked ? Colors.red : Colors.black,
               ),
             ),
             Text(
@@ -362,5 +300,78 @@ class CreatePost extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+
+class Update_delete extends StatelessWidget 
+{
+  int Post_id;
+   Update_delete(this.Post_id);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.only(right: 4),
+                minimumSize: Size(0, 0),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+              ),
+              onPressed: () 
+              {
+                  print("delete");
+                {
+                  CustomAlertDialog(
+                    context: context,
+                    title: 'Do you Want to Delete this Post',
+                    message:
+                        "Are You Sure that you want to delete this post? This action cannot be undone.",
+                    actionText: 'Delete',
+                    icon: Icons.delete,
+                    onPressed: ()
+                    {
+                      context.read<PostsCommunityCubit>().DeletePost(Post_id);
+                      Navigator.pop(context);
+                      context.read<PostsCommunityCubit>().getAllPosts();
+                      print("delete");
+                    }
+                  ).show();
+                }
+              },
+              child: Text(
+                "delete",
+                style: GoogleFonts.abhayaLibre(
+                  fontSize: 18,
+                  color: Color(0xffFC4C4C),
+                ),
+              ),
+            ),
+            Container(
+              width: 2,
+              height: 20,
+              color: Color(0xff100F11).withOpacity(.2),
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                padding: EdgeInsets.only(left: 4),
+                minimumSize: Size(0, 0),
+                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+              ),
+              onPressed: () {},
+              child: Text(
+                "Edit",
+                style: GoogleFonts.abhayaLibre(
+                  fontSize: 18,
+                  color: Color(0xff8B4CFC),
+                ),
+              ),
+            ),
+          ],
+        );
   }
 }

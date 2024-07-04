@@ -2,7 +2,9 @@ import 'package:des/Components/NextButton.dart';
 import 'package:des/Models/Plans/TopicModel.dart';
 import 'package:des/Screens/Plans/Plan.dart';
 import 'package:des/Screens/Plans/Widgets/TopicPhoto.dart';
+import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
@@ -33,7 +35,9 @@ class PlanDescrtion extends StatelessWidget
             left: 20,
             right: 20,
             child: NextButton(
-                ontap: () {
+                ontap: () 
+                {
+                  BlocProvider.of<PlanTasksCubit>(context).FetchPlanToDoList();
                   Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(PlansTopicTips.name),));
                 },
                 groundColor: Color(int.parse(
