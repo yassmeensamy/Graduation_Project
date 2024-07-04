@@ -11,21 +11,21 @@ import 'dart:convert';
 part 'plan_tasks_state.dart';
 
 class PlanTasksCubit extends Cubit<PlanTasksState> {
-  late PlanTodoModel planTasks;
+  //late PlanTodoModel planTasks;
   List<ActivityplanModel> plan = [];
   PlanTasksCubit() : super(PlanTasksloading());
 
   Future<void> FetchPlanToDoList() async {
-
     emit(PlanTasksloading());
     try {
-      print("heee");
       Response response = await Api().get(url: "${constants.BaseURL}/api/first-false-user-activity/");
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200) 
+      {
         dynamic responseData = jsonDecode(response.body);
         List<dynamic>Todoplans = responseData["first_false_activities"];
+
         plan=Todoplans.map((e) => ActivityplanModel.fromJson(e)).toList();
-        //print(plan.length);
+        print(plan.length);
         emit(PlanTasksloaded());
       }
     } catch (e) 
@@ -45,6 +45,7 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       return false;
     }
   }
+  
 /*
   void RemoveFromToDoList(int ActivityId, String topic_name) async {
     int index = 0;
@@ -59,5 +60,8 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       emit(PlanTasksloaded());
     } else {
       emit(PlanTasksError());
-    }*/
+    }
   }
+  */
+  
+}

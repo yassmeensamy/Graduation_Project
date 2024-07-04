@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'ForgotPassword/Forgot.dart';
 import 'Register/Register.dart';
 import '../constants.dart' as constants;
-
 class Login extends StatelessWidget {
   const Login({super.key});
 
@@ -19,10 +18,9 @@ class Login extends StatelessWidget {
         constants.babyBlue70, 'Sign In', 390.0, LoginContent());
   }
 }
-
-class LoginContent extends StatelessWidget {
+class LoginContent extends StatelessWidget 
+{
   const LoginContent({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Column(

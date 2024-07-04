@@ -18,11 +18,11 @@ class TODo extends StatelessWidget
     return 
     ListTile(
       title: Text(
-              todo is  WeeklyToDoPlan? todo.activityName : todo.Activities[0].content.substring(0, todo.Activities[0].content.indexOf(':')).trim(),
-               style: TextStyle(fontSize: 20),
-        ),
-      subtitle: todo is  WeeklyToDoPlan? Text(todo.activityDescription): Text(todo.Activities[0].content.substring( todo.Activities[0].content.indexOf(':')+1).trim()+"(${todo.name})"),
-      trailing: BlocBuilder<CheckboxCubit, bool>(
+              todo is  WeeklyToDoPlan? todo.activityName : todo.content.substring(0,  todo.content.indexOf(':')) .trim(),
+              
+               style: TextStyle(fontSize: 20), ),
+              subtitle: todo is  WeeklyToDoPlan? Text(todo.activityDescription) : Text(todo.content.substring(todo.content.indexOf(':')+1).trim()),
+           trailing: BlocBuilder<CheckboxCubit, bool>(
         builder: (context, isChecked) {
           return Checkbox(
             value: isChecked,
@@ -34,7 +34,7 @@ class TODo extends StatelessWidget
               if(todo is TopicModel)
               {
                
-               // BlocProvider.of<PlanTasksCubit >(context).RemoveFromToDoList(todo.Activities[0].id, todo.name);
+              // BlocProvider.of<PlanTasksCubit >(context).RemoveFromToDoList(todo.Activities[0].id, todo.name);
               }
               else
               {

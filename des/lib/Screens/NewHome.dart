@@ -35,19 +35,20 @@ class NewHome extends StatelessWidget {
   final ValueNotifier<bool> shouldShowDialog =
       ValueNotifier<bool>(true); // Changed to true initially
 
-  void showCustomDialog(BuildContext context) {
-    CustomAlertDialog(
+  void showCustomDialog(BuildContext context) 
+  {
+    CustomAlertDialog
+    (
       context: context,
       title: 'Depression Notification',
       message:
           "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
       actionText: 'Go To Test',
       icon: Icons.arrow_back,
-      onPressed: (){
-      
-                      Navigator.of(context).pop();
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => TestScreen()));
+      onPressed: ()
+      {
+              Navigator.of(context).pop();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => TestScreen()));
       }
     ).show();
   }
@@ -175,11 +176,12 @@ class NewHome extends StatelessWidget {
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
 
-                        /*
+                        
                         BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
-                            */
+                            
+                            
                             
                       ],
                     ),
@@ -278,12 +280,13 @@ class DisplayWeeklyTasks extends StatelessWidget {
                           : BlocProvider.of<WeeklyTasksCubit>(context)
                               .WeeklyToDo
                               .length,
-                      itemBuilder: (BuildContext context, int index) {
+                      itemBuilder: (BuildContext context, int index) 
+                      {
                         return BlocProvider<CheckboxCubit>(
                           create: (context) => CheckboxCubit(),
                           child: TODo(
                               todo: BlocProvider.of<WeeklyTasksCubit>(context)
-                                  .WeeklyToDo[index]),
+                               .WeeklyToDo[index]),
                         );
                       },
                     )
@@ -523,7 +526,8 @@ class MoodSelectedContainer extends StatelessWidget {
   }
 }
 
-class PlanToDoTasks extends StatelessWidget {
+class PlanToDoTasks extends StatelessWidget
+ {
   const PlanToDoTasks({super.key});
   @override
   Widget build(BuildContext context) {
@@ -539,34 +543,32 @@ class PlanToDoTasks extends StatelessWidget {
           ),
           Container(
             child: BlocBuilder<PlanTasksCubit, PlanTasksState>(
-                builder: (context, state) {
-              if (state is PlanTasksloading) {
+                builder: (context, state) 
+                {
+              if (state is PlanTasksloading)
+               {
                 return Center(child: CircularProgressIndicator());
-              } else if (state is PlanTasksError) {
+              } 
+              else if (state is PlanTasksError) 
+              {
                 return Container(
                   color: Colors.black,
                 );
               }
-              return BlocProvider.of<PlanTasksCubit>(context)
-                          .planTasks
-                          .plansToDo
-                          .length !=
-                      0
-                  ? ListView.builder(
+              return BlocProvider.of<PlanTasksCubit>(context).plan.length !=0 ? ListView.builder
+              (
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: BlocProvider.of<PlanTasksCubit>(context)
-                          .planTasks
-                          .plansToDo
-                          .length,
+                      itemCount: BlocProvider.of<PlanTasksCubit>(context).plan.length,    
                       itemBuilder: (BuildContext context, int index) {
                         return BlocProvider<CheckboxCubit>(
                           create: (context) => CheckboxCubit(),
-                          child: TODo(
-                              todo: BlocProvider.of<PlanTasksCubit>(context)
-                                  .planTasks
-                                  .plansToDo[index]),
+                          child:
+                           TODo(
+                              todo:BlocProvider.of<PlanTasksCubit>(context).plan[index],)
+                              
                         );
+                        
                       },
                     )
                   : Center(

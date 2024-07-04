@@ -62,7 +62,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => HomeCubit()),
         BlocProvider( create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
-       BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
+        BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
         BlocProvider( create: (context) => CommuityCubitCubit()),
         BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
@@ -186,17 +186,7 @@ class MainNavigatorState extends State<MainNavigator> {
                 debugShowCheckedModeBanner: false,
                 home: Scaffold(
                   backgroundColor: constants.pageColor,
-                  body: //CommentsApp()
-                  //CommentsScreen(),
-                  //CommentsScreen()
-                  //CreatePostPage(),
-                  //NewPostScreen(),
-                  homeWidget
-                  //NewPostScreen(),
-                  //PostsScreen(),
-                  //PostsScreen(),
-                  //NewPostScreen(),
-                   //CreatePostPage(),
+                  body:homeWidget
                 ),
               );
             },
@@ -206,3 +196,5 @@ class MainNavigatorState extends State<MainNavigator> {
     );
   }
 }
+
+
