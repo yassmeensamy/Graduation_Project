@@ -14,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../../constants.dart' as constants;
+import 'EditPostScreen.dart';
 
 class PostsCommunityScreen extends StatelessWidget {
   @override
@@ -22,6 +23,7 @@ class PostsCommunityScreen extends StatelessWidget {
       create: (context) => PostsCommunityCubit()..getAllPosts(),
       child: BlocBuilder<PostsCommunityCubit, PostsState>(
         builder: (context, state) {
+         
           return Scaffold(
             backgroundColor: constants.pageColor,
             body: Padding(
@@ -38,14 +40,18 @@ class PostsCommunityScreen extends StatelessWidget {
                       child: Center(child: Text('Error loading posts')),
                     ),
                   if (state.postsState == RequestState.loaded)
+                
+                   
                     Expanded(
                       child: ListView.builder(
                         itemCount: state.posts!.length, // Total number of items
                         itemBuilder: (context, index) {
-                          return PostCard(post: state.posts![index] , postcontext: context);
+                          return PostCard(
+                              post: state.posts![index], postcontext: context);
                         },
                       ),
                     ),
+                
                 ],
               ),
             ),
@@ -55,10 +61,11 @@ class PostsCommunityScreen extends StatelessWidget {
     );
   }
 }
+
 class PostCard extends StatelessWidget {
   PostModel post;
   BuildContext postcontext;
-  PostCard({required this.post ,required this.postcontext});
+  PostCard({required this.post, required this.postcontext});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -81,7 +88,7 @@ class PostCard extends StatelessWidget {
               ),
               CommitsAndLikes(
                 post: post,
-                postcontext:postcontext,
+                postcontext: postcontext,
               )
             ],
           ),
@@ -109,10 +116,14 @@ class HeaderPost extends StatelessWidget {
                 height: 40,
                 child:CachedImage(imageUrl: context.read<PostsCommunityCubit>().getImage(post.user),),
                 ),
+
              ],
         ),
               
-              SizedBox(width:10 ),
+         
+              
+              SizedBox(width: 10),
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -121,17 +132,23 @@ class HeaderPost extends StatelessWidget {
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
-                    Text(
-                      post.postDate,
-                      style: GoogleFonts.comfortaa(
-                          fontSize: 14, color: Color(0xffB0B0B0)),
-                    ),
+                  Text(
+                    post.postDate,
+                    style: GoogleFonts.comfortaa(
+                        fontSize: 14, color: Color(0xffB0B0B0)),
+                  ),
                 ],
               ),
-                SizedBox(width: 70,),
-              post.is_created!?Update_delete(post.id):SizedBox.shrink()
-            ]
-    );
+              SizedBox(
+                width: 70,
+              ),
+              post.is_created!
+              ? Update_delete(post.id, post.content, post.img)
+                  : SizedBox.shrink()
+            ]);
+    
+
+  
         
     
 
@@ -150,15 +167,17 @@ class ContentPost extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              post.content,
-               //textAlign: TextAlign.left,
-               softWrap: true,
+            Text(post.content,
+              
+                softWrap: true,
                 style: GoogleFonts.abhayaLibre(
+
                   fontSize: 22,    
                 )),
             post.img==null?SizedBox.shrink(): CachedImage(imageUrl: post.img!,)  
           ]
+
+
         ));
   }
 }
@@ -198,8 +217,10 @@ class _CommitsAndLikesState extends State<CommitsAndLikes> {
                 });
               },
               icon: Icon(
+
                  widget.post.is_liked!  ? Icons.favorite : Icons.favorite_border_outlined,
                 color: widget.post.is_liked! ? Colors.red : Colors.black,
+
               ),
             ),
             Text(
@@ -215,7 +236,7 @@ class _CommitsAndLikesState extends State<CommitsAndLikes> {
               onPressed: () {
                 Navigator.of(context).push(slideBottomRoute(
                   page: CommentsScreen(
-                   Post_id: widget.post.id,
+                    Post_id: widget.post.id,
                     postcontext: widget.postcontext,
                   ),
                 ));
@@ -274,76 +295,81 @@ class CreatePost extends StatelessWidget {
   }
 }
 
-
-class Update_delete extends StatelessWidget 
-{
+class Update_delete extends StatelessWidget {
   int Post_id;
-   Update_delete(this.Post_id);
+  final String initialContent;
+  final String? initialImageUrl;
+  Update_delete(this.Post_id, this.initialContent, this.initialImageUrl);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.only(right: 4),
-                minimumSize: Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
-              ),
-              onPressed: () 
-              {
-                  print("delete");
-                {
-                  CustomAlertDialog(
-                    context: context,
-                    title: 'Do you Want to Delete this Post',
-                    message:
-                        "Are You Sure that you want to delete this post? This action cannot be undone.",
-                    actionText: 'Delete',
-                    icon: Icons.delete,
-                    onPressed: ()
-                    {
-                      context.read<PostsCommunityCubit>().DeletePost(Post_id);
-                      Navigator.pop(context);
-                      context.read<PostsCommunityCubit>().getAllPosts();
-                      print("delete");
-                    }
-                  ).show();
-                }
-              },
-              child: Text(
-                "delete",
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 18,
-                  color: Color(0xffFC4C4C),
-                ),
-              ),
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.only(right: 4),
+            minimumSize: Size(0, 0),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
+          ),
+          onPressed: () {
+            print("delete");
+            {
+              CustomAlertDialog(
+                  context: context,
+                  title: 'Do you Want to Delete this Post',
+                  message:
+                      "Are You Sure that you want to delete this post? This action cannot be undone.",
+                  actionText: 'Delete',
+                  icon: Icons.delete,
+                  onPressed: () async {
+                    context.read<PostsCommunityCubit>().DeletePost(Post_id);
+                    Navigator.pop(context);
+                   
+                    print("delete");
+                  }).show();
+            }
+          },
+          child: Text(
+            "delete",
+            style: GoogleFonts.abhayaLibre(
+              fontSize: 18,
+              color: Color(0xffFC4C4C),
             ),
-            Container(
-              width: 2,
-              height: 20,
-              color: Color(0xff100F11).withOpacity(.2),
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                padding: EdgeInsets.only(left: 4),
-                minimumSize: Size(0, 0),
-                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                visualDensity: VisualDensity.compact,
+          ),
+        ),
+        Container(
+          width: 2,
+          height: 20,
+          color: Color(0xff100F11).withOpacity(.2),
+        ),
+        TextButton(
+          style: TextButton.styleFrom(
+            padding: EdgeInsets.only(left: 4),
+            minimumSize: Size(0, 0),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
+          ),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => EditPostPage(
+                postId: Post_id,
+                initialContent: initialContent,
+                initialImageUrl: initialImageUrl,
               ),
-              onPressed: () {},
-              child: Text(
-                "Edit",
-                style: GoogleFonts.abhayaLibre(
-                  fontSize: 18,
-                  color: Color(0xff8B4CFC),
-                ),
-              ),
+            ));
+          },
+          child: Text(
+            "Edit",
+            style: GoogleFonts.abhayaLibre(
+              fontSize: 18,
+              color: Color(0xff8B4CFC),
             ),
-          ],
-        );
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -365,3 +391,4 @@ PageRouteBuilder slideBottomRoute({required Widget page}) {
     },
   );
 }
+

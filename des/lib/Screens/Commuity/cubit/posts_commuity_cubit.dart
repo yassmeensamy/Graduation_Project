@@ -56,9 +56,8 @@ class PostsCommunityCubit extends Cubit<PostsState>
 
     var data={"id": Post_id};
     var json_data=jsonEncode(data);
-    Response response = await Api().delete(url:"${constants.BaseURL}/api/posts/delete/", body:json_data );
-    print(response.statusCode);
-    
+    Response response = await Api().delete(url:"${constants.BaseURL}/api/posts/delete/",body:json_data );
+     await getAllPosts();
  }
 
  String getImage(User user)
@@ -89,5 +88,5 @@ class PostsCommunityCubit extends Cubit<PostsState>
       emit(state.copyWith(postsState: RequestState.error));
     }
   }
-  
+
 }

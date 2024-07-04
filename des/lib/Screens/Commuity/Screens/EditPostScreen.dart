@@ -5,18 +5,34 @@ import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import '../../../constants.dart' as constants;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'CommuintyScreens.dart';
 
-class CreatePostPage extends StatefulWidget {
+class EditPostPage extends StatefulWidget {
+  final int postId;
+  final String initialContent;
+  final String? initialImageUrl;
+
+  EditPostPage({
+    required this.postId,
+    required this.initialContent,
+    this.initialImageUrl,
+  });
+
   @override
-  _CreatePostPageState createState() => _CreatePostPageState();
+  _EditPostPageState createState() => _EditPostPageState();
 }
 
-class _CreatePostPageState extends State<CreatePostPage> {
+class _EditPostPageState extends State<EditPostPage> {
   final _formKey = GlobalKey<FormState>();
   File? _image;
-  final TextEditingController _postController = TextEditingController();
+  bool _imageDeleted = false;
+  late TextEditingController _postController;
+
+  @override
+  void initState() {
+    super.initState();
+    _postController = TextEditingController(text: widget.initialContent);
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -25,6 +41,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
     if (pickedFile != null) {
       setState(() {
         _image = File(pickedFile.path);
+        _imageDeleted = false;
       });
     }
   }
@@ -35,25 +52,33 @@ class _CreatePostPageState extends State<CreatePostPage> {
       String? token = prefs.getString('accessToken');
 
       var request = http.MultipartRequest(
-          'POST', Uri.parse('${constants.BaseURL}/api/posts/create/'));
+          'POST', Uri.parse('${constants.BaseURL}/api/posts/update/'));
       request.headers['Authorization'] = 'Bearer $token';
       request.fields['content'] = _postController.text;
+      request.fields['id'] = widget.postId.toString();
 
-      if (_image != null) {
+      if (!_imageDeleted) {
         request.files
             .add(await http.MultipartFile.fromPath('img', _image!.path));
+      } else {
+        request.files.remove('img');
       }
+
+      print('Request URL: ${request.url}');
+      print('Request Headers: ${request.headers}');
+      print('Request Fields: ${request.fields}');
+      print('Request Files: ${request.files}');
 
       var response = await request.send();
 
-      if (response.statusCode == 201) {
-        successToast('Post created successfully');
+      if (response.statusCode == 200) {
+        successToast('Post updated successfully');
         Navigator.of(context).pop();
         Navigator.of(context).pop();
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
       } else {
-        errorToast('Failed to create post');
+        errorToast('Failed to update post');
       }
     }
   }
@@ -61,6 +86,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
   void _deleteImage() {
     setState(() {
       _image = null;
+      _imageDeleted = true;
     });
   }
 
@@ -71,7 +97,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       appBar: AppBar(
         elevation: 0,
         title: Text(
-          'Create New Post',
+          'Edit Post',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         backgroundColor: constants.pageColor,
@@ -92,7 +118,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Share Your Positivity Today!',
+                  'Update Your Post',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -113,7 +139,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue, width: 2.0),
+                          borderSide:
+                              BorderSide(color: Colors.blue, width: 2.0),
                           borderRadius: BorderRadius.circular(12.0),
                         ),
                         suffixIcon: IconButton(
@@ -131,6 +158,28 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   ],
                 ),
                 SizedBox(height: 20),
+                widget.initialImageUrl != null &&
+                        _image == null &&
+                        !_imageDeleted
+                    ? Stack(
+                        alignment: Alignment.topRight,
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: Image.network(
+                              widget.initialImageUrl!,
+                              height: 200,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete, color: Colors.red),
+                            onPressed: _deleteImage,
+                          ),
+                        ],
+                      )
+                    : Container(),
                 _image != null
                     ? Stack(
                         alignment: Alignment.topRight,
@@ -152,21 +201,16 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       )
                     : Container(),
                 SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton(
-                      onPressed: _submitPost,
-                      child: Text('Post'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                      ),
+                ElevatedButton(
+                  onPressed: _submitPost,
+                  child: Text('Update'),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.blue,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0),
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
