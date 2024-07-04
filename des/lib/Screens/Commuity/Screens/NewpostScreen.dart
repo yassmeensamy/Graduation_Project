@@ -45,7 +45,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
       }
 
       var response = await request.send();
-
+ 
       if (response.statusCode == 201) {
         successToast('Post created successfully');
         Navigator.of(context).pop();
