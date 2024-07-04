@@ -14,6 +14,26 @@ class _NotificationScreenState extends State<NotificationScreen> {
   DateTime _trackingTime = DateTime.now();
   String _selectedWeekday = 'None';
 
+  @override
+  void initState() {
+    super.initState();
+    _initializeTimes();
+  }
+
+  Future<void> _initializeTimes() async {
+    DateTime? meditationTime = await GetMeditationTime();
+    DateTime? trackingTime = await GetDailyTime();
+
+    setState(() {
+      if (meditationTime != null) {
+        _meditationTime = meditationTime;
+      }
+      if (trackingTime != null) {
+        _trackingTime = trackingTime;
+      }
+    });
+  }
+
   void _selectTime(BuildContext context, bool isMeditation) {
     DatePicker.showTimePicker(
       context,
@@ -191,8 +211,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
-  Future<void> handleNotification(String NotificationType) async 
-  {
+  Future<void> handleNotification(String NotificationType) async {
     //DateTime?time = await NotificationServices.getNotificationTimeById(NotificationType);
     await NotificationServices().cancelNotificationById(NotificationType);
     scheduleTrackingReminders(NotificationType, trackTime: _trackingTime);
