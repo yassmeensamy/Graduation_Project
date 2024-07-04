@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/Components/CachedNetworl.dart';
 import 'package:des/Components/ProfilePhoto.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
@@ -7,7 +8,7 @@ import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
 import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_cubit.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_state.dart';
-import 'package:des/Screens/DepressionNotification.dart';
+import 'package:des/Components/CustomAlertDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,6 +23,7 @@ class PostsCommunityScreen extends StatelessWidget {
       create: (context) => PostsCommunityCubit()..getAllPosts(),
       child: BlocBuilder<PostsCommunityCubit, PostsState>(
         builder: (context, state) {
+         
           return Scaffold(
             backgroundColor: constants.pageColor,
             body: Padding(
@@ -38,6 +40,8 @@ class PostsCommunityScreen extends StatelessWidget {
                       child: Center(child: Text('Error loading posts')),
                     ),
                   if (state.postsState == RequestState.loaded)
+                
+                   
                     Expanded(
                       child: ListView.builder(
                         itemCount: state.posts!.length, // Total number of items
@@ -47,6 +51,7 @@ class PostsCommunityScreen extends StatelessWidget {
                         },
                       ),
                     ),
+                
                 ],
               ),
             ),
@@ -98,36 +103,32 @@ class HeaderPost extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider =
-        Provider.of<UserProvider>(context, listen: false);
-    User currentUser = userProvider.user!;
-
+   
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
+          
             children: [
               Container(
                 width: 40,
                 height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  image: DecorationImage(
-                    image: getProfilePhoto(context),
-                    fit: BoxFit.cover,
-                  ),
+                child:CachedImage(imageUrl: context.read<PostsCommunityCubit>().getImage(post.user),),
                 ),
-              ),
+
+             ],
+        ),
+              
+         
+              
               SizedBox(width: 10),
+
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${currentUser.firstName} ${currentUser.lastName}',
+                    '${post.user.firstName} ${post.user.lastName}',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 4),
@@ -141,12 +142,16 @@ class HeaderPost extends StatelessWidget {
               SizedBox(
                 width: 70,
               ),
-              post.is_created
-                  ? Update_delete(post.id, post.content, post.img)
+              post.is_created!
+              ? Update_delete(post.id, post.content, post.img)
                   : SizedBox.shrink()
-            ]),
-      ],
-    );
+            ]);
+    
+
+  
+        
+    
+
   }
 }
 
@@ -163,28 +168,16 @@ class ContentPost extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(post.content,
-                //textAlign: TextAlign.left,
+              
                 softWrap: true,
                 style: GoogleFonts.abhayaLibre(
-                  fontSize: 22,
+
+                  fontSize: 22,    
                 )),
-            post.img == null
-                ? SizedBox.shrink()
-                : CachedNetworkImage(
-                    imageUrl: post.img!,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: constants.mint.withOpacity(.5),
-                      // Colors.grey[300],
-                    ),
-                    errorWidget: (context, url, error) => Center(
-                      child: Icon(
-                        Icons.error,
-                        color: Colors.red,
-                      ),
-                    ),
-                  ),
-          ],
+            post.img==null?SizedBox.shrink(): CachedImage(imageUrl: post.img!,)  
+          ]
+
+
         ));
   }
 }
@@ -209,20 +202,29 @@ class _CommitsAndLikesState extends State<CommitsAndLikes> {
         Row(
           children: [
             IconButton(
-              onPressed: () {
-                setState(() {
-                  isLiked = !isLiked; // Toggle like state
+              onPressed: () 
+              {
+                context.read<PostsCommunityCubit>().likePost(widget.post.id);
+                setState(()
+                 {
+                  if(widget.post.is_liked ==true)
+                  widget.post.likesnums=widget.post.likesnums!-1;
+                  else
+                  {
+                    widget.post.likesnums = widget.post.likesnums!+1;
+                  }
+                   widget.post.is_liked = !widget.post.is_liked!;
                 });
               },
               icon: Icon(
-                widget.post.is_liked
-                    ? Icons.favorite
-                    : Icons.favorite_border_outlined,
-                color: widget.post.is_liked ? Colors.red : Colors.black,
+
+                 widget.post.is_liked!  ? Icons.favorite : Icons.favorite_border_outlined,
+                color: widget.post.is_liked! ? Colors.red : Colors.black,
+
               ),
             ),
             Text(
-              widget.post.Commentnums.toString(),
+              widget.post.likesnums.toString(),
               style: GoogleFonts.comfortaa(color: Color(0xffB0B0B0)),
             )
           ],
@@ -252,22 +254,6 @@ class _CommitsAndLikesState extends State<CommitsAndLikes> {
   }
 }
 
-PageRouteBuilder slideBottomRoute({required Widget page}) {
-  return PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) => page,
-    transitionsBuilder: (context, animation, secondaryAnimation, child) {
-      var begin = Offset(0.0, 1.0);
-      var end = Offset.zero;
-      var curve = Curves.ease;
-      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-      return SlideTransition(
-        position: animation.drive(tween),
-        child: child,
-      );
-    },
-  );
-}
 
 class CreatePost extends StatelessWidget {
   const CreatePost({super.key});
@@ -337,10 +323,10 @@ class Update_delete extends StatelessWidget {
                       "Are You Sure that you want to delete this post? This action cannot be undone.",
                   actionText: 'Delete',
                   icon: Icons.delete,
-                  onPressed: () {
+                  onPressed: () async {
                     context.read<PostsCommunityCubit>().DeletePost(Post_id);
                     Navigator.pop(context);
-                    context.read<PostsCommunityCubit>().getAllPosts();
+                   
                     print("delete");
                   }).show();
             }
@@ -386,3 +372,23 @@ class Update_delete extends StatelessWidget {
     );
   }
 }
+
+
+
+PageRouteBuilder slideBottomRoute({required Widget page}) {
+  return PageRouteBuilder(
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      var begin = Offset(0.0, 1.0);
+      var end = Offset.zero;
+      var curve = Curves.ease;
+      var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+      return SlideTransition(
+        position: animation.drive(tween),
+        child: child,
+      );
+    },
+  );
+}
+

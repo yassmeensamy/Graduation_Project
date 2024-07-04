@@ -2,18 +2,14 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
+import 'package:des/Models/user.dart';
 import 'package:des/Screens/Commuity/Models/Post.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_state.dart';
-import 'package:equatable/equatable.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 import '/constants.dart' as constants;
-
-
 
 class PostsCommunityCubit extends Cubit<PostsState> 
 {
-
   PostsCommunityCubit() : super( PostsState());
      List<PostModel> allPosts=[];
 
@@ -60,26 +56,37 @@ class PostsCommunityCubit extends Cubit<PostsState>
 
     var data={"id": Post_id};
     var json_data=jsonEncode(data);
-    Response response = await Api().delete(url:"${constants.BaseURL}/api/posts/delete/", body:json_data );
-    print(response.statusCode);
-    
+    Response response = await Api().delete(url:"${constants.BaseURL}/api/posts/delete/",body:json_data );
+     await getAllPosts();
  }
 
+ String getImage(User user)
+ {
+    if (user.image == null) {
+      if (user.gender == 'F') {
+        return "assets/images/femalePhoto.png";
+      } else {
+        return "assets/images/malePhoto.png";
+      }
+    } else {
+      return user.image!;
+    }
+  }
   
-
-  /*
-  Future<void> likePost(int postId) async {
+  Future<void> likePost(int postId) async 
+  {
+    print(postId);
     try {
       var data = {"post_id": postId};
       var jsonData = jsonEncode(data);
       await Api().post(
-        url: "${constants.BaseURL}/api/posts/like",
+        url: "${constants.BaseURL}/api/likes/",
         body: jsonData,
       );
-      // Optionally, update state after liking a post
-    } catch (e) {
+    } 
+    catch (e) {
       emit(state.copyWith(postsState: RequestState.error));
     }
   }
-  */
+
 }

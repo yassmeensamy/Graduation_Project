@@ -5,7 +5,7 @@ import 'package:des/Models/ReportModel.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/Providers/UserProvider.dart';
 import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
-import 'package:des/Screens/DepressionNotification.dart';
+import 'package:des/Components/CustomAlertDialog.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Calender.dart';
 import 'package:des/Screens/HomeScreen/Widgets/Rectangle.dart';
 import 'package:des/Screens/HomeScreen/Widgets/ToDo.dart';
