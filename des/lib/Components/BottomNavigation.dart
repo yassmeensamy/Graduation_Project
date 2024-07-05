@@ -1,8 +1,8 @@
+import 'package:des/Features/HomeScreen/HomeCubits/HandleNavigtionCubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../../constants.dart' as constants;
-import '../cubit/cubit/home_cubit.dart';
 
 class BottomNavigator extends StatelessWidget {
   BottomNavigator();

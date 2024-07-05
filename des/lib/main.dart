@@ -1,20 +1,28 @@
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
-import 'package:des/Controllers/AuthController.dart';
+import '../constants.dart' as constants;
+import 'package:des/Features/HomeScreen/HomeCubits/DepressionPlanCubit/depression_cubit.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/HandleNavigtionCubit/home_cubit.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/MoodEntryCubit/handle_emojy_daily_cubit.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/PlanTaskCubit/plan_tasks_cubit.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/WeeklyTasks/weekly_tasks_cubit.dart';
+import 'package:des/Features/Insigth/InsigthCubit/insigths_cubit.dart';
+import 'package:des/Features/Insigth/Widgets/WeeklyGraph.dart';
+import 'package:des/Features/Learning/LearningCubit/learning_cubit.dart';
+import 'package:des/Features/MoodTracker/DailyTrackCubit/EmotionCubit.dart';
+import 'package:des/Features/MoodTracker/DailyTrackCubit/activity_card_cubit.dart';
+import 'package:des/Features/MoodTracker/DailyTrackCubit/mood_card_cubit.dart';
+import 'package:des/Features/Notification/NotificationServices.dart';
+import 'package:des/Features/Onboarding.dart';
+import 'package:des/Features/Plans/PlanCubit/topics_plan_cubit.dart';
+import 'package:des/Features/Register/Data.dart';
+import 'package:des/Features/Register/VerifyEmail.dart';
+import 'package:des/Features/Weekly/WeeklyCubit/slider_cubit.dart';
+import 'package:des/Features/Weekly/WeeklyCubit/weekly_cubit.dart';
+import 'package:des/Features/temp.dart';
 import 'package:des/Models/user.dart';
-import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Commuity/cubit/commuity_cubit_cubit.dart';
-import 'package:des/Screens/HomeScreen/FinishTaskScreen.dart';
-import 'package:des/Screens/Insigth/WeeklyGraph.dart';
-import 'package:des/Screens/Temp.dart';
-import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
-import 'package:des/cubit/cubit/cubit/depression_cubit.dart';
-import 'package:des/cubit/cubit/cubit/plan_tasks_cubit.dart';
-import 'package:des/cubit/cubit/cubit/weekly_cubit.dart';
-import 'package:des/cubit/cubit/handle_emojy_daily_cubit.dart';
-import 'package:des/cubit/cubit/learning_cubit.dart';
-import 'package:des/cubit/cubit/weekly_tasks_cubit.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart';
@@ -23,16 +31,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Providers/UserProvider.dart';
-import 'Screens/Register/Data.dart';
-import 'Screens/Register/VerifyEmail.dart';
-import 'constants.dart' as constants;
-import 'cubit/EmotionCubit.dart';
-import 'cubit/cubit/activity_card_cubit.dart';
-import 'cubit/cubit/home_cubit.dart';
-import 'cubit/cubit/insigths_cubit.dart';
-import 'cubit/cubit/slider_cubit.dart';
-import 'cubit/mood_card_cubit.dart';
-import 'screens/Onboarding.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //done
@@ -63,7 +61,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
         BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
-        BlocProvider( create: (context) => CommuityCubitCubit()),
+        //BlocProvider( create: (context) => CommuityCubitCubit()),
         BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
         BlocProvider( create: (context) => DepressionCubit()..CheckDepression(),
         )

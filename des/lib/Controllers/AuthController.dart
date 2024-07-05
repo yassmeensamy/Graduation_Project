@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:des/Components/Toasts.dart';
-import 'package:des/NotificationServices.dart';
+import 'package:des/Features/Notification/NotificationServices.dart';
+
 import 'package:des/Tokens.dart';
 import 'package:des/main.dart';
 import 'package:flutter/material.dart';
