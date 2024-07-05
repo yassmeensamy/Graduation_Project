@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
+import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
-import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
-import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
-import 'package:des/Screens/Commuity/Screens/CommuintyScreens.dart';
 import 'package:des/Screens/Commuity/cubit/commuity_cubit_cubit.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
@@ -93,7 +91,7 @@ class MainNavigatorState extends State<MainNavigator> {
     _getTokens();
   }
   _getTokens() async {
-  //logout(context);
+    //logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       refreshToken = prefs.getString('refreshToken');
@@ -113,7 +111,6 @@ class MainNavigatorState extends State<MainNavigator> {
 
   fetchUserProfile() async {
     Map<String, dynamic>? userData = await getProfile();
-
     userProvider = UserProvider();
     user.firstName = userData?['first_name'];
     user.lastName = userData?['last_name'];

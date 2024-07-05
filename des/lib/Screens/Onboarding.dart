@@ -12,7 +12,6 @@ class OnBoarding extends StatelessWidget {
     Container(),
     Container()
   ];
-
   Widget slide(String img, String txt) {
     return SizedBox(
       height: double.infinity,

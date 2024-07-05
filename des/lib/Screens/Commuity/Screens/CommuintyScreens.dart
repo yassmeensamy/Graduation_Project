@@ -1,8 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:des/Components/CachedNetworl.dart';
 import 'package:des/Components/ProfilePhoto.dart';
-import 'package:des/Models/user.dart';
-import 'package:des/Providers/UserProvider.dart';
 import 'package:des/Screens/Commuity/Models/Post.dart';
 import 'package:des/Screens/Commuity/Screens/CommentsScreen.dart';
 import 'package:des/Screens/Commuity/Screens/NewpostScreen.dart';
@@ -12,18 +9,22 @@ import 'package:des/Components/CustomAlertDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import '../../../constants.dart' as constants;
 import 'EditPostScreen.dart';
 
 class PostsCommunityScreen extends StatelessWidget {
+  Future<void> _refresh(BuildContext context) async {
+    await Future.delayed(Duration(seconds: 1));
+    print("refresh is here");
+    context.read<PostsCommunityCubit>().getAllPosts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => PostsCommunityCubit()..getAllPosts(),
       child: BlocBuilder<PostsCommunityCubit, PostsState>(
         builder: (context, state) {
-         
           return Scaffold(
             backgroundColor: constants.pageColor,
             body: Padding(
@@ -40,18 +41,23 @@ class PostsCommunityScreen extends StatelessWidget {
                       child: Center(child: Text('Error loading posts')),
                     ),
                   if (state.postsState == RequestState.loaded)
-                
-                   
                     Expanded(
-                      child: ListView.builder(
-                        itemCount: state.posts!.length, // Total number of items
-                        itemBuilder: (context, index) {
-                          return PostCard(
-                              post: state.posts![index], postcontext: context);
-                        },
+                      child: RefreshIndicator(
+                        onRefresh: () => _refresh(context),
+                        child: ListView.builder(
+                          physics: AlwaysScrollableScrollPhysics(),
+                           shrinkWrap: true,
+                          primary: false,
+                          itemCount:
+                              state.posts!.length, // Total number of items
+                          itemBuilder: (context, index) {
+                            return PostCard(
+                                post: state.posts![index],
+                                postcontext: context);
+                          },
+                        ),
                       ),
                     ),
-                
                 ],
               ),
             ),

@@ -23,8 +23,8 @@ class PlanTipsCubit extends Cubit<PlanTipsState> {
       if (response.statusCode == 200) 
       {
         dynamic data = jsonDecode(response.body);
-        
         PlansTopicTips = TopicModel.fromJson(data);
+      
         for (int i = 0; i < PlansTopicTips.Activities.length; i++) 
         {
           if (PlansTopicTips.Activities[i].flag == true) 

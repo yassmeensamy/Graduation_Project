@@ -46,22 +46,21 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
     }
   }
   
-/*
+
   void RemoveFromToDoList(int ActivityId, String topic_name) async {
     int index = 0;
     if (await Mark_as_done(ActivityId, topic_name) == true) {
-      for (int i = 0; i < planTasks.plansToDo.length; i++) {
-        if (planTasks.plansToDo[i].name == topic_name) {
+      for (int i = 0; i < plan.length; i++) {
+        if (plan[i].TopicName == topic_name) {
           index = i;
         }
       }
-      planTasks.plansToDo
-          .removeWhere((item) => item == planTasks.plansToDo[index]);
+     plan.removeWhere((item) => item == plan[index]);
       emit(PlanTasksloaded());
     } else {
       emit(PlanTasksError());
     }
   }
-  */
+  
   
 }

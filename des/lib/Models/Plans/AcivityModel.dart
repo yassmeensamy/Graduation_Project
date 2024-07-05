@@ -2,22 +2,25 @@ class ActivityplanModel {
   int? id;
   bool ? flag;
   String ? content;
-
+  String? TopicName;
   ActivityplanModel({
      this.id,
     required this.flag,
      this.content,
+     this.TopicName
   });
-
   factory ActivityplanModel.fromJson(Map<String, dynamic> json) 
   {
-    json=json["activity"];
+    Map<String, dynamic> depActivity={};
+    if(json.containsKey('activity'))
+    {
+       depActivity = json['activity'];
+    }
     return ActivityplanModel(
-      id: json['id'] ?? json['number'] ,
-      flag: json['flag'] ,
-      content: json['text'] ,
+      id: json['number'] ?? json['id'] ?? depActivity['number'],
+      flag: json['flag'] ?? depActivity['flag'],
+      content: json['text'] ?? depActivity['text'] ?? " ",
+      TopicName: json["topic_name"] ??depActivity["topic_name"]??" ",
     );
   }
-
-  
 }

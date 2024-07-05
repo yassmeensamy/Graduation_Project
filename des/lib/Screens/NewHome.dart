@@ -26,31 +26,25 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../constants.dart' as constants;
 
-
-
 class NewHome extends StatelessWidget {
   NewHome({super.key});
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final ValueNotifier<bool> shouldShowDialog =
-      ValueNotifier<bool>(true); // Changed to true initially
+  final ValueNotifier<bool> showDepressionTest =ValueNotifier<bool>(true); 
+  final ValueNotifier<bool> showRetakeTest = ValueNotifier<bool>(true); 
 
-  void showCustomDialog(BuildContext context) 
-  {
-    CustomAlertDialog
-    (
-      context: context,
-      title: 'Depression Notification',
-      message:
-          "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
-      actionText: 'Go To Test',
-      icon: Icons.arrow_back,
-      onPressed: ()
-      {
-              Navigator.of(context).pop();
-              Navigator.push(context, MaterialPageRoute(builder: (context) => TestScreen()));
-      }
-    ).show();
+  void showCustomDialog(BuildContext context, String title, String message) {
+    CustomAlertDialog(
+        context: context,
+        title: title,
+        message: message,
+        actionText: 'Go To Test',
+        icon: Icons.arrow_back,
+        onPressed: () {
+          Navigator.of(context).pop();
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => TestScreen()));
+        }).show();
   }
 
   @override
@@ -68,27 +62,33 @@ class NewHome extends StatelessWidget {
           context.watch<InsigthsCubit>().state;
           context.watch<WeeklyCubit>().state;
           context.watch<PlanTasksCubit>().state;
-          /*
-          WidgetsBinding.instance.addPostFrameCallback((_) 
-          {
-            if (shouldShowDialog.value &&context.read<DepressionCubit>().checkDepression)
-             {
-              print("off");
-              showCustomDialog(context);
-              shouldShowDialog.value = false;
-            }
-          });
-          */
+
           Future.microtask(() {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (shouldShowDialog.value && context.read<DepressionCubit>().checkDepression) {
-                print("off");
-                showCustomDialog(context);
-                shouldShowDialog.value = false;
+              if (showDepressionTest.value &&context.read<DepressionCubit>().Retaketest == true) {
+                showCustomDialog(
+                  context,
+                  'Test Notification',
+                  "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
+                );
+                showDepressionTest.value = false;
               }
             });
           });
 
+          Future.microtask(() {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              if (showRetakeTest.value && context.read<DepressionCubit>().checkDepression) 
+              {
+                showCustomDialog(
+                  context,
+                  'Depression Notification',
+                  "We've noticed that you've been tracking your mood with us for the past 15 days. Based on the information you've shared, it might be helpful to take a quick depression test to better understand your mental health. This can provide valuable insights and help us offer you the best support possible.",
+                );
+                showRetakeTest.value = false;
+              }
+            });
+          });
           return Column(
             children: [
               Expanded(
@@ -176,13 +176,9 @@ class NewHome extends StatelessWidget {
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
 
-                        
                         BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
-                            
-                            
-                            
                       ],
                     ),
                   ),
@@ -259,6 +255,10 @@ class DisplayWeeklyTasks extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Text(
+            "Weekly Tasks",
+            style: GoogleFonts.openSans(fontSize: 24, color: Colors.black),
+          ),
           Container(
             child: BlocBuilder<WeeklyTasksCubit, WeeklyTasksState>(
                 builder: (context, state) {
@@ -280,13 +280,12 @@ class DisplayWeeklyTasks extends StatelessWidget {
                           : BlocProvider.of<WeeklyTasksCubit>(context)
                               .WeeklyToDo
                               .length,
-                      itemBuilder: (BuildContext context, int index) 
-                      {
+                      itemBuilder: (BuildContext context, int index) {
                         return BlocProvider<CheckboxCubit>(
                           create: (context) => CheckboxCubit(),
                           child: TODo(
                               todo: BlocProvider.of<WeeklyTasksCubit>(context)
-                               .WeeklyToDo[index]),
+                                  .WeeklyToDo[index]),
                         );
                       },
                     )
@@ -526,8 +525,7 @@ class MoodSelectedContainer extends StatelessWidget {
   }
 }
 
-class PlanToDoTasks extends StatelessWidget
- {
+class PlanToDoTasks extends StatelessWidget {
   const PlanToDoTasks({super.key});
   @override
   Widget build(BuildContext context) {
@@ -543,32 +541,27 @@ class PlanToDoTasks extends StatelessWidget
           ),
           Container(
             child: BlocBuilder<PlanTasksCubit, PlanTasksState>(
-                builder: (context, state) 
-                {
-              if (state is PlanTasksloading)
-               {
+                builder: (context, state) {
+              if (state is PlanTasksloading) {
                 return Center(child: CircularProgressIndicator());
-              } 
-              else if (state is PlanTasksError) 
-              {
+              } else if (state is PlanTasksError) {
                 return Container(
                   color: Colors.black,
                 );
               }
-              return BlocProvider.of<PlanTasksCubit>(context).plan.length !=0 ? ListView.builder
-              (
+              return BlocProvider.of<PlanTasksCubit>(context).plan.length != 0
+                  ? ListView.builder(
                       physics: BouncingScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: BlocProvider.of<PlanTasksCubit>(context).plan.length,    
+                      itemCount:
+                          BlocProvider.of<PlanTasksCubit>(context).plan.length,
                       itemBuilder: (BuildContext context, int index) {
                         return BlocProvider<CheckboxCubit>(
-                          create: (context) => CheckboxCubit(),
-                          child:
-                           TODo(
-                              todo:BlocProvider.of<PlanTasksCubit>(context).plan[index],)
-                              
-                        );
-                        
+                            create: (context) => CheckboxCubit(),
+                            child: TODo(
+                              todo: BlocProvider.of<PlanTasksCubit>(context)
+                                  .plan[index],
+                            ));
                       },
                     )
                   : Center(
@@ -582,6 +575,7 @@ class PlanToDoTasks extends StatelessWidget
     );
   }
 }
+
 class TextLine extends StatelessWidget {
   final String first;
   final dynamic second;
@@ -744,8 +738,10 @@ class CommuintyContainer extends StatelessWidget {
             ),
             InkWell(
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PostsCommunityScreen()));
                 },
                 child: Row(
                   children: [

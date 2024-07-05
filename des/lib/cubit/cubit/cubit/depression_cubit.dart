@@ -13,6 +13,7 @@ class DepressionCubit extends Cubit<DepressionState>
 {
    late ActivityplanModel DepressionAcitivy ;
    bool checkDepression=false;
+   bool Retaketest=false ;
    DepressionCubit() : super(DepressionInitial());
   Future<void> CheckDepression() async 
   {
@@ -54,8 +55,17 @@ class DepressionCubit extends Cubit<DepressionState>
     }
     else if(response.statusCode==404)
     {
+         dynamic data=jsonDecode(response.body);
 
-       dynamic data=jsonDecode(response.body);
+           if(data.containsKey("level_depression"))
+           {
+              Retaketest=true;
+           }
+           else 
+           {
+              Retaketest = false ;
+            //DepressionAcitivy==Null;
+           }
        /*
        "detail": "No unflagged activity found for the user and depression level.",
     "level_depression": "moderate depression"
