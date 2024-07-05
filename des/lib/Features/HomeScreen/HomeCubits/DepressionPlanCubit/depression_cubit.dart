@@ -11,7 +11,7 @@ part 'depression_state.dart';
 
 class DepressionCubit extends Cubit<DepressionState> 
 {
-   late ActivityplanModel DepressionAcitivy ;
+   List< ActivityplanModel >DepressionAcitivys =[];
    bool checkDepression=false;
    bool Retaketest=false ;
    DepressionCubit() : super(DepressionInitial());
@@ -51,12 +51,13 @@ class DepressionCubit extends Cubit<DepressionState>
     if(response.statusCode==200)
     {
       dynamic data=jsonDecode(response.body);
-      DepressionAcitivy=ActivityplanModel.fromJson(data);
+     ActivityplanModel  DepressionAcitivy=ActivityplanModel.fromJson(data);
+     DepressionAcitivys.add(DepressionAcitivy);
+
     }
     else if(response.statusCode==404)
     {
          dynamic data=jsonDecode(response.body);
-
            if(data.containsKey("level_depression"))
            {
               Retaketest=true;
@@ -64,6 +65,7 @@ class DepressionCubit extends Cubit<DepressionState>
            else 
            {
               Retaketest = false ;
+              DepressionAcitivys=[];
             //DepressionAcitivy==Null;
            }
        /*

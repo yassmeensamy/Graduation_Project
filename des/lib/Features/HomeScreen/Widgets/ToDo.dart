@@ -24,7 +24,7 @@ class TODo extends StatelessWidget {
       subtitle: todo is WeeklyToDoPlan
           ? Text(todo.activityDescription)
           : Text(todo.content.substring(todo.content.indexOf(':') + 1).trim() +
-              "${todo.TopicName}"),
+              "( ${todo.TopicName} )"),
       trailing: BlocBuilder<CheckboxCubit, bool>(
         builder: (context, isChecked) {
           return Checkbox(

@@ -173,13 +173,7 @@ class ContentPost extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(post.content,
-              
-                softWrap: true,
-                style: GoogleFonts.abhayaLibre(
-
-                  fontSize: 22,    
-                )),
+          DescriptionTextWidget(text: post.content),
             post.img==null?SizedBox.shrink(): CachedImage(imageUrl: post.img!,)  
           ]
 
@@ -187,7 +181,6 @@ class ContentPost extends StatelessWidget {
         ));
   }
 }
-
 class CommitsAndLikes extends StatefulWidget {
   final PostModel post;
   final BuildContext postcontext;
@@ -398,3 +391,79 @@ PageRouteBuilder slideBottomRoute({required Widget page}) {
   );
 }
 
+
+class DescriptionTextWidget extends StatefulWidget {
+  final String text;
+
+  DescriptionTextWidget({required this.text});
+
+  @override
+  _DescriptionTextWidgetState createState() => _DescriptionTextWidgetState();
+}
+
+class _DescriptionTextWidgetState extends State<DescriptionTextWidget> {
+  late String firstHalf;
+  late String secondHalf;
+  bool flag = true;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.text.length > 400) {
+      firstHalf = widget.text.substring(0, 400);
+      secondHalf = widget.text.substring(400, widget.text.length);
+    } else {
+      firstHalf = widget.text;
+      secondHalf = "";
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: 12, bottom: 10),
+      child: secondHalf.isEmpty
+          ? Text(
+              firstHalf,
+              style: GoogleFonts.abhayaLibre(
+                fontWeight: FontWeight.normal,
+                fontSize: 20,
+                color: constants.textGrey,
+              ),
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  flag ? (firstHalf ) : (firstHalf + secondHalf),
+                  style: GoogleFonts.abhayaLibre(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 20,
+                    color: constants.textGrey,
+                  ),
+                ),
+                SizedBox(height: 10),
+                InkWell(
+                  onTap: () {
+                    setState(() {
+                      flag = !flag;
+                    });
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Icon(Icons.add, color: constants.darkpurple, size: 20),
+                      Text(
+                        flag ? "Read more" : "Read less",
+                        style: GoogleFonts.abhayaLibre(
+                          color: constants.darkpurple,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+    );
+  }
+}

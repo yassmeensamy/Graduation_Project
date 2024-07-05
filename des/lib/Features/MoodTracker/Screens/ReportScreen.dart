@@ -160,6 +160,7 @@ class ReportScreen extends StatelessWidget
     );
   }
 }
+
 class DescriptionTextWidget extends StatefulWidget {
   final String text;
 

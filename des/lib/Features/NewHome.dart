@@ -528,7 +528,6 @@ class PlanToDoTasks extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   
     return RectangleContainer(
       constants.babyBlue30,
       Column(
@@ -564,12 +563,12 @@ class PlanToDoTasks extends StatelessWidget {
                 itemCount: context.read<PlanTasksCubit>().CurrentActivityplan.length,
                 itemBuilder: (BuildContext context, int index) {
                  final task = context.read<PlanTasksCubit>().CurrentActivityplan[index];
+
                   return BlocProvider<CheckboxCubit>
                   (
                     create: (context) => CheckboxCubit(),
-                    child: TODo(
-                            todo: task,
-                          ),
+                    child:  
+                    TODo( todo: task,)   
                   );
                 },
               ):
@@ -583,9 +582,6 @@ class PlanToDoTasks extends StatelessWidget {
                             style: TextStyle(fontSize: 18)),
                       ));
             }),
-
-            
-          
         ],
       ),
     );
