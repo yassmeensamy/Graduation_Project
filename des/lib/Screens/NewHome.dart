@@ -175,7 +175,7 @@ class NewHome extends StatelessWidget {
                         BlocProvider.of<InsigthsCubit>(context).results.isEmpty
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
-
+           
                         BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
@@ -524,11 +524,12 @@ class MoodSelectedContainer extends StatelessWidget {
     );
   }
 }
-
 class PlanToDoTasks extends StatelessWidget {
   const PlanToDoTasks({super.key});
+
   @override
   Widget build(BuildContext context) {
+   
     return RectangleContainer(
       constants.mint,
       Column(
@@ -539,37 +540,55 @@ class PlanToDoTasks extends StatelessWidget {
             "Daily Tasks",
             style: GoogleFonts.openSans(fontSize: 24, color: Colors.black),
           ),
-          Container(
-            child: BlocBuilder<PlanTasksCubit, PlanTasksState>(
-                builder: (context, state) {
+          BlocBuilder<PlanTasksCubit, PlanTasksState>(
+            builder: (context, state) {
               if (state is PlanTasksloading) {
                 return Center(child: CircularProgressIndicator());
-              } else if (state is PlanTasksError) {
+              } else if (state is PlanTasksError) 
+              {
                 return Container(
                   color: Colors.black,
+                  child: Center(
+                    child: Text(
+                      'An error occurred',
+                      style: GoogleFonts.openSans(
+                          fontSize: 18, color: Colors.white),
+                    ),
+                  ),
                 );
               }
-              return BlocProvider.of<PlanTasksCubit>(context).plan.length != 0
-                  ? ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount:
-                          BlocProvider.of<PlanTasksCubit>(context).plan.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return BlocProvider<CheckboxCubit>(
-                            create: (context) => CheckboxCubit(),
-                            child: TODo(
-                              todo: BlocProvider.of<PlanTasksCubit>(context)
-                                  .plan[index],
-                            ));
-                      },
-                    )
-                  : Center(
-                      child: Text(
-                          " Daily Tasks done, Celebrate this achievement and keep moving forward.",
-                          style: TextStyle(fontSize: 20)));
+
+           return BlocProvider.of<PlanTasksCubit>(context).CurrentActivityplan.isNotEmpty ? 
+              ListView.builder(
+                physics: BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: context.read<PlanTasksCubit>().CurrentActivityplan.length,
+                itemBuilder: (BuildContext context, int index) {
+                 final task = context.read<PlanTasksCubit>().CurrentActivityplan[index];
+                  return BlocProvider<CheckboxCubit>
+                  (
+                    create: (context) => CheckboxCubit(),
+                    child: task.message != " "
+                        ? SizedBox.shrink()
+                        : TODo(
+                            todo: task,
+                          ),
+                  );
+                },
+              ):
+              Center(
+                      child: 
+                      Padding(
+                        padding: const EdgeInsets.only(top:10),
+                        child: Text(
+                            "Tasks done, Celebrate this achievement and keep moving forward.",
+                            softWrap: true,
+                            style: TextStyle(fontSize: 18)),
+                      ));
             }),
-          ),
+
+            
+          
         ],
       ),
     );

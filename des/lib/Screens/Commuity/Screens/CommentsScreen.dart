@@ -6,6 +6,7 @@ import 'package:des/Screens/Commuity/cubit/comments_cubit.dart';
 import 'package:des/Screens/Commuity/cubit/posts_commuity_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_the_tooltip/just_the_tooltip.dart';
 import '../../../constants.dart' as constants;
 
 class CommentsScreen extends StatelessWidget {
@@ -52,7 +53,8 @@ class CommentsScreen extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: context.read<CommentsCubit>().comments.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return CommentCard(
+                      return 
+                      CommentCard(
                           commentModel:
                               context.read<CommentsCubit>().comments[index],
                           postcontext: postcontext);
@@ -153,3 +155,4 @@ class CreateComment extends StatelessWidget {
     );
   }
 }
+

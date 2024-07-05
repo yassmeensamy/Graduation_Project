@@ -2,10 +2,14 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
+import 'package:des/Models/user.dart';
+import 'package:des/Providers/UserProvider.dart';
 import 'package:des/Screens/Commuity/Models/CommentModel.dart';
 import 'package:des/Screens/Commuity/Models/Post.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
+import 'package:provider/provider.dart';
 import '/constants.dart' as constants;
 part 'comments_state.dart';
 
@@ -36,4 +40,41 @@ class CommentsCubit extends Cubit<CommentsState>
      emit(CommentsSucess(comments));
 
   }
+  bool IsCreator(BuildContext context , User user )
+  {
+     UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+     User? currentUser = userProvider.user;
+     if(currentUser!.email==user.email)
+     {
+      return true;
+     }
+     else
+     {
+      return false;
+     }
+  }
 }
+/*
+
+class TooltipSample extends StatelessWidget {
+  final String description;
+  final Widget child;
+  const TooltipSample({required this.description ,required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return JustTheTooltip(
+      child: Material(
+       
+       
+        child:  child,
+        ),
+      
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(description),
+      ),
+    );
+  }
+}
+*/

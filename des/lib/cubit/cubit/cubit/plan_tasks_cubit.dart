@@ -13,6 +13,7 @@ part 'plan_tasks_state.dart';
 class PlanTasksCubit extends Cubit<PlanTasksState> {
   //late PlanTodoModel planTasks;
   List<ActivityplanModel> plan = [];
+  List<ActivityplanModel> CurrentActivityplan = [];
   PlanTasksCubit() : super(PlanTasksloading());
 
   Future<void> FetchPlanToDoList() async {
@@ -22,15 +23,30 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       if (response.statusCode == 200) 
       {
         dynamic responseData = jsonDecode(response.body);
+        print(responseData);
         List<dynamic>Todoplans = responseData["first_false_activities"];
-
         plan=Todoplans.map((e) => ActivityplanModel.fromJson(e)).toList();
-        print(plan.length);
+        for(int i=0 ;i<plan.length ;i++)
+        {
+          //print(plan[i].message);
+        }
         emit(PlanTasksloaded());
       }
     } catch (e) 
     {
       print("error ${e}");
+    }
+  }
+
+
+  void CheckActivityOrNO ()
+  {
+    for (int i=0 ;i<plan.length ;i++)
+    {
+      if(plan[i].message !=" ")
+      {
+        CurrentActivityplan.add(plan[i]);
+      }
     }
   }
 

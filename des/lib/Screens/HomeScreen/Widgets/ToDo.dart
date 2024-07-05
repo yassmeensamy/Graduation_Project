@@ -10,17 +10,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TODo extends StatelessWidget 
 {
    dynamic todo;
-   
+  
   TODo({required this.todo});
 
   @override
   Widget build(BuildContext context) 
-  {
-    context.read<CheckboxCubit>().toggleCheckbox(false);
+  {  
+        context.read<CheckboxCubit>().toggleCheckbox(false);
      return  ListTile(
-      title: Text(
-              todo is  WeeklyToDoPlan? todo.activityName : todo.content.substring(0,  todo.content.indexOf(':')) .trim(),  
+      
+      title: 
+      
+      Text( todo is  WeeklyToDoPlan? todo.activityName :   todo.content.substring(0,  todo.content.indexOf(':')) .trim(),  
                style: TextStyle(fontSize: 20), ),
+               
               subtitle: todo is  WeeklyToDoPlan? Text(todo.activityDescription) : Text(todo.content.substring(todo.content.indexOf(':')+1).trim()+"${todo.TopicName}"),
                trailing: BlocBuilder<CheckboxCubit, bool>(
         builder: (context, isChecked) {
@@ -33,8 +36,7 @@ class TODo extends StatelessWidget
               //context.read<CheckboxCubit>().toggleCheckbox(!newValue);
               if(todo is ActivityplanModel)
               {
-                print("lolllllly");
-                print(todo.id);
+    
                BlocProvider.of<PlanTasksCubit >(context).RemoveFromToDoList(todo.id, todo.TopicName);
               }
               else
