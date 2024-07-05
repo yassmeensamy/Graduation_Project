@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const Color pageColor = Color(0xfff5f5f5);
 const Color babyBlue = Color(0xff6495ED);
+
 const Color babyBlue80 = Color.fromRGBO(100, 149, 237, 0.8);
 const Color babyBlue70 = Color.fromRGBO(100, 149, 237, 0.7);
 const Color babyBlue30 = Color.fromRGBO(100, 149, 237, 0.3);

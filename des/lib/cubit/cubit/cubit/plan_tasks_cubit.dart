@@ -1,21 +1,18 @@
-import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
-import 'package:des/Models/PlanTodoModel.dart';
 import 'package:des/Models/Plans/AcivityModel.dart';
-import 'package:des/Models/Plans/TopicModel.dart';
+import 'package:des/Screens/HomeScreen/FinishTaskScreen.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
-import 'package:meta/meta.dart';
 import '/constants.dart' as constants;
 import 'dart:convert';
-
 part 'plan_tasks_state.dart';
 
+
 class PlanTasksCubit extends Cubit<PlanTasksState> {
-  //late PlanTodoModel planTasks;
   List<ActivityplanModel> plan = [];
   List<ActivityplanModel> CurrentActivityplan = [];
   PlanTasksCubit() : super(PlanTasksloading());
-
   Future<void> FetchPlanToDoList() async {
     emit(PlanTasksloading());
     try {
@@ -23,33 +20,29 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       if (response.statusCode == 200) 
       {
         dynamic responseData = jsonDecode(response.body);
-        print(responseData);
         List<dynamic>Todoplans = responseData["first_false_activities"];
         plan=Todoplans.map((e) => ActivityplanModel.fromJson(e)).toList();
-        for(int i=0 ;i<plan.length ;i++)
-        {
-          //print(plan[i].message);
-        }
+        CheckActivityOrNO();
         emit(PlanTasksloaded());
       }
-    } catch (e) 
+    } 
+    catch (e) 
     {
       print("error ${e}");
     }
   }
 
-
   void CheckActivityOrNO ()
   {
     for (int i=0 ;i<plan.length ;i++)
-    {
-      if(plan[i].message !=" ")
+    { 
+      if(plan[i].message ==" ")
       {
         CurrentActivityplan.add(plan[i]);
       }
     }
   }
-
+  
   Future<bool> Mark_as_done(int activity_number, String topic_name) async {
     var data = {"activity_number": activity_number, "topic_name": topic_name};
     var json_data = jsonEncode(data);
@@ -61,21 +54,29 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       return false;
     }
   }
-  
-
-  void RemoveFromToDoList(int ActivityId, String topic_name) async {
+  void RemoveFromToDoList(int ActivityId, String topic_name ,BuildContext context) async {
     int index = 0;
-    if (await Mark_as_done(ActivityId, topic_name) == true) {
-      for (int i = 0; i < plan.length; i++) {
-        if (plan[i].TopicName == topic_name) {
+    
+    if (await Mark_as_done(ActivityId, topic_name) == true) 
+    {
+     
+      for (int i = 0; i < CurrentActivityplan.length-1; i++) 
+      {
+        if (CurrentActivityplan[i].TopicName == topic_name) {
           index = i;
         }
       }
-     plan.removeWhere((item) => item == plan[index]);
-      emit(PlanTasksloaded());
-    } else {
-      emit(PlanTasksError());
+     CurrentActivityplan.removeWhere((item) => item == CurrentActivityplan[index]);
+     if (context.read<PlanTasksCubit>().CurrentActivityplan.isEmpty) 
+     {
+        Navigator.push(context,MaterialPageRoute(  builder: (context) => TemporaryScreen(),),);
     }
+      emit(PlanTasksloaded());
+    } 
+    else
+     {
+      emit(PlanTasksError());
+     }
   }
   
   

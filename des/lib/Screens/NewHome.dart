@@ -49,6 +49,7 @@ class NewHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(BlocProvider.of<PlanTasksCubit>(context).plan.length);
     UserProvider userProvider =
         Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
@@ -176,7 +177,7 @@ class NewHome extends StatelessWidget {
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
            
-                        BlocProvider.of<PlanTasksCubit>(context).plan.isEmpty
+                        BlocProvider.of<PlanTasksCubit>(context).plan.length==0
                             ? SizedBox.shrink()
                             : PlanToDoTasks(),
                       ],
@@ -531,7 +532,7 @@ class PlanToDoTasks extends StatelessWidget {
   Widget build(BuildContext context) {
    
     return RectangleContainer(
-      constants.mint,
+      constants.babyBlue30,
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -568,9 +569,7 @@ class PlanToDoTasks extends StatelessWidget {
                   return BlocProvider<CheckboxCubit>
                   (
                     create: (context) => CheckboxCubit(),
-                    child: task.message != " "
-                        ? SizedBox.shrink()
-                        : TODo(
+                    child: TODo(
                             todo: task,
                           ),
                   );

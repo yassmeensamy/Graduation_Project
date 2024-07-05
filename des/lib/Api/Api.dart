@@ -8,7 +8,6 @@ class Api
   {
      SharedPreferences prefs = await SharedPreferences.getInstance();
      String? accessToken = prefs.getString('accessToken');
-     print(accessToken);
      Map<String, String> headers =
       {
          'Authorization': 'Bearer $accessToken',
@@ -23,7 +22,7 @@ class Api
       throw Exception("Problem with status code ${response.statusCode}");
     }
   }
-   
+
    Future<http.Response> post({required String url,required dynamic body,}) async
     {
        SharedPreferences prefs = await SharedPreferences.getInstance();

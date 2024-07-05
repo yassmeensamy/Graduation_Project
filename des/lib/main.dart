@@ -5,6 +5,7 @@ import 'package:des/Controllers/AuthController.dart';
 import 'package:des/Models/user.dart';
 import 'package:des/NotificationServices.dart';
 import 'package:des/Screens/Commuity/cubit/commuity_cubit_cubit.dart';
+import 'package:des/Screens/HomeScreen/FinishTaskScreen.dart';
 import 'package:des/Screens/Insigth/WeeklyGraph.dart';
 import 'package:des/Screens/Temp.dart';
 import 'package:des/cubit/PlanCubits/cubit/topics_plan_cubit.dart';
@@ -183,7 +184,9 @@ class MainNavigatorState extends State<MainNavigator> {
                 debugShowCheckedModeBanner: false,
                 home: Scaffold(
                   backgroundColor: constants.pageColor,
-                  body:homeWidget
+                  body: 
+                  //TemporaryScreen()
+                  homeWidget
                 ),
               );
             },
