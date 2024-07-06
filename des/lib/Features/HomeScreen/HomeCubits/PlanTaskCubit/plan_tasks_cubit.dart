@@ -1,5 +1,6 @@
 import 'package:des/Api/Api.dart';
 import 'package:des/Features/HomeScreen/FinishTaskScreen.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/DepressionPlanCubit/depression_cubit.dart';
 import 'package:des/Features/Plans/Models/AcivityModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,6 +55,7 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       return false;
     }
   }
+
   void RemoveFromToDoList(int ActivityId, String topic_name ,BuildContext context) async {
     int index = 0;
     
@@ -67,7 +69,7 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
         }
       }
      CurrentActivityplan.removeWhere((item) => item == CurrentActivityplan[index]);
-     if (context.read<PlanTasksCubit>().CurrentActivityplan.isEmpty) 
+     if (context.read<PlanTasksCubit>().CurrentActivityplan.length + BlocProvider.of<DepressionCubit>(context).CurrentDepressionAcitivy.length==0) 
      {
         Navigator.push(context,MaterialPageRoute(  builder: (context) => TemporaryScreen(),),);
     }

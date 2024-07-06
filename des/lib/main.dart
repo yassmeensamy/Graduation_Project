@@ -64,7 +64,7 @@ Future<void> main() async {
         BlocProvider(create: (context) => WeeklytabsCubit()),
         //BlocProvider( create: (context) => CommuityCubitCubit()),
         BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
-        BlocProvider( create: (context) => DepressionCubit()..CheckDepression(),
+        BlocProvider( create: (context) => DepressionCubit(),
         )
       ],
       child: const MainNavigator(),

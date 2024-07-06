@@ -174,10 +174,12 @@ class NewHome extends StatelessWidget {
                         BlocProvider.of<InsigthsCubit>(context).results.isEmpty
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
-           
-                        BlocProvider.of<PlanTasksCubit>(context).plan.length==0
+                            BlocProvider.of<DepressionCubit>(context).CurrentDepressionAcitivy == 0 || BlocProvider.of<PlanTasksCubit>(context) .plan
+                                        .length ==
+                                    0
                             ? SizedBox.shrink()
-                            : PlanToDoTasks(),
+                            : MixToDoTasks(),
+
                       ],
                     ),
                   ),
@@ -523,8 +525,9 @@ class MoodSelectedContainer extends StatelessWidget {
     );
   }
 }
-class PlanToDoTasks extends StatelessWidget {
-  const PlanToDoTasks({super.key});
+
+class MixToDoTasks extends StatelessWidget {
+  const MixToDoTasks({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -539,54 +542,70 @@ class PlanToDoTasks extends StatelessWidget {
             style: GoogleFonts.openSans(fontSize: 24, color: Colors.black),
           ),
           BlocBuilder<PlanTasksCubit, PlanTasksState>(
-            builder: (context, state) {
-              if (state is PlanTasksloading) {
-                return Center(child: CircularProgressIndicator());
-              } else if (state is PlanTasksError) 
-              {
-                return Container(
-                  color: Colors.black,
-                  child: Center(
-                    child: Text(
-                      'An error occurred',
-                      style: GoogleFonts.openSans(
-                          fontSize: 18, color: Colors.white),
-                    ),
-                  ),
-                );
-              }
-
-           return BlocProvider.of<PlanTasksCubit>(context).CurrentActivityplan.isNotEmpty ? 
-              ListView.builder(
-                physics: BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: context.read<PlanTasksCubit>().CurrentActivityplan.length,
-                itemBuilder: (BuildContext context, int index) {
-                 final task = context.read<PlanTasksCubit>().CurrentActivityplan[index];
-
-                  return BlocProvider<CheckboxCubit>
-                  (
-                    create: (context) => CheckboxCubit(),
-                    child:  
-                    TODo( todo: task,)   
-                  );
-                },
-              ):
-              Center(
-                      child: 
-                      Padding(
-                        padding: const EdgeInsets.only(top:10),
+            builder: (context, planTasksState) {
+              return BlocBuilder<DepressionCubit, DepressionState>(
+                builder: (context, depressionState) {
+                  if (planTasksState is PlanTasksloading ||
+                      depressionState is Depressionloading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (planTasksState is PlanTasksError ||
+                      depressionState is DepressionError) {
+                    return Container(
+                      color: Colors.black,
+                      child: Center(
                         child: Text(
-                            "Tasks done, Celebrate this achievement and keep moving forward.",
-                            softWrap: true,
-                            style: TextStyle(fontSize: 18)),
-                      ));
-            }),
+                          'An error occurred',
+                          style: GoogleFonts.openSans(
+                              fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    );
+                  }
+
+                  final planTasks =
+                      context.read<PlanTasksCubit>().CurrentActivityplan;
+                       final depressionTasks =
+                      context.read<DepressionCubit>().CurrentDepressionAcitivy;
+
+                  final combinedTasks = [...planTasks, ...depressionTasks];
+
+                  return combinedTasks.isNotEmpty
+                      ? ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: combinedTasks.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            final task = combinedTasks[index];
+                            return BlocProvider<CheckboxCubit>(
+                              create: (context) => CheckboxCubit(),
+                              child: TODo(
+                                todo: task,
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              "Tasks done, Celebrate this achievement and keep moving forward.",
+                              softWrap: true,
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ),
+                        );
+                },
+              );
+            },
+          ),
         ],
       ),
     );
   }
 }
+
+
+
 
 class TextLine extends StatelessWidget {
   final String first;
@@ -750,10 +769,7 @@ class CommuintyContainer extends StatelessWidget {
             ),
             InkWell(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PostsCommunityScreen()));
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
                 },
                 child: Row(
                   children: [

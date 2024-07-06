@@ -1,4 +1,5 @@
 
+import 'package:des/Features/HomeScreen/HomeCubits/DepressionPlanCubit/depression_cubit.dart';
 import 'package:des/Features/HomeScreen/HomeCubits/PlanTaskCubit/plan_tasks_cubit.dart';
 import 'package:des/Features/HomeScreen/HomeCubits/WeeklyTasks/weekly_tasks_cubit.dart';
 import 'package:des/Features/Plans/Models/AcivityModel.dart';
@@ -24,7 +25,8 @@ class TODo extends StatelessWidget {
       subtitle: todo is WeeklyToDoPlan
           ? Text(todo.activityDescription)
           : Text(todo.content.substring(todo.content.indexOf(':') + 1).trim() +
-              "( ${todo.TopicName} )"),
+              "(${todo.TopicName.isEmpty ? "depression Plan" : todo.TopicName})"),
+
       trailing: BlocBuilder<CheckboxCubit, bool>(
         builder: (context, isChecked) {
           return Checkbox(
@@ -32,10 +34,20 @@ class TODo extends StatelessWidget {
             onChanged: (newValue) {
               context.read<CheckboxCubit>().toggleCheckbox(newValue!);
 
-              if (todo is ActivityplanModel) {
-                BlocProvider.of<PlanTasksCubit>(context)
-                    .RemoveFromToDoList(todo.id, todo.TopicName,context);
-              } else {
+
+                if(todo.TopicName== " ")
+              {
+
+                   BlocProvider.of<DepressionCubit>(context).RemoveFromToDoList(todo.id,context);
+              }
+              else
+              if (todo is ActivityplanModel) 
+              {
+                BlocProvider.of<PlanTasksCubit>(context).RemoveFromToDoList(todo.id, todo.TopicName,context);
+              } 
+             
+              
+              else {
                 BlocProvider.of<WeeklyTasksCubit>(context)
                     .RemoveFromToDoList(todo.id);
               }

@@ -24,7 +24,7 @@ class ActivityplanModel {
       flag: json['flag'] ?? depActivity['flag'],
       content: json['text'] ?? depActivity['text'] ?? " ",
       TopicName: json["topic_name"] ??depActivity["topic_name"]??" ",
-      message: json['message']??" ",
+      message: json['message']?? json["detail"]??" ",
     );
   }
 }
