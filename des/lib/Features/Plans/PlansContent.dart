@@ -42,8 +42,11 @@ class PlansContent extends StatelessWidget
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("What brings you to \n SoulSync",style: GoogleFonts.inter(fontSize: 27,fontWeight: FontWeight.w500),),
+                        
                          context.read<TopicsPlanCubit>().enrolledPlans.isNotEmpty?
                          EnrolledPlan(flag:true):SizedBox.shrink(),
+                         
+                         //context.read<TopicsPlanCubit>().enrolledPlans.isEmpty?
                          SizedBox(height: 5,),
                         context.read<TopicsPlanCubit>().UnenrolledPlans.isNotEmpty? EnrolledPlan(flag: false)
                       : SizedBox.shrink(),
@@ -72,6 +75,41 @@ class PlansContent extends StatelessWidget
   
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class PlanCard extends StatelessWidget 
   {
   final TopicModel? topic;
@@ -145,6 +183,7 @@ class PlanContentLoading extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text("What brings you to \n SoulSync",style: GoogleFonts.inter(fontSize: 27,fontWeight: FontWeight.w500),),
+            
             Text("choose a topic to focus on:",style: GoogleFonts.abhayaLibre(fontSize: 20,color: Color(0xffA1A4B2)),),
             Expanded(child:
                 GridView.custom(

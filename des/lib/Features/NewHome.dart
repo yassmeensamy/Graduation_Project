@@ -193,12 +193,14 @@ class NewHome extends StatelessWidget {
   }
 }
 
+
 class DepressionTestContainer extends StatelessWidget {
   const DepressionTestContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return RectangleContainer(
+      
       constants.mint,
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text(
@@ -244,6 +246,7 @@ class DepressionTestContainer extends StatelessWidget {
     );
   }
 }
+
 
 class DisplayWeeklyTasks extends StatelessWidget {
   DisplayWeeklyTasks({super.key});
@@ -604,6 +607,59 @@ class MixToDoTasks extends StatelessWidget {
   }
 }
 
+class WeeklySurveyContainer extends StatelessWidget {
+  const WeeklySurveyContainer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return RectangleContainer(
+      constants.babyBlue30,
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const Text(
+              'Weekly Check in',
+              style: TextStyle(fontSize: 22),
+            ),
+            Container( 
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: const Text(
+                "Rate your life's aspects.",
+                style: TextStyle(color: constants.darkGrey),
+              ),
+            ),
+            InkWell(
+                onTap: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => WeeklySurvey()));
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      'Join Now',
+                      style: TextStyle(
+                          color: constants.babyBlue30,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 17),
+                    ),
+                    Icon(
+                      Icons.play_arrow,
+                      color: constants.babyBlue30,
+                      size: 20,
+                    )
+                  ],
+                )),
+          ]),
+          Image.asset(
+            'assets/images/Weeklycheck.png',
+            width: 80,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 
 
@@ -690,20 +746,20 @@ class TextLine extends StatelessWidget {
     }
   }
 }
-
-class WeeklySurveyContainer extends StatelessWidget {
-  const WeeklySurveyContainer({super.key});
+/*
+class DepressionTestContainer extends StatelessWidget {
+  const DepressionTestContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return RectangleContainer(
-      constants.babyBlue30,
+      constants.mint,
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Text(
-              'Weekly Check in',
+              'Depression Test',
               style: TextStyle(fontSize: 22),
             ),
             Container(
@@ -716,7 +772,7 @@ class WeeklySurveyContainer extends StatelessWidget {
             InkWell(
                 onTap: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => WeeklySurvey()));
+                      MaterialPageRoute(builder: (context) => TestScreen()));
                 },
                 child: Row(
                   children: [
@@ -736,14 +792,15 @@ class WeeklySurveyContainer extends StatelessWidget {
                 )),
           ]),
           Image.asset(
-            'assets/images/WEEEEEEK.png',
-            width: 100,
+            'assets/images/TEST.png',
+            width: 80,
           ),
         ],
       ),
     );
   }
 }
+*/
 
 class CommuintyContainer extends StatelessWidget {
   CommuintyContainer({super.key});
@@ -789,9 +846,9 @@ class CommuintyContainer extends StatelessWidget {
                 )),
           ]),
           Image.asset(
-            'assets/images/comm.png',
-            height: 120,
-            width:120,
+            'assets/images/commuity.png',
+           
+            width:80,
           ),
         ],
       ),
