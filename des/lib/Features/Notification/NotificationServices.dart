@@ -33,8 +33,8 @@ class NotificationServices {
   static Future<void> cancelAllNotifications() async
    {
      SharedPreferences prefs = await SharedPreferences.getInstance();
-     //await prefs.remove('Meditation Reminder');
-     //await prefs.remove('DailyMood Rreminder');
+     await prefs.remove('Meditation Reminder');
+     await prefs.remove('DailyMood Rreminder');
      prefs.getString('refreshToken');
     AwesomeNotifications().cancelAll();
   }
@@ -58,8 +58,8 @@ class NotificationServices {
   }
 
   static Future<int> scheduleNotification(
-    Schedule schedule,
-  ) async {
+    Schedule schedule,) async {
+    print(schedule.time);
     Random random = Random();
     int Notification_id = random.nextInt(1000000) + 1;
     await AwesomeNotifications().createNotification(
@@ -76,6 +76,7 @@ class NotificationServices {
         fullScreenIntent: true,
         backgroundColor: Colors.transparent,
       ),
+     
       schedule: NotificationCalendar(
         minute: schedule.time.minute,
         hour: schedule.time.hour,

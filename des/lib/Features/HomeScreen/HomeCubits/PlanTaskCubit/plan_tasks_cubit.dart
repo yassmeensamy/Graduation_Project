@@ -35,6 +35,7 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
 
   void CheckActivityOrNO ()
   {
+    CurrentActivityplan=[];
     for (int i=0 ;i<plan.length ;i++)
     { 
       if(plan[i].message ==" ")

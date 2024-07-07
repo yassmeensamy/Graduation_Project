@@ -25,7 +25,7 @@ class PlanDescrtion extends StatelessWidget
           left: 20,
           right: 20,
           child: Center(
-              child: Text(PlansTopicTips.description,
+              child: Text(PlansTopicTips.description!,
                   softWrap: true,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.openSans(fontSize: 30))),

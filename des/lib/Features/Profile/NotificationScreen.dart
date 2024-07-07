@@ -221,7 +221,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   Future<void> handleMeditaionNotification(String NotificationType) async {
     print(_meditationTime);
     print(NotificationType);
-    await NotificationServices().cancelNotificationById(NotificationType);
+    print( _selectedWeekday);
+    //await NotificationServices().cancelNotificationById(NotificationType);
     scheduleMeditationReminders(NotificationType,
         meditaion: _meditationTime, selectedWeekday: _selectedWeekday);
   }

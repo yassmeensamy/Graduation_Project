@@ -49,6 +49,7 @@ class PlanTipsCubit extends Cubit<PlanTipsState> {
   }
 
   Future<void> RestartPlan(String topic_name) async {
+   
     emit(PlanTipsLoading());
     var data = {"topic_name": topic_name};
     var json_data = jsonEncode(data);
@@ -58,6 +59,7 @@ class PlanTipsCubit extends Cubit<PlanTipsState> {
       if (response.statusCode == 200) {
         dynamic data = jsonDecode(response.body);
         TopicModel PlansTopicTips = TopicModel.fromJson(data);
+        PlansTopicTips.image=constants.BaseURL+PlansTopicTips.image;
         /*
          for(int i=0 ;i< PlansTopicTips.Activities.length; i++)
          {

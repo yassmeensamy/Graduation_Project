@@ -697,7 +697,7 @@ class WeeklySurveyContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RectangleContainer(
-      constants.lilac30,
+      constants.babyBlue30,
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -723,21 +723,21 @@ class WeeklySurveyContainer extends StatelessWidget {
                     Text(
                       'Join Now',
                       style: TextStyle(
-                          color: constants.lilac,
+                          color: constants.babyBlue30,
                           fontWeight: FontWeight.bold,
                           fontSize: 17),
                     ),
                     Icon(
                       Icons.play_arrow,
-                      color: constants.lilac,
+                      color: constants.babyBlue30,
                       size: 20,
                     )
                   ],
                 )),
           ]),
           Image.asset(
-            'assets/images/Emotions/meetup.png',
-            width: 92,
+            'assets/images/WEEEEEEK.png',
+            width: 100,
           ),
         ],
       ),
@@ -789,8 +789,9 @@ class CommuintyContainer extends StatelessWidget {
                 )),
           ]),
           Image.asset(
-            'assets/images/Emotions/meetup.png',
-            width: 92,
+            'assets/images/comm.png',
+            height: 120,
+            width:120,
           ),
         ],
       ),

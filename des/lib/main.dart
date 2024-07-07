@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:des/Components/loader.dart';
 import 'package:des/Controllers/AuthController.dart';
+import 'package:des/SplashScreen.dart';
 import '../constants.dart' as constants;
 import 'package:des/Features/HomeScreen/HomeCubits/DepressionPlanCubit/depression_cubit.dart';
 import 'package:des/Features/HomeScreen/HomeCubits/HandleNavigtionCubit/home_cubit.dart';
@@ -35,9 +36,7 @@ import 'Providers/UserProvider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); //done
-  await AwesomeNotifications()
-      .isNotificationAllowed().then 
-      (
+  await AwesomeNotifications().isNotificationAllowed().then(
     (isAllowed) {
       if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();
@@ -48,8 +47,7 @@ Future<void> main() async {
   await NotificationServices().setupNotifications();
   runApp(
     MultiBlocProvider(
-      providers: 
-      [
+      providers: [
         BlocProvider(create: (context) => WeeklyCubit()..GetAspects()),
         BlocProvider(create: (context) => InsigthsCubit()..loadInsights()),
         BlocProvider(create: (context) => TopicsPlanCubit()),
@@ -58,13 +56,19 @@ Future<void> main() async {
         BlocProvider(create: (context) => SliderCubit()),
         BlocProvider(create: (context) => LearningCubit()),
         BlocProvider(create: (context) => HomeCubit()),
-        BlocProvider( create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
+        BlocProvider(
+            create: (context) => MoodCubit(context.read<SecondLayerCubit>())),
         BlocProvider(create: (context) => WeeklyTasksCubit()..GetWeeklyToDo()),
-        BlocProvider( create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
+        BlocProvider(
+            create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
         //BlocProvider( create: (context) => CommuityCubitCubit()),
-        BlocProvider( create: (context) => HandleEmojyDailyCubit(  moodCubit: BlocProvider.of<SecondLayerCubit>(context),  )..loadData()),
-        BlocProvider( create: (context) => DepressionCubit(),
+        BlocProvider(
+            create: (context) => HandleEmojyDailyCubit(
+                  moodCubit: BlocProvider.of<SecondLayerCubit>(context),
+                )..loadData()),
+        BlocProvider(
+          create: (context) => DepressionCubit(),
         )
       ],
       child: const MainNavigator(),
@@ -90,6 +94,7 @@ class MainNavigatorState extends State<MainNavigator> {
     super.initState();
     _getTokens();
   }
+
   _getTokens() async {
     //logout(context);
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -101,6 +106,7 @@ class MainNavigatorState extends State<MainNavigator> {
       await fetchUserProfile();
     }
   }
+
   getProfile() async {
     Response response = await get(
         Uri.parse('${constants.BaseURL}/api/auth/user/'),
@@ -146,13 +152,13 @@ class MainNavigatorState extends State<MainNavigator> {
         user.isEmailVerified != null &&
         !user.isEmailVerified!;
   }
-  bool _isnotLoggedIn() 
-  {
+
+  bool _isnotLoggedIn() {
     return accessToken == null || refreshToken == null;
   }
+
   @override
-  Widget build(BuildContext context) 
-  {
+  Widget build(BuildContext context) {
     if (_isLoggedInVerifiedAndProfileComplete()) {
       return _buildMaterialApp(const temp());
     } else if (_isLoggedInVerifiedAndProfileIncomplete()) {
@@ -161,39 +167,38 @@ class MainNavigatorState extends State<MainNavigator> {
       return _buildMaterialApp(const VerifyEmail());
     } else if (_isnotLoggedIn()) {
       return _buildMaterialApp(const OnBoarding());
-    } else
-     {
+    } else {
       return _buildMaterialApp(const Loader());
+      // return _buildMaterialApp(const SplashScreen());
     }
   }
+
   Widget _buildMaterialApp(Widget homeWidget) {
-    return  ScreenUtilInit(
+    return ScreenUtilInit(
       designSize: const Size(360, 690),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (_, __) => ChangeNotifierProvider.value(
-        value: userProvider,
-        child: OKToast(
-          child: Builder(
-            builder: (context) {
-              return MaterialApp(
-                routes: {
-                  '/home': (context) => temp(), // Replace with your actual route
-                },
-                debugShowCheckedModeBanner: false,
-                home: Scaffold(
-                  backgroundColor: constants.pageColor,
-                  body: 
-                  //TemporaryScreen()
-                  homeWidget
-                ),
-              );
-            },
-          ),
-        )
-      ),
+          value: userProvider,
+          child: OKToast(
+            child: Builder(
+              builder: (context) {
+                return MaterialApp(
+                  routes: {
+                    '/home': (context) =>
+                        temp(), // Replace with your actual route
+                  },
+                  debugShowCheckedModeBanner: false,
+                  home: Scaffold(
+                      backgroundColor: constants.pageColor,
+                      body:
+                          //SplashScreen()
+                          //TemporaryScreen()
+                          homeWidget),
+                );
+              },
+            ),
+          )),
     );
   }
 }
-
-

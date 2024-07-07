@@ -5,8 +5,8 @@ class TopicModel {
   String colorTheme;
   String image;
   List<ActivityplanModel> Activities;
-  String description;
-  bool enrolled;
+  String ?description;
+  bool ?enrolled;
 
   TopicModel({
     required this.id,
@@ -14,7 +14,7 @@ class TopicModel {
     required this.colorTheme,
     required this.image,
     required this.Activities,
-    required this.description,
+    this.description,
     required this.enrolled,
   });
 
@@ -41,7 +41,7 @@ class TopicModel {
       name: json['name'] ?? maintopic!["name"],
       colorTheme: json['color'] ?? maintopic!["color"],
       image: json['image'] ?? maintopic!["image"],
-      description: json["description"] ?? maintopic!["description"],
+      description: json["description"] ?? maintopic!["description"]??" ",
       enrolled: json["enrolled"] ?? maintopic!["enrolled"],
       Activities: activitiesList,
     );

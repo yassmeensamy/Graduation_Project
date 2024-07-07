@@ -35,21 +35,26 @@ class TODo extends StatelessWidget {
               context.read<CheckboxCubit>().toggleCheckbox(newValue!);
 
 
-                if(todo.TopicName== " ")
-              {
-
-                   BlocProvider.of<DepressionCubit>(context).RemoveFromToDoList(todo.id,context);
-              }
-              else
+             
+              
               if (todo is ActivityplanModel) 
               {
+                   if (todo.TopicName == " ")
+                    {
+                  BlocProvider.of<DepressionCubit>(context)
+                      .RemoveFromToDoList(todo.id, context);
+                }
+                else 
+                {
                 BlocProvider.of<PlanTasksCubit>(context).RemoveFromToDoList(todo.id, todo.TopicName,context);
+                }
               } 
              
               
-              else {
-                BlocProvider.of<WeeklyTasksCubit>(context)
-                    .RemoveFromToDoList(todo.id);
+              else 
+              {
+                
+                BlocProvider.of<WeeklyTasksCubit>(context).RemoveFromToDoList(todo.id);
               }
             
               // Check if this is the last task

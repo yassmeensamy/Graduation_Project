@@ -75,9 +75,7 @@ class WeeklySurvey extends StatelessWidget {
                     await    BlocProvider.of<WeeklyTasksCubit>(context).GetWeeklyToDo();
                      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
                     
-                    
-                    
-              
+          
                         
                   },
                   groundColor: constants.purpledark,

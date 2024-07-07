@@ -118,18 +118,20 @@ void sendPreferences() async {
 }
 
 
-DateTime HandleNotificationTime(DateTime? Selectedtime) {
-  DateTime now = DateTime.now();
-  DateTime scheduledTime = DateTime(
-    now.year,
-    now.month,
-    now.day,
-    Selectedtime!.hour,
-    Selectedtime!.minute,
-  );
+DateTime HandleNotificationTime(DateTime? Selectedtime ,int dayDifference,DateTime scheduledday)
+ {
 
-  if (scheduledTime.isBefore(now)) {
-    scheduledTime = scheduledTime.add(Duration(days: 1));
+  DateTime scheduledTime = DateTime
+  (
+   scheduledday.year,
+   scheduledday.month,
+   scheduledday.day,
+   Selectedtime!.hour,
+  Selectedtime!.minute,
+  );
+  if (scheduledTime.isBefore( DateTime.now())) 
+  {
+    scheduledTime = scheduledTime.add(Duration(days:dayDifference));
   }
   return scheduledTime;
 }
@@ -138,25 +140,21 @@ DateTime HandleNotificationTime(DateTime? Selectedtime) {
 Future<void> scheduleMeditationReminders(String NotificationType,{DateTime? meditaion, String? selectedWeekday}) 
 async 
 {
-
-  
   Map<String, int> dayMapping = 
   {
-    "Sunday": 0,
-    "Monday": 1,
-    "Tuesday": 2,
-    "Wednesday": 3,
-    "Thursday": 4,
-    "Friday": 5,
-    "Saturday": 6
+    "Sunday": DateTime.sunday,
+    "Monday": DateTime.monday,
+    "Tuesday": DateTime.tuesday,
+    "Wednesday": DateTime.wednesday,
+    "Thursday": DateTime.thursday,
+    "Friday": DateTime.friday,
+    "Saturday": DateTime.saturday,
   };
-  print("Notification ${selectedWeekday}");
-  
-  
+
   List<bool> _selectedDays = List.generate(7, (index) => false);
-  if (dayMapping.containsKey(meditationDay)) 
+  if (dayMapping.containsKey(selectedWeekday == null ? meditationDay : selectedWeekday)) 
   {
-    _selectedDays[dayMapping[selectedWeekday == null ? meditationDay: selectedWeekday]!] = true;
+    _selectedDays[dayMapping[selectedWeekday == null ? meditationDay: selectedWeekday]!-1] = true;
   } 
   else 
   {
@@ -169,15 +167,19 @@ async
 
   for (int i = 0; i < _selectedDays.length; i++) 
   {
-    if (_selectedDays[i]) {
-      int dayDifference = (i - now.weekday + 7) % 7;
-      if (dayDifference == 0 &&
-          now.hour >= meditationTime!.hour &&
-          now.minute >= meditationTime!.minute) 
-          {
-                dayDifference += 7;
-           }
-       DateTime scheduledTime= HandleNotificationTime(meditaion== null ? meditationTime: meditaion);   
+            if (_selectedDays[i]) 
+        {
+      int currentWeekday = now.weekday; 
+      int dayDifference = (i - currentWeekday + 7) % 7;
+      if (dayDifference == 0 && (now.hour > meditationTime!.hour || (now.hour == meditationTime!.hour && now.minute >= meditationTime!.minute)))
+       {
+        dayDifference += 7;
+      }
+      print(i);
+      print(now.weekday);
+      print(((i+1)- now.weekday + 7) % 7);
+       DateTime scheduledday =  now.add(Duration(days: ((i+1)- now.weekday + 7) % 7));
+       DateTime scheduledTime= HandleNotificationTime(meditaion== null ? meditationTime: meditaion, 0, scheduledday);   
         int notificationId = await NotificationServices.scheduleNotification(
         Schedule(
           details: NotificationType,
@@ -189,16 +191,15 @@ async
       print(prefs.getInt(NotificationType));
        print('Notification ID saved Meditaion: $notificationId');
       
-    }
+    
+     }
   }
-
 }
-
 
 /// TrackNotification
 Future<void> scheduleTrackingReminders(String notificationType,{DateTime? trackTime}) async 
 {
- DateTime scheduledTime=HandleNotificationTime(trackTime ==null? trackingTime : trackTime);
+ DateTime scheduledTime=HandleNotificationTime(trackTime ==null? trackingTime : trackTime,1, DateTime.now());
   int notificationId = await NotificationServices.scheduleNotification(
     Schedule(
       details: notificationType,

@@ -85,7 +85,7 @@ class PlanCard extends StatelessWidget
           child: InkWell(
             onTap:()
              {
-              topic!.enrolled ?
+              topic!.enrolled! ?
                                 Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(topic!.name),)): Navigator.push(context,MaterialPageRoute(builder: (context) => PlanDescrtion(topic!),));
           
             },
