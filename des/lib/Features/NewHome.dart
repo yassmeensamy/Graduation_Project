@@ -471,29 +471,7 @@ class MoodSelectedContainer extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                width: 2,
-                height: 20,
-                color: Color(0xff100F11).withOpacity(.2),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.only(left: 4), // Remove default padding
-                  minimumSize: Size(0, 0), // Minimum size to zero
-                  tapTargetSize:
-                      MaterialTapTargetSize.shrinkWrap, // Shrink wrap
-                  visualDensity:
-                      VisualDensity.compact, // Make the button more compact
-                ),
-                onPressed: () {},
-                child: Text(
-                  "Edit",
-                  style: GoogleFonts.abhayaLibre(
-                    fontSize: 18,
-                    color: Color(0xff8B4CFC),
-                  ),
-                ),
-              ),
+              
             ],
           ),
           SizedBox(height: 4),
