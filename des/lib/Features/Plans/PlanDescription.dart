@@ -36,13 +36,11 @@ class PlanDescrtion extends StatelessWidget
             right: 20,
             child: NextButton(
                 ontap: () 
-                async {
-                  //await  BlocProvider.of<PlanTasksCubit>(context) .FetchPlanToDoList();
-                 
+                async 
+                {
                   Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(PlansTopicTips.name),));
                 },
-                groundColor: Color(int.parse(
-                    PlansTopicTips.colorTheme.replaceFirst('#', '0xFF'))),
+                groundColor: Color(int.parse(PlansTopicTips.colorTheme.replaceFirst('#', '0xFF'))),
                 text: "Enroll",
                 TextColor: Colors.white))
       ],

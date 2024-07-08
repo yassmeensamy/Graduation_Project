@@ -18,11 +18,14 @@ class PlansContent extends StatelessWidget
   PlansContent({super.key});
 
 void Enrolldepressiontest(BuildContext context) {
+
+  print(" enter in ernrollll dep");
     bool flag = false;
     final depressionTopic = context.read<DepressionCubit>().topic;
     if (depressionTopic?.name != null) {
       
-      for (int i = 0;i < context.read<TopicsPlanCubit>().enrolledPlans.length; i++) {
+      for (int i = 0;i < context.read<TopicsPlanCubit>().enrolledPlans.length; i++) 
+      {
         if (depressionTopic!.name != context.read<TopicsPlanCubit>().enrolledPlans[i].name) 
         {
           flag = true;
