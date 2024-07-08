@@ -17,12 +17,20 @@ class PlansContent extends StatelessWidget
   List<TopicModel>PlansTopics=[];
   PlansContent({super.key});
 
+ List<TopicModel>removeItemsNotInFirstList(List<TopicModel> list1, List<TopicModel> list2)
+ {
+    Set<String> idsInList1 = list1.map((obj) => obj.name).toSet();
+    list2.removeWhere((obj) => !idsInList1.contains(obj.name));
+    return list2;
+  }
+
 void Enrolldepressiontest(BuildContext context) {
 
-  print(" enter in ernrollll dep");
+  
     bool flag = false;
     final depressionTopic = context.read<DepressionCubit>().topic;
-    if (depressionTopic?.name != null) {
+    if (depressionTopic?.name != null) 
+    {
       
       for (int i = 0;i < context.read<TopicsPlanCubit>().enrolledPlans.length; i++) 
       {
@@ -31,7 +39,7 @@ void Enrolldepressiontest(BuildContext context) {
           flag = true;
         } 
         else
-         {
+        {
           flag = false;
           break; 
         }
@@ -39,6 +47,11 @@ void Enrolldepressiontest(BuildContext context) {
       if (flag == true) {
         context.read<TopicsPlanCubit>().enrolledPlans.add(depressionTopic!);
       }
+    }
+    else 
+    {
+      context.read<TopicsPlanCubit>().enrolledPlans=
+       removeItemsNotInFirstList(context.read<TopicsPlanCubit>().PlansTopics,context.read<TopicsPlanCubit>().enrolledPlans);
     }
   }
 

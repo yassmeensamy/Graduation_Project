@@ -83,8 +83,9 @@ class DepressionCubit extends Cubit<DepressionState>
     }
     else if(response.statusCode==404)
     {
-              print("enter in 404");
+          print("enter in 404");
          dynamic data=jsonDecode(response.body);
+           topic=null;
            if(data.containsKey("level_depression"))
            {
               Retaketest=true;

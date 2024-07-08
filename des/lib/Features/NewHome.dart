@@ -27,14 +27,9 @@ import '../constants.dart' as constants;
 import 'HomeScreen/HomeCubits/MoodEntryCubit/handle_emojy_daily_cubit.dart';
 
 // Update with the actual path
-class NewHome extends StatefulWidget 
-{
-  NewHome({Key? key}) : super(key: key);
 
-  @override
-  _NewHomeState createState() => _NewHomeState();
-}
-class _NewHomeState extends State<NewHome> {
+class NewHome extends StatelessWidget
+ {
  
   // static دي الزياده علشان لو حصل ايررور
   final ValueNotifier<bool> showDepressionTest = ValueNotifier<bool>(true);
@@ -64,7 +59,7 @@ class _NewHomeState extends State<NewHome> {
       backgroundColor: constants.pageColor,
       drawer: myDrawer(),
       body: Builder(
-        builder: (context) {
+        builder: (BuildContext scaffoldContext) {
           context.watch<DepressionCubit>().state;
           context.watch<InsigthsCubit>().state;
           context.watch<WeeklyCubit>().state;
@@ -113,8 +108,10 @@ class _NewHomeState extends State<NewHome> {
                               Row(
                                 children: [
                                   GestureDetector(
-                                    onTap: () {
-                                      Scaffold.of(context).openDrawer();
+                                    onTap: () 
+                                    {
+                                         Scaffold.of(scaffoldContext).openDrawer();
+                                      //Scaffold.of(context).openDrawer();
                                     },
                                     child: Container(
                                       margin: const EdgeInsets.only(top: 16),
