@@ -48,6 +48,9 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => DepressionCubit(),
+        ),
         BlocProvider(create: (context) => WeeklyCubit()..GetAspects()),
         BlocProvider(create: (context) => InsigthsCubit()..loadInsights()),
         BlocProvider(create: (context) => TopicsPlanCubit()),
@@ -62,14 +65,10 @@ Future<void> main() async {
         BlocProvider(
             create: (context) => PlanTasksCubit()..FetchPlanToDoList()),
         BlocProvider(create: (context) => WeeklytabsCubit()),
-        //BlocProvider( create: (context) => CommuityCubitCubit()),
         BlocProvider(
             create: (context) => HandleEmojyDailyCubit(
                   moodCubit: BlocProvider.of<SecondLayerCubit>(context),
                 )..loadData()),
-        BlocProvider(
-          create: (context) => DepressionCubit(),
-        )
       ],
       child: const MainNavigator(),
     ),

@@ -36,8 +36,9 @@ class PlanDescrtion extends StatelessWidget
             right: 20,
             child: NextButton(
                 ontap: () 
-                {
-                  BlocProvider.of<PlanTasksCubit>(context).FetchPlanToDoList();
+                async {
+                  //await  BlocProvider.of<PlanTasksCubit>(context) .FetchPlanToDoList();
+                 
                   Navigator.push(context,MaterialPageRoute(builder: (context) => PlanScreen(PlansTopicTips.name),));
                 },
                 groundColor: Color(int.parse(

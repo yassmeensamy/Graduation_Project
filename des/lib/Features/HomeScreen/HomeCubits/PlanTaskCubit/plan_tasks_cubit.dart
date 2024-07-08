@@ -20,10 +20,14 @@ class PlanTasksCubit extends Cubit<PlanTasksState> {
       Response response = await Api().get(url: "${constants.BaseURL}/api/first-false-user-activity/");
       if (response.statusCode == 200) 
       {
+        print(" enter in get tasks plan");
         dynamic responseData = jsonDecode(response.body);
         List<dynamic>Todoplans = responseData["first_false_activities"];
+        print(Todoplans.length);
         plan=Todoplans.map((e) => ActivityplanModel.fromJson(e)).toList();
         CheckActivityOrNO();
+        print(plan.length);
+        print(CurrentActivityplan.length);
         emit(PlanTasksloaded());
       }
     } 

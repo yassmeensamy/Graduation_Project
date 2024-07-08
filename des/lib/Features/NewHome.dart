@@ -26,12 +26,15 @@ import 'package:provider/provider.dart';
 import '../constants.dart' as constants;
 import 'HomeScreen/HomeCubits/MoodEntryCubit/handle_emojy_daily_cubit.dart';
 
+// Update with the actual path
+
 class NewHome extends StatelessWidget {
   NewHome({super.key});
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final ValueNotifier<bool> showDepressionTest =ValueNotifier<bool>(true); 
-  final ValueNotifier<bool> showRetakeTest = ValueNotifier<bool>(true); 
+ final GlobalKey<ScaffoldState> _scaffoldKey =
+      GlobalKey<ScaffoldState>(); // static دي الزياده علشان لو حصل ايررور
+  final ValueNotifier<bool> showDepressionTest = ValueNotifier<bool>(true);
+  final ValueNotifier<bool> showRetakeTest = ValueNotifier<bool>(true);
 
   void showCustomDialog(BuildContext context, String title, String message) {
     CustomAlertDialog(
@@ -49,7 +52,8 @@ class NewHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UserProvider userProvider = Provider.of<UserProvider>(context, listen: false);
+    UserProvider userProvider =
+        Provider.of<UserProvider>(context, listen: false);
     User? currentUser = userProvider.user;
     return Scaffold(
       key: _scaffoldKey,
@@ -64,7 +68,8 @@ class NewHome extends StatelessWidget {
 
           Future.microtask(() {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (showDepressionTest.value &&context.read<DepressionCubit>().Retaketest == true) {
+              if (showDepressionTest.value &&
+                  context.read<DepressionCubit>().Retaketest == true) {
                 showCustomDialog(
                   context,
                   'Test Notification',
@@ -77,8 +82,8 @@ class NewHome extends StatelessWidget {
 
           Future.microtask(() {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (showRetakeTest.value && context.read<DepressionCubit>().checkDepression) 
-              {
+              if (showRetakeTest.value &&
+                  context.read<DepressionCubit>().checkDepression) {
                 showCustomDialog(
                   context,
                   'Depression Notification',
@@ -97,7 +102,6 @@ class NewHome extends StatelessWidget {
                         vertical: 32.0, horizontal: 16),
                     child: Column(
                       children: [
-                        //HeaderHomeSCreen(_scaffoldKey),
                         Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,12 +178,14 @@ class NewHome extends StatelessWidget {
                         BlocProvider.of<InsigthsCubit>(context).results.isEmpty
                             ? SizedBox.shrink()
                             : DisplayWeeklyTasks(),
-                            BlocProvider.of<DepressionCubit>(context).CurrentDepressionAcitivy == 0 || BlocProvider.of<PlanTasksCubit>(context) .plan
-                                        .length ==
-                                    0
-                            ? SizedBox.shrink()
-                            : MixToDoTasks(),
-
+                        BlocProvider.of<DepressionCubit>(context)
+                                    .CurrentDepressionAcitivy
+                                    .isNotEmpty ||
+                                BlocProvider.of<PlanTasksCubit>(context)
+                                    .plan
+                                    .isNotEmpty
+                            ? MixToDoTasks()
+                            : SizedBox.shrink()
                       ],
                     ),
                   ),
@@ -193,14 +199,12 @@ class NewHome extends StatelessWidget {
   }
 }
 
-
 class DepressionTestContainer extends StatelessWidget {
   const DepressionTestContainer({super.key});
 
   @override
   Widget build(BuildContext context) {
     return RectangleContainer(
-      
       constants.mint,
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         const Text(
@@ -246,7 +250,6 @@ class DepressionTestContainer extends StatelessWidget {
     );
   }
 }
-
 
 class DisplayWeeklyTasks extends StatelessWidget {
   DisplayWeeklyTasks({super.key});
@@ -567,11 +570,9 @@ class MixToDoTasks extends StatelessWidget {
 
                   final planTasks =
                       context.read<PlanTasksCubit>().CurrentActivityplan;
-                       final depressionTasks =
+                  final depressionTasks =
                       context.read<DepressionCubit>().CurrentDepressionAcitivy;
-
                   final combinedTasks = [...planTasks, ...depressionTasks];
-
                   return combinedTasks.isNotEmpty
                       ? ListView.builder(
                           physics: BouncingScrollPhysics(),
@@ -622,7 +623,7 @@ class WeeklySurveyContainer extends StatelessWidget {
               'Weekly Check in',
               style: TextStyle(fontSize: 22),
             ),
-            Container( 
+            Container(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
               child: const Text(
                 "Rate your life's aspects.",
@@ -660,8 +661,6 @@ class WeeklySurveyContainer extends StatelessWidget {
     );
   }
 }
-
-
 
 class TextLine extends StatelessWidget {
   final String first;
@@ -746,61 +745,6 @@ class TextLine extends StatelessWidget {
     }
   }
 }
-/*
-class DepressionTestContainer extends StatelessWidget {
-  const DepressionTestContainer({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return RectangleContainer(
-      constants.mint,
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text(
-              'Depression Test',
-              style: TextStyle(fontSize: 22),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: const Text(
-                'Take a test to determine your \n depression level',
-                style: TextStyle(color: constants.darkGrey),
-              ),
-            ),
-            InkWell(
-                onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TestScreen()));
-                },
-                child: Row(
-                  children: [
-                    Text(
-                      'Join Now',
-                      style: TextStyle(
-                          color: constants.babyBlue30,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 17),
-                    ),
-                    Icon(
-                      Icons.play_arrow,
-                      color: constants.babyBlue30,
-                      size: 20,
-                    )
-                  ],
-                )),
-          ]),
-          Image.asset(
-            'assets/images/TEST.png',
-            width: 80,
-          ),
-        ],
-      ),
-    );
-  }
-}
-*/
 
 class CommuintyContainer extends StatelessWidget {
   CommuintyContainer({super.key});
@@ -826,7 +770,10 @@ class CommuintyContainer extends StatelessWidget {
             ),
             InkWell(
                 onTap: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (context) => PostsCommunityScreen()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PostsCommunityScreen()));
                 },
                 child: Row(
                   children: [
@@ -847,8 +794,7 @@ class CommuintyContainer extends StatelessWidget {
           ]),
           Image.asset(
             'assets/images/commuity.png',
-           
-            width:80,
+            width: 80,
           ),
         ],
       ),

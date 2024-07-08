@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:des/Components/CachedNetworl.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/DepressionPlanCubit/depression_cubit.dart';
 import 'package:des/Features/Plans/Models/TopicModel.dart';
 import 'package:des/Features/Plans/Plan.dart';
 import 'package:des/Features/Plans/PlanCubit/topics_plan_cubit.dart';
@@ -14,9 +16,33 @@ class PlansContent extends StatelessWidget
 {
   List<TopicModel>PlansTopics=[];
   PlansContent({super.key});
+
+void Enrolldepressiontest(BuildContext context) {
+    bool flag = false;
+    final depressionTopic = context.read<DepressionCubit>().topic;
+    if (depressionTopic?.name != null) {
+      
+      for (int i = 0;i < context.read<TopicsPlanCubit>().enrolledPlans.length; i++) {
+        if (depressionTopic!.name != context.read<TopicsPlanCubit>().enrolledPlans[i].name) 
+        {
+          flag = true;
+        } 
+        else
+         {
+          flag = false;
+          break; 
+        }
+      }
+      if (flag == true) {
+        context.read<TopicsPlanCubit>().enrolledPlans.add(depressionTopic!);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) 
   {
+   
     return BlocConsumer<TopicsPlanCubit,TopicsPlanState>(
       builder: (context, state) 
       {
@@ -30,6 +56,10 @@ class PlansContent extends StatelessWidget
         }
         else 
         {
+
+          
+             Enrolldepressiontest(context);
+         
           return 
           Scaffold(
           backgroundColor: constants.pageColor,
@@ -42,11 +72,10 @@ class PlansContent extends StatelessWidget
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text("What brings you to \n SoulSync",style: GoogleFonts.inter(fontSize: 27,fontWeight: FontWeight.w500),),
-                        
+                          
                          context.read<TopicsPlanCubit>().enrolledPlans.isNotEmpty?
                          EnrolledPlan(flag:true):SizedBox.shrink(),
-                         
-                         //context.read<TopicsPlanCubit>().enrolledPlans.isEmpty?
+                     
                          SizedBox(height: 5,),
                         context.read<TopicsPlanCubit>().UnenrolledPlans.isNotEmpty? EnrolledPlan(flag: false)
                       : SizedBox.shrink(),
@@ -132,21 +161,8 @@ class PlanCard extends StatelessWidget
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
               ),
-              child:
-                CachedNetworkImage(
-                  imageUrl: topic!.image,
-                fit: BoxFit.cover,
-                placeholder: (context, url) => Container(
-                  color: constants.mint.withOpacity(.5),
-                  // Colors.grey[300],
-                ),
-                errorWidget: (context, url, error) => Center(
-                  child: Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  ),
-                ),
-                ),
+              child:CachedImage(imageUrl: topic!.image),
+               
             ),
         )
           ),

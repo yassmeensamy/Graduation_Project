@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:des/Api/Api.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/DepressionPlanCubit/depression_cubit.dart';
 import 'package:des/Features/Test/Models/QuestionModel.dart';
 import 'package:des/Features/Test/Models/TestResultModel.dart';
 import 'package:des/Features/Test/TestCubit/TestCubitStates.dart';
@@ -46,7 +47,7 @@ class Testcubit extends Cubit<TestState> {
     }
   }
 
-  void fetchNextQuestions(int currentQuestionIndex, BuildContext context) {
+  Future<void> fetchNextQuestions(int currentQuestionIndex, BuildContext context) async {
     if (currentQuestionIndex < questions.length) {
       if (currentQuestionIndex < questions.length) {
         if (isselected) {
@@ -61,9 +62,13 @@ class Testcubit extends Cubit<TestState> {
               context.read<AnswerCubit>().disSelected();
             }
             emit(TestQuestionChanged(currentQuestionIndex));
-          } else {
-            fetchFinalScore();
+          } else 
+          {
+           await fetchFinalScore(context);
             ClearScores(context);
+            print("----------------------------------------------------------------------");
+            await BlocProvider.of<DepressionCubit>(context).FetchActivityDepresion();
+            print("ppppppppppppppppppppppppppppppppppppppppppppppppppp");
           }
         } else {
           displaySnackBar(context);
@@ -75,11 +80,10 @@ class Testcubit extends Cubit<TestState> {
   int getCurrentQuestionSelectd(int currentIndex) {
     return scores[currentIndex]['value'] ?? -1;
   }
-
   void ClearScores(BuildContext context) {
     scores = [];
   }
-
+  
   void fetchPreveriousQuestions(
       int currentQuestionIndex, BuildContext context) {
     if (currentQuestionIndex > 0) {
@@ -104,18 +108,20 @@ class Testcubit extends Cubit<TestState> {
     );
   }
 
-  void fetchFinalScore() async {
+ Future <void >fetchFinalScore(BuildContext context) async {
     var data = {"answers": scores};
     var jsonData = jsonEncode(data);
     Response response = await Api()
         .post(url: "${constants.BaseURL}/api/questions/", body: jsonData);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200)
+     {
+              
       dynamic data = jsonDecode(response.body);
       TestResultModel TestResult = TestResultModel.fromJson(data);
+
       emit(TestFinished(TestResult));
     } else if (response.statusCode == 401) {
-      emit(TestError(
-          "Unauthorized: Please login or provide valid credentials."));
+      emit(TestError("Unauthorized: Please login or provide valid credentials."));
     } else {
       emit(TestError("Failed to load questions"));
     }

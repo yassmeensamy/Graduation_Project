@@ -1,8 +1,11 @@
 import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
+import 'package:des/Features/HomeScreen/HomeCubits/PlanTaskCubit/plan_tasks_cubit.dart';
 import 'package:des/Features/Plans/Models/AcivityModel.dart';
 import 'package:des/Features/Plans/Models/TopicModel.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
@@ -13,8 +16,9 @@ class PlanTipsCubit extends Cubit<PlanTipsState> {
   late TopicModel PlansTopicTips;
   PlanTipsCubit() : super(PlanTipsLoading());
 
-
-  Future<void> FetchPlanActivities(String topic_name) async {
+  
+  
+  Future<void> FetchPlanActivities(String topic_name ,BuildContext context) async {
     emit(PlanTipsLoading());
     var data = {"topic_name": topic_name};
     var json_data = jsonEncode(data);
@@ -33,6 +37,7 @@ class PlanTipsCubit extends Cubit<PlanTipsState> {
             await FetchActivitiesContent(PlansTopicTips.name, i);
           }
         }
+        await BlocProvider.of<PlanTasksCubit>(context).FetchPlanToDoList();
         emit(PlanTipsLoaded(PlansTopicTips));
       } 
       else {

@@ -42,12 +42,15 @@ class PlanScreen extends StatelessWidget
     
     child:
     BlocProvider(
-      create: (context) => PlanTipsCubit()..FetchPlanActivities(topic_name),
+      create: (context) => PlanTipsCubit().. FetchPlanActivities(topic_name,context),
       child: BlocConsumer<PlanTipsCubit, PlanTipsState>(
+
+           
         builder: (context, state)
          {
           if (state is PlanTipsLoaded) 
           { 
+            
             final screenHeight = MediaQuery.of(context).size.height;
               return Scaffold(
                   body: Stack(

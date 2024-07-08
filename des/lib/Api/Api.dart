@@ -12,7 +12,9 @@ class Api
       {
          'Authorization': 'Bearer $accessToken',
       };
+      
       print(accessToken);
+   
     http.Response response = await http.get(Uri.parse(url),headers: headers);
     if (response.statusCode == 200) 
     {

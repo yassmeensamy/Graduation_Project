@@ -13,7 +13,7 @@ class MoodCount extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10,right: 4),
+      padding: EdgeInsets.only(bottom: 10,right:25),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -79,7 +79,7 @@ return
           Positioned(
             top: 30,
             left: 0,
-            right: 0,
+            right: 10,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

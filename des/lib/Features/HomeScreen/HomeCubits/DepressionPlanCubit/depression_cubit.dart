@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:des/Api/Api.dart';
 import 'package:des/Features/HomeScreen/HomeCubits/PlanTaskCubit/plan_tasks_cubit.dart';
 import 'package:des/Features/Plans/Models/AcivityModel.dart';
+import 'package:des/Features/Plans/Models/TopicModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart';
@@ -15,6 +16,8 @@ part 'depression_state.dart';
 
 class DepressionCubit extends Cubit<DepressionState> 
 {
+  TopicModel? topic;
+  bool UserDepressionFlag=false;
    List< ActivityplanModel >DepressionAcitivys =[];
    List<ActivityplanModel> CurrentDepressionAcitivy=[];
    bool checkDepression=false;
@@ -26,26 +29,22 @@ class DepressionCubit extends Cubit<DepressionState>
     
    }
   Future<void> CheckDepression() async 
-  {
-  
+  { 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
-
     try {
-      Map<String, String> headers = {
-        'Authorization': 'Bearer $accessToken',
-      };
-
-      var response = await http.get(
-          Uri.parse("${constants.BaseURL}/api/consecutive-depression-check/"), headers: headers);
+      Map<String, String> headers = {'Authorization': 'Bearer $accessToken',};
+      var response = await http.get( Uri.parse("${constants.BaseURL}/api/consecutive-depression-check/"), headers: headers);
       if (response.statusCode == 200) 
       {
         dynamic data = jsonDecode(response.body);
         checkDepression= data["depression_streak"]; 
-        
-        
+        if(checkDepression==false)
+        {
+          //مكانها هنا مش صح بس لازم نععمل كده هلشان تتعرض
+          //topic=TopicModel(id: 10, name: "DepressionTest", colorTheme: "6495ED", image: "assets/images/depressionplan.png", Activities: [], enrolled: true);
+        }
       } 
-     
     } 
     catch (e) 
     {
@@ -54,23 +53,37 @@ class DepressionCubit extends Cubit<DepressionState>
   }
  Future<void>FetchActivityDepresion() async
  {
+    CurrentDepressionAcitivy = [];
+    DepressionAcitivys = [];
     Depressionloading();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('accessToken');
     Map<String, String> headers = { 'Authorization': 'Bearer $accessToken'};
     try{
     var response = await http.get( Uri.parse("${constants.BaseURL}/api/dep_first-unflagged-activity/"), headers: headers);
+    print(response.statusCode);
     if(response.statusCode==200)
     {
       
-      dynamic data=jsonDecode(response.body);
+      UserDepressionFlag=true;
+      print("enter in 200");
+      topic = TopicModel(
+            id: 10,
+            name: "DepressionTest",
+            colorTheme: "6495ED",
+            image: "assets/images/depressionplan.png",
+            Activities: [],
+            enrolled: true);
+            
+     dynamic data=jsonDecode(response.body);
      ActivityplanModel  DepressionAcitivy=ActivityplanModel.fromJson(data);
      DepressionAcitivys.add(DepressionAcitivy);
+      
      CheckActivityOrNO() ;
     }
     else if(response.statusCode==404)
     {
-      
+              print("enter in 404");
          dynamic data=jsonDecode(response.body);
            if(data.containsKey("level_depression"))
            {
@@ -79,13 +92,10 @@ class DepressionCubit extends Cubit<DepressionState>
            else 
            {
               Retaketest = false ;
-              DepressionAcitivys=[];
+            
            }
 
-       /*
-       "detail": "No unflagged activity found for the user and depression level.",
-    "level_depression": "moderate depression"
-    */
+   
      
     }
     emit(Depressionloaded());
@@ -100,10 +110,8 @@ class DepressionCubit extends Cubit<DepressionState>
    {
     for (int i = 0; i < DepressionAcitivys.length; i++) 
     {
-       print("offff ${DepressionAcitivys[i].message}");
       if (DepressionAcitivys[i].message == " ") 
       {
-        print("yalwhhhhhhhhhhhhh");
         CurrentDepressionAcitivy.add(DepressionAcitivys[i]);
       }
     }
@@ -149,4 +157,3 @@ class DepressionCubit extends Cubit<DepressionState>
   }
   
 }
-
